@@ -1,0 +1,31 @@
+{
+  "expo": {
+    "name": "cosmetic",
+    "slug": "cosmetic",
+    "version": "1.0.1",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "bundleIdentifier": "com.xenure.cosmetic",
+      "buildNumber": "1.0.1"
+    },
+    "android": {
+      "package": "com.xenure.cosmetic",
+      "versionCode": 2
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}
