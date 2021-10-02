@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -9,12 +9,10 @@ import {
   TextInput,
   ToastAndroid,
 } from "react-native";
-import Input from "../../atoms/input";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { UserContext } from "../../../../App";
 
-function SignUp() {
+function ForgetPassword() {
   const navigation = useNavigation();
 
   const [email, setEmail] = useState("");
@@ -22,26 +20,28 @@ function SignUp() {
 
   const validate = () => {
     if (email === "") {
-      setErrors("Username or Password Empty");
+      setErrors({
+        email: "Please Enter Email",
+      });
     } else {
-      //   fetch("https://api-cosmetic.herokuapp.com/login/post", {
-      //     method: "POST",
-      //     headers: { "content-type": "application/json" },
-      //     body: JSON.stringify({ email, password }),
-      //   })
-      //     .then((res) => res.json())
-      //     .then((data) => {
-      //       if (data.errors) {
-      //         setErrors(data);
-      //         setFieldValid("");
-      //       } else if (data.message) {
-      //         setLoggedInUser(data);
-      //         setErrors("");
-      //       } else {
-      //         setLoggedInUser(data);
-      //         navigation.navigate("ClientDashBoard");
-      //       }
-      //     });
+      fetch("https://api-cosmetic.herokuapp.com/user/resetPasswordMail", {
+        method: "PUT",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ email }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.error) {
+            setErrors(data);
+          } else {
+            setEmail("");
+            setErrors(data);
+            setTimeout(() => {
+              setErrors({});
+              navigation.navigate("ChangePassword");
+            }, 2000);
+          }
+        });
     }
   };
 
@@ -64,13 +64,17 @@ function SignUp() {
               resizeMode="contain"
               style={style.logo}
             />
-            <Input
-              placeholder="Jassica@example.com"
-              onChangeText={(e) => setEmail(e)}
-            />
-            {errors?.errors?.email?.msg && (
+            <View style={style.inputView}>
+              <TextInput
+                placeholder="Jassica@example.com"
+                value={email}
+                style={style.input}
+                onChangeText={(e) => setEmail(e)}
+              />
+            </View>
+            {errors?.email && (
               <Text style={{ fontSize: 12, marginTop: 8, color: "red" }}>
-                {errors?.errors?.email?.msg}
+                {errors?.email}
               </Text>
             )}
 
@@ -82,6 +86,30 @@ function SignUp() {
                 <Text style={{ fontSize: 12, color: "white" }}>Continue</Text>
               </View>
             </TouchableOpacity>
+            {errors?.success && (
+              <Text
+                style={{
+                  fontSize: 12,
+                  textAlign: "center",
+                  marginTop: 20,
+                  color: "green",
+                }}
+              >
+                {errors?.success}
+              </Text>
+            )}
+            {errors?.error && (
+              <Text
+                style={{
+                  fontSize: 12,
+                  textAlign: "center",
+                  marginTop: 20,
+                  color: "red",
+                }}
+              >
+                {errors?.error}
+              </Text>
+            )}
           </View>
           <View style={style.viewBottom}>
             <TouchableOpacity
@@ -96,7 +124,7 @@ function SignUp() {
     </View>
   );
 }
-export default SignUp;
+export default ForgetPassword;
 
 const style = StyleSheet.create({
   InputContainer: {
