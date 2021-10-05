@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -8,14 +8,53 @@ import {
   SafeAreaView,
   ScrollView,
   Image,
+  TextInput,
+  ToastAndroid,
 } from "react-native";
-import Input from "../../atoms/input";
 import Header from "../../atoms/header";
 import AppTemplate from "../../ClientTemplate";
 import { useNavigation } from "@react-navigation/native";
+import { useState } from "react";
 
 function AddCatogory() {
   const navigation = useNavigation();
+  const [categories, setCategories] = useState([]);
+  const [categoryName, setCategoryName] = useState("");
+  const [errors, setErrors] = useState({});
+  const [number, setNumber] = useState(0);
+  const showToast = (i) => {
+    ToastAndroid.show(i, ToastAndroid.SHORT);
+  };
+  useEffect(() => {
+    fetch(`https://api-cosmetic.herokuapp.com/category/get`)
+      .then((res) => res.json())
+      .then((data) => setCategories(data));
+  }, [number]);
+
+  const validate = () => {
+    if (categoryName === "") {
+      showToast("Please Enter Category Name");
+    } else {
+      fetch(`https://api-cosmetic.herokuapp.com/category/post`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ categoryName }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.error) {
+            setErrors(data);
+          } else {
+            setErrors(data);
+            setNumber(number + 1);
+            setTimeout(() => {
+              setCategoryName("");
+              setErrors({});
+            }, 2000);
+          }
+        });
+    }
+  };
 
   return (
     <AppTemplate>
@@ -42,10 +81,17 @@ function AddCatogory() {
             >
               <View style={style.InputContainer}>
                 <View style={{ marginTop: 30 }}>
-                  <Input placeholder="Add Catogory" />
+                  <View style={style.inputView}>
+                    <TextInput
+                      value={categoryName}
+                      style={style.input}
+                      placeholder="Add Catogory"
+                      onChangeText={(e) => setCategoryName(e)}
+                    />
+                  </View>
                 </View>
 
-                <View
+                {/* <View
                   style={{
                     display: "flex",
                     flexDirection: "row",
@@ -54,7 +100,6 @@ function AddCatogory() {
                     width: "100%",
                   }}
                 >
-                  {/* <Text>jj</Text> */}
 
                   <TouchableOpacity style={style.buttonblack}>
                     <Text
@@ -84,15 +129,50 @@ function AddCatogory() {
                       />
                     </TouchableOpacity>
                   </TouchableOpacity>
-                </View>
+                </View> */}
 
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => validate()}>
                   <View style={style.button}>
                     <Text style={{ fontSize: 12, color: "white" }}>
                       Continue
                     </Text>
                   </View>
                 </TouchableOpacity>
+                {errors?.success && (
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      textAlign: "center",
+                      marginTop: 20,
+                      color: "green",
+                    }}
+                  >
+                    {errors?.success}
+                  </Text>
+                )}
+                {errors?.error && (
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      textAlign: "center",
+                      marginTop: 20,
+                      color: "red",
+                    }}
+                  >
+                    {errors?.error}
+                  </Text>
+                )}
+                {categories.map((category) => (
+                  <View style={style.view5}>
+                    <View style={style.view4}>
+                      <Text
+                        style={{ fontSize: 13, color: "black", opacity: 0.7 }}
+                      >
+                        {category.categoryName}
+                      </Text>
+                    </View>
+                  </View>
+                ))}
               </View>
             </ScrollView>
           </SafeAreaView>
@@ -142,7 +222,7 @@ const style = StyleSheet.create({
     paddingTop: 17,
     paddingBottom: 17,
     elevation: 5,
-    marginTop: 250,
+    marginTop: 20,
     marginBottom: 10,
   },
   buttonblack: {
@@ -158,5 +238,33 @@ const style = StyleSheet.create({
     marginTop: 20,
     alignItems: "center",
     marginBottom: 8,
+  },
+  view4: {
+    marginLeft: 16,
+  },
+  view5: {
+    paddingTop: 15,
+    paddingBottom: 15,
+    borderRadius: 10,
+    marginTop: 10,
+    width: "100%",
+    display: "flex",
+    backgroundColor: "white",
+  },
+  input: {
+    width: "85%",
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 10,
+    paddingBottom: 11,
+  },
+  inputView: {
+    backgroundColor: "white",
+    borderRadius: 11,
+    marginTop: 16,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
 });

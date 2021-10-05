@@ -10,10 +10,23 @@ import NotificationCard from "../../orgasms/notificationCard";
 import Header from "../../atoms/header";
 import AppTemplate from "../../ClientTemplate";
 import { useNavigation } from "@react-navigation/native";
+import { UserContext } from "../../../../App";
 
 function Notifications() {
   const navigation = useNavigation();
-
+  const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
+  const [notification, setNotification] = React.useState([]);
+  const [number, setNumber] = React.useState(0);
+  React.useEffect(() => {
+    const email = loggedInUser.user.email;
+    fetch("https://api-cosmetic.herokuapp.com/user/getUserNotification", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ email }),
+    })
+      .then((res) => res.json())
+      .then((data) => setNotification(data));
+  }, [number]);
   return (
     <AppTemplate>
       <View style={{ flex: 1, backgroundColor: "#EBEAEF" }}>
@@ -37,94 +50,21 @@ function Notifications() {
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
             >
-              <NotificationCard
-                title="Skin Care Lotion"
-                dis="Sed ut  -  Perspiciatis unde omnis iste Perspiciatis unde omnis iste
-              Perspiciatis unde omnis iste...              "
-                backColor="white"
-                dotColor="#B7C9D2"
-                toggle={false}
-              />
-              <NotificationCard
-                title="Skin Care Lotion"
-                dis="Sed ut  -  Perspiciatis unde omnis iste Perspiciatis unde omnis iste
-              Perspiciatis unde omnis iste...              "
-                backColor="white"
-                dotColor="#B7C9D2"
-                toggle={false}
-              />
-              <NotificationCard
-                title="Skin Care Lotion"
-                dis="Sed ut  -  Perspiciatis unde omnis iste Perspiciatis unde omnis iste
-                 Perspiciatis unde omnis iste...              "
-                backColor="rgba(255, 255,255, 0.4)"
-                dotColor="transparent"
-                toggle={true}
-              />
-              <NotificationCard
-                title="Skin Care Lotion"
-                dis="Sed ut  -  Perspiciatis unde omnis iste Perspiciatis unde omnis iste
-                 Perspiciatis unde omnis iste...              "
-                backColor="rgba(255, 255,255, 0.4)"
-                dotColor="transparent"
-                toggle={true}
-              />
-              <NotificationCard
-                title="Skin Care Lotion"
-                dis="Sed ut  -  Perspiciatis unde omnis iste Perspiciatis unde omnis iste
-                 Perspiciatis unde omnis iste...              "
-                backColor="rgba(255, 255,255, 0.4)"
-                dotColor="transparent"
-                toggle={true}
-              />
-              <NotificationCard
-                title="Skin Care Lotion"
-                dis="Sed ut  -  Perspiciatis unde omnis iste Perspiciatis unde omnis iste
-                 Perspiciatis unde omnis iste...              "
-                backColor="rgba(255, 255,255, 0.4)"
-                dotColor="transparent"
-                toggle={true}
-              />
-              <NotificationCard
-                title="Skin Care Lotion"
-                dis="Sed ut  -  Perspiciatis unde omnis iste Perspiciatis unde omnis iste
-                 Perspiciatis unde omnis iste...              "
-                backColor="rgba(255, 255,255, 0.4)"
-                dotColor="transparent"
-                toggle={true}
-              />
-              <NotificationCard
-                title="Skin Care Lotion"
-                dis="Sed ut  -  Perspiciatis unde omnis iste Perspiciatis unde omnis iste
-                 Perspiciatis unde omnis iste...              "
-                backColor="rgba(255, 255,255, 0.4)"
-                dotColor="transparent"
-                toggle={true}
-              />
-              <NotificationCard
-                title="Skin Care Lotion"
-                dis="Sed ut  -  Perspiciatis unde omnis iste Perspiciatis unde omnis iste
-                 Perspiciatis unde omnis iste...              "
-                backColor="rgba(255, 255,255, 0.4)"
-                dotColor="transparent"
-                toggle={true}
-              />
-              <NotificationCard
-                title="Skin Care Lotion"
-                dis="Sed ut  -  Perspiciatis unde omnis iste Perspiciatis unde omnis iste
-                 Perspiciatis unde omnis iste...              "
-                backColor="rgba(255, 255,255, 0.4)"
-                dotColor="transparent"
-                toggle={true}
-              />
-              <NotificationCard
-                title="Skin Care Lotion"
-                dis="Sed ut  -  Perspiciatis unde omnis iste Perspiciatis unde omnis iste
-                 Perspiciatis unde omnis iste...              "
-                backColor="rgba(255, 255,255, 0.4)"
-                dotColor="transparent"
-                toggle={true}
-              />
+              {notification.map((nt) => (
+                <View key={nt?._id}>
+                  <NotificationCard
+                    id={nt?._id}
+                    title={nt?.title}
+                    dis={nt?.description}
+                    img={nt?.imgURL}
+                    email={loggedInUser?.user?.email}
+                    setNumber={setNumber}
+                    backColor="white"
+                    dotColor="#B7C9D2"
+                    toggle={true}
+                  />
+                </View>
+              ))}
             </ScrollView>
           </SafeAreaView>
         </ImageBackground>

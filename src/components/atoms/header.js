@@ -2,14 +2,14 @@ import * as React from "react";
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { DrawerActions, useNavigation } from "@react-navigation/native";
 function Header(props) {
-  const { img1, img2, img3, title, onPress } = props;
+  const { img1, img2, img3, userImg, title, onPress } = props;
   const navigation = useNavigation();
   return (
     <View style={style.view1}>
       <View style={{ width: "22%" }}>
         <TouchableOpacity onPress={onPress}>
           <Image
-            source={{ uri: img1 }}
+            source={userImg ? { uri: userImg } : img1}
             style={style.image11}
             resizeMethod="resize"
             resizeMode="contain"

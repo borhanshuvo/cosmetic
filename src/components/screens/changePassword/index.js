@@ -64,7 +64,11 @@ function ChangePassword() {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.warn(data);
+          setErrors(data);
+          setTimeout(() => {
+            setErrors({});
+            navigation.navigate("SignUp");
+          }, 2000);
         });
     }
   };

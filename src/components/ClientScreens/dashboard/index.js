@@ -35,7 +35,7 @@ function DashBoard() {
             style={style.backgroundImage}
           >
             <Header
-              img1={loggedInUser?.user?.imgURL}
+              userImg={loggedInUser?.user?.imgURL}
               title="Dashboard"
               img2={require("../../../assets/menu2.png")}
               img3={require("../../../assets/loupe.png")}
