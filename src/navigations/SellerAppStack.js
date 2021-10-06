@@ -1,6 +1,5 @@
-import React, { useContext } from "react";
+import React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ClientSidebar from "../components/orgasms/ClientSidebar";
 import ClientBuyerProfile from "../components/ClientScreens/buyerProfile";
 import ClientMessages from "../components/ClientScreens/messages";
@@ -14,14 +13,10 @@ import ClientAddCatogory from "../components/ClientScreens/addCatogory";
 import ClientTagClient from "../components/ClientScreens/tagClient";
 import ClientSpecailOffer from "../components/ClientScreens/specailOffer";
 import ClientStatics from "../components/ClientScreens/statics";
-import { UserContext } from "../../App";
-import UserSignUp from "../components/screens/signUp";
 
 const Drawer = createDrawerNavigator();
-const Stack = createNativeStackNavigator();
 
 const SellerAppStackNavigater = () => {
-  const [loggedInUser, setLoggedInUser] = useContext(UserContext);
   return (
     <Drawer.Navigator
       screenOptions={{
@@ -31,11 +26,7 @@ const SellerAppStackNavigater = () => {
       }}
       drawerContent={(props) => <ClientSidebar {...props} />}
     >
-      {loggedInUser?.accessToken && loggedInUser?.user?.email ? (
-        <Drawer.Screen name="ClientDashBoard" component={ClientDashBoard} />
-      ) : (
-        <Stack.Screen name="SignUp" component={UserSignUp} />
-      )}
+      <Drawer.Screen name="ClientDashBoard" component={ClientDashBoard} />
       <Drawer.Screen name="ClientBuyerProfile" component={ClientBuyerProfile} />
       <Drawer.Screen name="ClientMessages" component={ClientMessages} />
       <Drawer.Screen name="ClientInbox" component={ClientInbox} />

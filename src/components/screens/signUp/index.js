@@ -11,8 +11,8 @@ import {
 } from "react-native";
 import Input from "../../atoms/input";
 import { useNavigation } from "@react-navigation/native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UserContext } from "../../../../App";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function SignUp() {
   const navigation = useNavigation();
@@ -43,6 +43,7 @@ function SignUp() {
             setErrors("");
           } else {
             setLoggedInUser(data);
+            AsyncStorage.setItem("userInfo", JSON.stringify(data));
             navigation.navigate("ClientDashBoard");
           }
         });

@@ -7,10 +7,19 @@ import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 // import Messages from "../userScreens/messages";
 import { useNavigation } from "@react-navigation/native";
 import { UserContext } from "../../../App";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function ClientSidebar() {
   const navigation = useNavigation();
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
+
+  const logout = async () => {
+    try {
+      await AsyncStorage.removeItem("userInfo");
+      setLoggedInUser({});
+      navigation.navigate("SignUp");
+    } catch (err) {}
+  };
   return (
     <View style={style.view1}>
       <View>
@@ -114,39 +123,31 @@ function ClientSidebar() {
         </View>
       </View>
       <View>
-        <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-          <View style={style.view3}>
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <View style={{ marginLeft: 12 }}>
-                <Text
-                  style={{ color: "#B7C9D2", fontSize: 13 }}
-                  onPress={() => {
-                    setLoggedInUser({});
-                    navigation.navigate("SignUp");
-                  }}
-                >
-                  Sign Out
-                </Text>
-              </View>
-            </View>
-            <View>
-              <TouchableOpacity>
-                <Image
-                  source={require("../../assets/back.png")}
-                  resizeMode="cover"
-                  resizeMode="contain"
-                  style={style.image3}
-                />
+        <View style={style.view3}>
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <View style={{ marginLeft: 12 }}>
+              <TouchableOpacity onPress={() => logout()}>
+                <Text style={{ color: "#B7C9D2", fontSize: 13 }}>Sign Out</Text>
               </TouchableOpacity>
             </View>
           </View>
-        </TouchableOpacity>
+          <View>
+            <TouchableOpacity onPress={() => logout()}>
+              <Image
+                source={require("../../assets/back.png")}
+                resizeMode="cover"
+                resizeMode="contain"
+                style={style.image3}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
     </View>
   );
