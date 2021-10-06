@@ -1,5 +1,4 @@
-import { BASE_URL } from "@env";
+import { APP_URL } from "@env";
 export default {
-  BASE_URL,
   APP_URL,
 };

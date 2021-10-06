@@ -2,7 +2,7 @@ import * as React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 
 function BigLotionCard(props) {
-  const { title, dis, price, color, onPress } = props;
+  const { title, dis, price, color, onPress, img } = props;
   return (
     <TouchableOpacity
       style={[style.view1, { backgroundColor: color }]}
@@ -11,7 +11,7 @@ function BigLotionCard(props) {
       <View style={style.view5}>
         <View>
           <Image
-            source={require("../../assets/lotion2.png")}
+            source={{ uri: img }}
             resizeMethod="resize"
             resizeMode="contain"
             style={style.image}

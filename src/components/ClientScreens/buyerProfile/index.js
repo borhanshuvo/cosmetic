@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   View,
   Text,
@@ -16,9 +16,11 @@ import Header from "../../atoms/header";
 const Data = [{}, {}, {}, {}, {}, {}, {}, {}];
 import AppTemplate from "../../ClientTemplate";
 import { useNavigation } from "@react-navigation/native";
+import { UserContext } from "../../../../App";
 
 function BuyerProfile() {
   const navigation = useNavigation();
+  const [loggedInUser, setLoggedInUser] = useContext(UserContext);
   return (
     <AppTemplate>
       <View style={{ flex: 1, backgroundColor: "#EBEAEF" }}>
@@ -31,7 +33,7 @@ function BuyerProfile() {
             <Header
               onPress={() => navigation.goBack()}
               img1={require("../../../assets/arrowLeft2.png")}
-              title="Buyer Profile"
+              title="Profile"
               img2={require("../../../assets/menu2.png")}
               img3={require("../../../assets/loupe.png")}
             />
@@ -48,11 +50,14 @@ function BuyerProfile() {
                   wi={80}
                   icon={require("../../../assets/badge.png")}
                   backcolor="#707070"
+                  img={loggedInUser?.user?.imgURL}
                 />
                 <View style={style.view2}>
-                  <Text style={{ opacity: 0.8 }}>User Name</Text>
+                  <Text style={{ opacity: 0.8 }}>
+                    {loggedInUser?.user?.name}
+                  </Text>
                   <Text style={{ opacity: 0.5, fontSize: 8 }}>
-                    User@example.com
+                    {loggedInUser?.user?.email}
                   </Text>
                 </View>
                 <View style={{ marginTop: 8 }}>
@@ -77,11 +82,7 @@ function BuyerProfile() {
                     About
                   </Text>
                   <Text style={{ fontSize: 12, color: "white", marginTop: 7 }}>
-                    Sed ut - Perspiciatis unde omnis iste iatis unde omnis iste
-                    Perspiciatis unde omnis iste… Sed ut - Perspiciatis unde
-                    omnis iste iatis unde omnis iste Perspiciatis unde omnis
-                    iste...Sed ut - Perspiciatis unde omnis iste iatis unde
-                    omnis iste Perspiciatis unde omnis iste...
+                    {loggedInUser?.user?.aboutMe}
                   </Text>
                 </View>
               </View>

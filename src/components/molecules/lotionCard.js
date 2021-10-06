@@ -2,12 +2,12 @@ import * as React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 
 function LotionCard(props) {
-  const { title, dis, price, onPress, ButtonClick } = props;
+  const { title, dis, price, onPress, ButtonClick, img } = props;
   return (
     <TouchableOpacity style={style.view1} onPress={onPress}>
       <View>
         <Image
-          source={require("../../assets/lotionB.png")}
+          source={{ uri: img }}
           resizeMethod="resize"
           resizeMode="contain"
           style={style.image}
@@ -51,6 +51,7 @@ const style = StyleSheet.create({
 
   image: {
     height: 110,
+    width: 150
   },
   image2: {
     height: 30,

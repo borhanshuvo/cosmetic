@@ -13,6 +13,7 @@ import Menu, {
   MenuOption,
   MenuTrigger,
 } from "react-native-popup-menu";
+import config from "../../../config";
 function MessagesCard(props) {
   const { title, dis, dotColor, backColor, toggle, img, id, email, setNumber } =
     props;
@@ -79,7 +80,7 @@ function MessagesCard(props) {
             }}
           >
             <Image
-              source={{ uri: img }}
+              source={{ uri: `${config?.APP_URL}${img}` }}
               resizeMethod="resize"
               resizeMode="contain"
               style={style.image}

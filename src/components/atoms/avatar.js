@@ -2,12 +2,12 @@ import * as React from "react";
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 
 function Avatar(props) {
-  const { hi, wi, icon, backcolor } = props;
+  const { hi, wi, icon, backcolor, img } = props;
   return (
     <View style={style.view1}>
       <View style={{ height: hi, width: wi }}>
         <Image
-          source={require("../../assets/icon.png")}
+          source={{ uri: img }}
           resizeMode="contain"
           resizeMethod="resize"
           style={{ height: "100%", width: "100%", borderRadius: 6 }}

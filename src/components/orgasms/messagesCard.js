@@ -2,7 +2,7 @@ import * as React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 
 function MessagesCard(props) {
-  const { title, dis, dotColor, backColor, onPress, img } = props;
+  const { title, dis, backColor, onPress, img } = props;
   return (
     <TouchableOpacity
       style={[style.view1, { backgroundColor: backColor }]}
@@ -11,7 +11,7 @@ function MessagesCard(props) {
       <View style={style.view5}>
         <View style={style.viewtop}>
           <View></View>
-          <View style={[style.dot, { backgroundColor: dotColor }]}></View>
+          <View style={[style.dot]}></View>
         </View>
         <View
           style={{

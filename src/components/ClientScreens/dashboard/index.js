@@ -21,6 +21,15 @@ import { UserContext } from "../../../../App";
 function DashBoard() {
   const navigation = useNavigation();
   const [loggedInUser, setLoggedInUser] = useContext(UserContext);
+  const [products, setProducts] = React.useState([]);
+  React.useEffect(() => {
+    try {
+      fetch("https://api-cosmetic.herokuapp.com/product/get")
+        .then((res) => res.json())
+        .then((result) => setProducts(result));
+    } catch (err) {}
+  }, []);
+
   return (
     <AppTemplate>
       <View style={{ flex: 1, backgroundColor: "#EBEAEF" }}>
@@ -54,21 +63,23 @@ function DashBoard() {
             showsHorizontalScrollIndicator={false}
           >
             <Text style={style.text2}>Best Selling</Text>
+
             <FlatList
               showsHorizontalScrollIndicator={false}
               horizontal={true}
               style={{ width: "100%", marginTop: 10 }}
-              data={Data}
-              keyExtractor={(item) => item.id}
+              data={products}
+              keyExtractor={(item) => item._id}
               renderItem={({ item }) => (
                 <LotionCard
                   ButtonClick={() =>
                     navigation.navigate("ClientAddProductDetail")
                   }
                   onPress={() => navigation.navigate("ClientAddProductDetail")}
-                  title="Skin Care Lotion"
-                  dis="Sed ut - Perspiciatis unde Perspiciatis Iciatis"
-                  price="$ 29.00"
+                  title={item?.title}
+                  dis={item?.description}
+                  price={item?.price}
+                  img={item?.imgURL}
                 />
               )}
             />
@@ -77,14 +88,15 @@ function DashBoard() {
               showsHorizontalScrollIndicator={false}
               horizontal={true}
               style={{ width: "100%", marginTop: 10 }}
-              data={Data}
+              data={products}
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => (
                 <BigLotionCard
                   onPress={() => navigation.navigate("ClientAddProductDetail")}
-                  title="Skin Care Lotion"
-                  dis="Sed ut  -  Perspiciatis unde omnis iste"
-                  price="$ 29.00"
+                  title={item?.title}
+                  dis={item?.description}
+                  price={item?.price}
+                  img={item?.imgURL}
                   color="white"
                 />
               )}
@@ -94,7 +106,7 @@ function DashBoard() {
               showsHorizontalScrollIndicator={false}
               horizontal={true}
               style={{ width: "100%", marginTop: 10 }}
-              data={Data}
+              data={products}
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => (
                 <LotionCard
@@ -102,9 +114,10 @@ function DashBoard() {
                     navigation.navigate("ClientAddProductDetail")
                   }
                   onPress={() => navigation.navigate("ClientAddProductDetail")}
-                  title="Skin Care Lotion"
-                  dis="Sed ut - Perspiciatis unde Perspiciatis Iciatis"
-                  price="$ 29.00"
+                  title={item?.title}
+                  dis={item?.description}
+                  price={item?.price}
+                  img={item?.imgURL}
                 />
               )}
             />
