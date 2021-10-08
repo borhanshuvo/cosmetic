@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 function CounterCheck(props) {
-  const { value } = props;
-  const [quantity, setquantity] = useState(1);
+  const { value, quantity, setquantity, price } = props;
 
   return (
     <View style={style.main}>
@@ -18,7 +17,7 @@ function CounterCheck(props) {
               opacity: 0.8,
             }}
           >
-            $29.00
+            ${parseFloat(price).toFixed(2)}
           </Text>
         </TouchableOpacity>
         <View style={style.counter}>

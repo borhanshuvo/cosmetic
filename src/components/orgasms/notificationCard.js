@@ -36,6 +36,7 @@ function MessagesCard(props) {
         }
       });
   };
+  const saveProduct = (id) => {};
   return (
     <MenuProvider skipInstanceCheck={true}>
       <View style={[style.view1, { backgroundColor: backColor }]}>
@@ -61,6 +62,11 @@ function MessagesCard(props) {
                       <TouchableOpacity onPress={() => deleteProduct(id)}>
                         <Text style={{ marginTop: 5, marginLeft: 5 }}>
                           DELETE
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => saveProduct(id)}>
+                        <Text style={{ marginTop: 5, marginLeft: 5 }}>
+                          SAVE
                         </Text>
                       </TouchableOpacity>
                       <MenuOption />
@@ -127,12 +133,10 @@ const style = StyleSheet.create({
   view5: {
     width: "100%",
     display: "flex",
-
     alignItems: "center",
   },
   view3: {
     width: 70,
-
     alignItems: "center",
   },
   view4: {
@@ -154,7 +158,6 @@ const style = StyleSheet.create({
   dot: {
     height: 10,
     width: 10,
-
     borderRadius: 100,
     marginRight: -12,
   },

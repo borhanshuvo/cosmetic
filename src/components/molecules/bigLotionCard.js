@@ -1,5 +1,6 @@
 import * as React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+import config from "../../../config";
 
 function BigLotionCard(props) {
   const { title, dis, price, color, onPress, img } = props;
@@ -11,7 +12,7 @@ function BigLotionCard(props) {
       <View style={style.view5}>
         <View>
           <Image
-            source={{ uri: img }}
+            source={{ uri: `${config.APP_URL}${img}` }}
             resizeMethod="resize"
             resizeMode="contain"
             style={style.image}
@@ -26,8 +27,15 @@ function BigLotionCard(props) {
       </View>
 
       <View style={style.view3}>
-        <Text style={{ fontSize: 9, color: "black", opacity: 0.7 }}>
-          {price}
+        <Text
+          style={{
+            fontSize: 9,
+            color: "black",
+            opacity: 0.7,
+            marginBottom: 18,
+          }}
+        >
+          ${parseFloat(price).toFixed(2)}
         </Text>
       </View>
     </TouchableOpacity>

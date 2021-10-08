@@ -1,5 +1,6 @@
 import * as React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+import config from "../../../config";
 
 function LotionCard(props) {
   const { title, dis, price, onPress, ButtonClick, img } = props;
@@ -7,7 +8,7 @@ function LotionCard(props) {
     <TouchableOpacity style={style.view1} onPress={onPress}>
       <View>
         <Image
-          source={{ uri: img }}
+          source={{ uri: `${config.APP_URL}${img}` }}
           resizeMethod="resize"
           resizeMode="contain"
           style={style.image}
@@ -20,7 +21,7 @@ function LotionCard(props) {
         <Text style={{ fontSize: 6, color: "grey" }}>{dis}</Text>
         <View style={style.view3}>
           <Text style={{ fontSize: 9, color: "black", opacity: 0.7 }}>
-            {price}
+            ${parseFloat(price).toFixed(2)}
           </Text>
           <TouchableOpacity onPress={ButtonClick}>
             <View style={style.view2}>
@@ -51,7 +52,7 @@ const style = StyleSheet.create({
 
   image: {
     height: 110,
-    width: 150
+    width: 150,
   },
   image2: {
     height: 30,

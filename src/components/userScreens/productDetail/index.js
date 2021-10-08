@@ -11,9 +11,21 @@ import Header from "../../atoms/header";
 import ProductDetailCard from "../../orgasms/productDetailCard";
 import AppTemplate from "../../Usertemplate";
 import { useNavigation } from "@react-navigation/native";
+import { useState } from "react";
+import { useEffect } from "react";
+import config from "../../../../config";
 
-function ProductDetail() {
+function ProductDetail({ route }) {
   const navigation = useNavigation();
+  const { id } = route?.params;
+  const [product, setProduct] = useState({});
+  useEffect(() => {
+    try {
+      fetch(`https://api-cosmetic.herokuapp.com/product/get/${id}`)
+        .then((res) => res.json())
+        .then((result) => setProduct(result));
+    } catch (err) {}
+  }, [id]);
 
   return (
     <AppTemplate>
@@ -44,7 +56,7 @@ function ProductDetail() {
               img3={require("../../../assets/loupe.png")}
             />
             <Image
-              source={require("../../../assets/creem.png")}
+              source={{ uri: `${config.APP_URL}${product?.imgURL}` }}
               style={style.image}
               resizeMethod="resize"
               resizeMode="contain"
@@ -59,7 +71,7 @@ function ProductDetail() {
             showsHorizontalScrollIndicator={false}
           >
             <View style={{ marginTop: 5 }}>
-              <ProductDetailCard />
+              <ProductDetailCard product={product} />
             </View>
           </ScrollView>
         </SafeAreaView>

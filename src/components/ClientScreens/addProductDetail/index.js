@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -14,9 +14,42 @@ import Input from "../../atoms/input";
 import Header from "../../atoms/header";
 import AppTemplate from "../../ClientTemplate";
 import { useNavigation } from "@react-navigation/native";
+import DocumentPicker from "react-native-document-picker";
+import ModalDropdown from "react-native-modal-dropdown";
+import config from "../../../../config";
 
 function AddProductDetail() {
   const navigation = useNavigation();
+  const [categories, setCategories] = useState([]);
+  const [number, setNumber] = useState(0);
+
+  useEffect(() => {
+    try {
+      fetch(`${config.APP_URL}/category/categoryName`)
+        .then((res) => res.json())
+        .then((result) => setCategories(result));
+    } catch (err) {}
+  }, [number + 1]);
+
+  async function openDocumentFile() {
+    try {
+      const res = await DocumentPicker.pick({
+        type: [DocumentPicker.types.images],
+      });
+      console.log(
+        res.uri,
+        res.type, // mime type
+        res.name,
+        res.size
+      );
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        // User cancelled the picker, exit any dialogs or menus and move on
+      } else {
+        throw err;
+      }
+    }
+  }
 
   return (
     <AppTemplate>
@@ -65,7 +98,35 @@ function AddProductDetail() {
                   }}
                 />
                 <Input placeholder="Minimum Bid ($ 00.00)" />
-
+                <ModalDropdown
+                  isFullWidth
+                  textStyle={{ flex: 1, fontSize: 15 }}
+                  animated={true}
+                  renderRightComponent={() => (
+                    <Image
+                      source={require("../../../assets/down.png")}
+                      resizeMethod="resize"
+                      resizeMode="cover"
+                      style={{ height: 18, width: 18, marginRight: 25 }}
+                    />
+                  )}
+                  dropdownStyle={{
+                    width: "86%",
+                    marginLeft: -14,
+                    marginTop: 14,
+                  }}
+                  defaultValue="Select Category"
+                  options={categories}
+                  style={{
+                    backgroundColor: "white",
+                    height: 50,
+                    marginTop: 14,
+                    borderRadius: 11,
+                    display: "flex",
+                    justifyContent: "center",
+                    paddingLeft: 14,
+                  }}
+                />
                 <Input placeholder="Product Stock (Quantity)" />
                 <Input placeholder="Buy Now Price" />
                 <View
@@ -77,7 +138,10 @@ function AddProductDetail() {
                     width: "100%",
                   }}
                 >
-                  <TouchableOpacity style={style.buttonblack}>
+                  <TouchableOpacity
+                    style={style.buttonblack}
+                    onPress={() => openDocumentFile()}
+                  >
                     <Text style={{ fontSize: 12, color: "white" }}>
                       Update From Gallery
                     </Text>

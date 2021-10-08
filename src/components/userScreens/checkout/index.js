@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   ImageBackground,
@@ -7,15 +7,23 @@ import {
   ScrollView,
   Image,
 } from "react-native";
-import Input from "../../atoms/input";
-import ModalDropdown from "react-native-modal-dropdown";
 import CheckOutCard from "../../orgasms/checkOutCard";
 import { useNavigation } from "@react-navigation/native";
 import Header from "../../atoms/header";
 import AppTemplate from "../../Usertemplate";
 
-function CheckOut() {
+function CheckOut({ route }) {
   const navigation = useNavigation();
+  const { id } = route?.params;
+  const [product, setProduct] = useState({});
+
+  useEffect(() => {
+    try {
+      fetch(`https://api-cosmetic.herokuapp.com/product/get/${id}`)
+        .then((res) => res.json())
+        .then((result) => setProduct(result));
+    } catch (err) {}
+  }, [id]);
 
   return (
     <AppTemplate>
@@ -40,43 +48,8 @@ function CheckOut() {
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
             >
-              <View style={style.InputContainer}>
-                <Input placeholder="Address" />
-                <Input placeholder="Street Address" />
-                <ModalDropdown
-                  isFullWidth
-                  textStyle={{ flex: 1, fontSize: 15 }}
-                  animated={true}
-                  renderRightComponent={() => (
-                    <Image
-                      source={require("../../../assets/down.png")}
-                      resizeMethod="resize"
-                      resizeMode="cover"
-                      style={{ height: 18, width: 18, marginRight: 25 }}
-                    />
-                  )}
-                  dropdownStyle={{
-                    width: "86%",
-                    marginLeft: -14,
-                    marginTop: 14,
-                  }}
-                  defaultValue="Select City"
-                  options={["Lahore", "Paris", "Islamabad", "Quetta"]}
-                  style={{
-                    backgroundColor: "white",
-                    height: 50,
-                    marginTop: 14,
-                    borderRadius: 11,
-                    display: "flex",
-                    justifyContent: "center",
-                    paddingLeft: 14,
-                  }}
-                />
-                <Input placeholder="Phone Number" />
-              </View>
-
-              <View style={{ marginTop: 10 }}>
-                <CheckOutCard />
+              <View>
+                <CheckOutCard productDetail={product} />
               </View>
             </ScrollView>
           </SafeAreaView>

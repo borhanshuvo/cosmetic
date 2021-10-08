@@ -7,7 +7,9 @@ function CounterCard(props) {
 
   return (
     <View style={style.main}>
-      <Text style={[style.text1.opacity, { fontSize: 13 }]}>${value}</Text>
+      <Text style={[style.text1.opacity, { fontSize: 13 }]}>
+        ${parseFloat(value).toFixed(2)}
+      </Text>
       <View style={style.view1}>
         <View style={style.counter}>
           <TouchableOpacity

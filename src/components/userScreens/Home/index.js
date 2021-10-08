@@ -13,11 +13,20 @@ import Header from "../../atoms/header";
 import LotionCard from "../../molecules/lotionCard";
 import BigLotionCard from "../../molecules/bigLotionCard";
 import { useNavigation } from "@react-navigation/native";
-
+import { UserContext } from "../../../../App";
 import AppTemplate from "../../Usertemplate";
-const Data = [{}, {}, {}, {}, {}, {}, {}, {}];
+
 function Home() {
   const navigation = useNavigation();
+  const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
+  const [products, setProducts] = React.useState([]);
+  React.useEffect(() => {
+    try {
+      fetch("https://api-cosmetic.herokuapp.com/product/get")
+        .then((res) => res.json())
+        .then((result) => setProducts(result));
+    } catch (err) {}
+  }, []);
   return (
     <AppTemplate>
       <View style={{ flex: 1, backgroundColor: "#EBEAEF" }}>
@@ -32,7 +41,7 @@ function Home() {
             style={style.backgroundImage}
           >
             <Header
-              img1={require("../../../assets/icon.png")}
+              userImg={loggedInUser?.user?.imgURL}
               title="Products"
               img2={require("../../../assets/menu2.png")}
               img3={require("../../../assets/loupe.png")}
@@ -62,15 +71,20 @@ function Home() {
               showsHorizontalScrollIndicator={false}
               horizontal={true}
               style={{ width: "100%", marginTop: 10 }}
-              data={Data}
-              keyExtractor={(item) => item.id}
+              data={products}
+              keyExtractor={(item) => item._id}
               renderItem={({ item }) => (
                 <LotionCard
-                  ButtonClick={() => navigation.navigate("UserCheckOut")}
-                  onPress={() => navigation.navigate("UserProductDetail")}
-                  title="Skin Care Lotion"
-                  dis="Sed ut - Perspiciatis unde Perspiciatis Iciatis"
-                  price="$ 29.00"
+                  ButtonClick={() =>
+                    navigation.navigate("UserCheckOut", { id: item?._id })
+                  }
+                  onPress={() =>
+                    navigation.navigate("UserProductDetail", { id: item?._id })
+                  }
+                  title={item?.title}
+                  dis={item?.description}
+                  price={item?.price}
+                  img={item?.imgURL}
                 />
               )}
             />
@@ -79,32 +93,36 @@ function Home() {
               showsHorizontalScrollIndicator={false}
               horizontal={true}
               style={{ width: "100%", marginTop: 10 }}
-              data={Data}
-              keyExtractor={(item) => item.id}
+              data={products}
+              keyExtractor={(item) => item._id}
               renderItem={({ item }) => (
                 <BigLotionCard
-                  onPress={() => navigation.navigate("UserProductDetail")}
-                  title="Skin Care Lotion"
-                  dis="Sed ut  -  Perspiciatis unde omnis iste"
-                  price="$ 29.00"
+                  onPress={() => navigation.navigate("UserProductDetail", { id: item?._id })}
+                  title={item?.title}
+                  dis={item?.description}
+                  price={item?.price}
+                  img={item?.imgURL}
                   color="white"
                 />
               )}
             />
-            <Text style={style.text2}>Newest (20 Products)</Text>
+            <Text style={style.text2}>
+              Newest ({products?.length} Products)
+            </Text>
             <FlatList
               showsHorizontalScrollIndicator={false}
               horizontal={true}
               style={{ width: "100%", marginTop: 10 }}
-              data={Data}
-              keyExtractor={(item) => item.id}
+              data={products}
+              keyExtractor={(item) => item._id}
               renderItem={({ item }) => (
                 <LotionCard
-                  ButtonClick={() => navigation.navigate("UserCheckOut")}
-                  onPress={() => navigation.navigate("UserProductDetail")}
-                  title="Skin Care Lotion"
-                  dis="Sed ut - Perspiciatis unde Perspiciatis Iciatis"
-                  price="$ 29.00"
+                  ButtonClick={() => navigation.navigate("UserCheckOut", { id: item?._id })}
+                  onPress={() => navigation.navigate("UserProductDetail", { id: item?._id })}
+                  title={item?.title}
+                  dis={item?.description}
+                  price={item?.price}
+                  img={item?.imgURL}
                 />
               )}
             />

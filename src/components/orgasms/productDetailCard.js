@@ -3,21 +3,18 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import Stars from "../atoms/stars";
 import CounterCard from "../molecules/counterCard";
 import { useNavigation } from "@react-navigation/native";
-function ProductDetailCard() {
+function ProductDetailCard({ product }) {
   const navigation = useNavigation();
   return (
     <View style={style.main}>
       <Stars />
       <View style={style.line}></View>
       <View style={style.card}>
-        <Text style={{ opacity: 0.8 }}>Skin Care Lotion</Text>
+        <Text style={{ opacity: 0.8, marginTop: 6 }}>{product?.title}</Text>
         <Text style={{ opacity: 0.5, fontSize: 9, width: "90%", marginTop: 5 }}>
-          Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-          accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae
-          ab illo inventore veritatis et quasi architecto beatae vitae dicta
-          sunt explicabo.
+          {product?.description}
         </Text>
-        <TouchableOpacity>
+        {/* <TouchableOpacity>
           <Text
             style={{
               opacity: 0.7,
@@ -28,21 +25,24 @@ function ProductDetailCard() {
           >
             Seller Info
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
-      <View style={{ marginTop: 10 }}>
-        <CounterCard value="29.00" />
+      <View style={{ marginTop: 12, marginBottom: 12 }}>
+        {/* <CounterCard value={product.price} />$<Text></Text> */}
+        <Text style={[style.text1.opacity, { fontSize: 13 }]}>
+          ${parseFloat(product?.price).toFixed(2)}
+        </Text>
       </View>
       <View style={style.buttons}>
         <TouchableOpacity
           style={style.button}
-          onPress={() => navigation.navigate("UserCheckOut")}
+          onPress={() => navigation.navigate("UserCheckOut", { id: product?._id })}
         >
           <Text style={{ fontSize: 12, color: "white" }}>Order Now</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={style.button2}
-          onPress={() => navigation.navigate("UserBidRequest")}
+          onPress={() => navigation.navigate("UserBidRequest", { id: product?._id })}
         >
           <Text style={{ fontSize: 12, color: "black", opacity: 0.7 }}>
             Place Bid
@@ -59,10 +59,10 @@ const style = StyleSheet.create({
     backgroundColor: "white",
     borderTopEndRadius: 40,
     borderTopLeftRadius: 40,
-    paddingTop: 20,
+    paddingTop: 40,
     paddingLeft: 20,
     paddingRight: 20,
-    paddingBottom: 20,
+    paddingBottom: 30,
   },
   line: {
     height: 1,
@@ -77,7 +77,7 @@ const style = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row",
-    marginTop: 18,
+    marginTop: 20,
   },
   button: {
     width: "45%",
@@ -100,5 +100,8 @@ const style = StyleSheet.create({
     borderRadius: 16,
     paddingTop: 17,
     paddingBottom: 17,
+  },
+  text1: {
+    opacity: 0.8,
   },
 });

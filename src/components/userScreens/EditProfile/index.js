@@ -15,10 +15,11 @@ import Avatar from "../../atoms/avatar";
 import Header from "../../atoms/header";
 import AppTemplate from "../../Usertemplate";
 import { useNavigation } from "@react-navigation/native";
+import { UserContext } from "../../../../App";
 
 function EditProfile() {
   const navigation = useNavigation();
-
+  const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
   return (
     <AppTemplate>
       <View style={{ flex: 1, backgroundColor: "#EBEAEF" }}>
@@ -48,6 +49,7 @@ function EditProfile() {
                   wi={100}
                   icon={require("../../../assets/camera.png")}
                   backcolor="white"
+                  img={loggedInUser?.user?.imgURL}
                 />
                 <View style={{ marginTop: 30 }}>
                   <Input placeholder="Full Name" />
