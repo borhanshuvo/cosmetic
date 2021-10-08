@@ -13,23 +13,25 @@ import {
 import Input from "../../atoms/input";
 import Header from "../../atoms/header";
 import AppTemplate from "../../ClientTemplate";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import DocumentPicker from "react-native-document-picker";
 import ModalDropdown from "react-native-modal-dropdown";
 import config from "../../../../config";
 
 function AddProductDetail() {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const [categories, setCategories] = useState([]);
-  const [number, setNumber] = useState(0);
 
   useEffect(() => {
-    try {
-      fetch(`${config.APP_URL}/category/categoryName`)
-        .then((res) => res.json())
-        .then((result) => setCategories(result));
-    } catch (err) {}
-  }, [number + 1]);
+    if (isFocused) {
+      try {
+        fetch(`${config.APP_URL}/category/categoryName`)
+          .then((res) => res.json())
+          .then((result) => setCategories(result));
+      } catch (err) {}
+    }
+  }, [isFocused]);
 
   async function openDocumentFile() {
     try {

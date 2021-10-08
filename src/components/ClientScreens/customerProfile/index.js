@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -16,11 +16,18 @@ import Header from "../../atoms/header";
 const Data = [{}, {}, {}, {}, {}, {}, {}, {}];
 import AppTemplate from "../../ClientTemplate";
 import { useNavigation } from "@react-navigation/native";
-import { UserContext } from "../../../../App";
 
-function BuyerProfile() {
+function CustomerProfile({ route }) {
   const navigation = useNavigation();
-  const [loggedInUser, setLoggedInUser] = useContext(UserContext);
+  const { id } = route?.params;
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    fetch(`https://api-cosmetic.herokuapp.com/user/get/${id}`)
+      .then((res) => res.json())
+      .then((data) => setUser(data));
+  }, [id]);
+
   return (
     <AppTemplate>
       <View style={{ flex: 1, backgroundColor: "#EBEAEF" }}>
@@ -50,14 +57,12 @@ function BuyerProfile() {
                   wi={80}
                   icon={require("../../../assets/badge.png")}
                   backcolor="#707070"
-                  img={loggedInUser?.user?.imgURL}
+                  img={user?.user[0]?.imgURL}
                 />
                 <View style={style.view2}>
-                  <Text style={{ opacity: 0.8 }}>
-                    {loggedInUser?.user?.name}
-                  </Text>
+                  <Text style={{ opacity: 0.8 }}>{user?.user[0]?.name}</Text>
                   <Text style={{ opacity: 0.5, fontSize: 8 }}>
-                    {loggedInUser?.user?.email}
+                    {user?.user[0]?.email}
                   </Text>
                 </View>
                 <View style={{ marginTop: 8 }}>
@@ -79,22 +84,14 @@ function BuyerProfile() {
                   <Text
                     style={{ fontSize: 12, color: "white", fontWeight: "bold" }}
                   >
-                    About Me
+                    About
                   </Text>
                   <Text style={{ fontSize: 12, color: "white", marginTop: 7 }}>
-                    {loggedInUser?.user?.aboutMe}
-                  </Text>
-                  <Text
-                    style={{ fontSize: 12, color: "white", fontWeight: "bold", marginTop: 10 }}
-                  >
-                    Instagram Username
-                  </Text>
-                  <Text style={{ fontSize: 12, color: "white", marginTop: 7 }}>
-                    {loggedInUser?.user?.instagramUsername}
+                    {user?.user[0]?.aboutMe}
                   </Text>
                 </View>
               </View>
-              {/* <View style={style.view3}>
+              <View style={style.view3}>
                 <Text
                   style={{
                     fontSize: 12,
@@ -104,24 +101,25 @@ function BuyerProfile() {
                     paddingLeft: 10,
                   }}
                 >
-                  Purchase History (20 Products)
+                  Purchase History ({user?.userProduct?.length || 0} Products)
                 </Text>
                 <FlatList
                   showsHorizontalScrollIndicator={false}
                   horizontal={true}
                   style={{ width: "100%", marginTop: 10 }}
-                  data={Data}
-                  keyExtractor={(item) => item.id}
+                  data={user?.userProduct}
+                  keyExtractor={(item) => item._id}
                   renderItem={({ item }) => (
                     <BigLotionCard
-                      title="Skin Care Lotion"
-                      dis="Sed ut  -  Perspiciatis unde omnis iste"
-                      price="$ 29.00"
+                      title={item?.product?.title}
+                      dis={item?.product?.description}
+                      price={item?.product?.price}
+                      img={item?.product?.imgURL}
                       color="rgba(255, 255,255, 0.4)"
                     />
                   )}
                 />
-              </View> */}
+              </View>
             </ScrollView>
           </SafeAreaView>
         </ImageBackground>
@@ -129,7 +127,7 @@ function BuyerProfile() {
     </AppTemplate>
   );
 }
-export default BuyerProfile;
+export default CustomerProfile;
 
 const style = StyleSheet.create({
   container: {

@@ -163,7 +163,7 @@ function AddCatogory() {
                   </Text>
                 )}
                 {categories.map((category) => (
-                  <View style={style.view5}>
+                  <View style={style.view5} key={category._id}>
                     <View style={style.view4}>
                       <Text
                         style={{ fontSize: 13, color: "black", opacity: 0.7 }}

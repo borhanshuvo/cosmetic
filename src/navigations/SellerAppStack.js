@@ -2,6 +2,7 @@ import React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import ClientSidebar from "../components/orgasms/ClientSidebar";
 import ClientBuyerProfile from "../components/ClientScreens/buyerProfile";
+import ClientCustomerProfile from "../components/ClientScreens/customerProfile";
 import ClientMessages from "../components/ClientScreens/messages";
 import ClientInbox from "../components/ClientScreens/Inbox";
 import ClientNotifications from "../components/ClientScreens/notification";
@@ -30,18 +31,15 @@ const SellerAppStackNavigater = () => {
       <Drawer.Screen name="ClientBuyerProfile" component={ClientBuyerProfile} />
       <Drawer.Screen name="ClientMessages" component={ClientMessages} />
       <Drawer.Screen name="ClientInbox" component={ClientInbox} />
-
       <Drawer.Screen
         name="ClientNotifications"
         component={ClientNotifications}
       />
-
       <Drawer.Screen name="ClientBidRequest2" component={ClientBidRequest2} />
       <Drawer.Screen
         name="ClientPremiumRequest"
         component={ClientPremiumRequest}
       />
-
       <Drawer.Screen
         name="ClientAddProductDetail"
         component={ClientAddProductDetail}
@@ -50,6 +48,10 @@ const SellerAppStackNavigater = () => {
       <Drawer.Screen name="ClientTagClient" component={ClientTagClient} />
       <Drawer.Screen name="ClientSpecailOffer" component={ClientSpecailOffer} />
       <Drawer.Screen name="ClientStatics" component={ClientStatics} />
+      <Drawer.Screen
+        name="ClientCustomerProfile"
+        component={ClientCustomerProfile}
+      />
     </Drawer.Navigator>
   );
 };

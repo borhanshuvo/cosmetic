@@ -19,7 +19,6 @@ import { useNavigation } from "@react-navigation/native";
 function TagClient() {
   const navigation = useNavigation();
   const [users, setUsers] = useState([]);
-  console.warn(users);
 
   const handelSearch = (e) => {
     const search = e;
@@ -105,6 +104,7 @@ function TagClient() {
                   users.map((user) => (
                     <View key={user._id}>
                       <MessagesCard
+                        id={user._id}
                         title={user.name}
                         dis={user.email}
                         img={user.imgURL}
