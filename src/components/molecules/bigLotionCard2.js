@@ -1,5 +1,6 @@
 import * as React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+import config from "../../../config";
 
 function BigLotionCard2(props) {
   const {
@@ -7,6 +8,8 @@ function BigLotionCard2(props) {
     dis,
     price,
     backColor,
+    productImg,
+    userImg,
     orderStatus,
     buttonBackColor,
     buttonWidth,
@@ -24,7 +27,7 @@ function BigLotionCard2(props) {
           }}
         >
           <Image
-            source={require("../../assets/lotion2.png")}
+            source={{ uri: `${config?.APP_URL}${productImg}` }}
             resizeMethod="resize"
             resizeMode="contain"
             style={style.image}
@@ -34,7 +37,7 @@ function BigLotionCard2(props) {
               {title}
             </Text>
 
-            <Text style={{ fontSize: 6, color: "grey" }}>{dis}</Text>
+            <Text style={{ fontSize: 6, color: "grey", marginRight: 40}}>{dis}</Text>
             <View
               style={{
                 backgroundColor: buttonBackColor,
@@ -62,9 +65,9 @@ function BigLotionCard2(props) {
 
       <View style={style.view3}>
         <Text style={{ fontSize: 9, color: "black", opacity: 0.7 }}>
-          {price}
+          ${parseFloat(price).toFixed(2)}
         </Text>
-        <Image source={require("../../assets/icon.png")} style={style.image1} />
+        <Image  source={{ uri: `${config?.APP_URL}${userImg}` }} style={style.image1} />
       </View>
     </TouchableOpacity>
   );

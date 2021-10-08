@@ -7,13 +7,30 @@ import {
   ScrollView,
 } from "react-native";
 import BigLotionCard2 from "../../molecules/bigLotionCard2";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import Header from "../../atoms/header";
 import AppTemplate from "../../Usertemplate";
+import { UserContext } from "../../../../App";
 
 function Orders() {
   const navigation = useNavigation();
-
+  const isFocused = useIsFocused();
+  const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
+  const email = loggedInUser?.user?.email;
+  const [orderList, setOrderList] = React.useState([]);
+  React.useEffect(() => {
+    if (isFocused) {
+      try {
+        fetch("https://api-cosmetic.herokuapp.com/order/info", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ email }),
+        })
+          .then((res) => res.json())
+          .then((result) => setOrderList(result));
+      } catch (err) {}
+    }
+  }, [email, isFocused]);
   return (
     <AppTemplate>
       <View style={{ flex: 1, backgroundColor: "#EBEAEF" }}>
@@ -37,56 +54,21 @@ function Orders() {
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
             >
-              <BigLotionCard2
-                title="Skin Care Lotion"
-                dis="Sed ut  -  Perspiciatis unde omnis iste"
-                price="$ 29.00"
-                backColor="white"
-                orderStatus="Delivered"
-                buttonBackColor="#B7C9D2"
-                buttonWidth={70}
-                ButtontextColor="white"
-              />
-              <BigLotionCard2
-                title="Skin Care Lotion"
-                dis="Sed ut  -  Perspiciatis unde omnis iste"
-                price="$ 29.00"
-                backColor="white"
-                orderStatus="Delivered"
-                buttonBackColor="#B7C9D2"
-                buttonWidth={70}
-                ButtontextColor="white"
-              />
-              <BigLotionCard2
-                title="Skin Care Lotion"
-                dis="Sed ut  -  Perspiciatis unde omnis iste"
-                price="$ 29.00"
-                backColor="rgba(255, 255,255, 0.4)"
-                orderStatus="Pending"
-                buttonBackColor="#464646"
-                buttonWidth={70}
-                ButtontextColor="white"
-              />
-              <BigLotionCard2
-                title="Skin Care Lotion"
-                dis="Sed ut  -  Perspiciatis unde omnis iste"
-                price="$ 29.00"
-                backColor="rgba(255, 255,255, 0.4)"
-                orderStatus="Delivered"
-                buttonBackColor="#B7C9D2"
-                buttonWidth={70}
-                ButtontextColor="white"
-              />
-              <BigLotionCard2
-                title="Skin Care Lotion"
-                dis="Sed ut  -  Perspiciatis unde omnis iste"
-                price="$ 29.00"
-                backColor="rgba(255, 255,255, 0.4)"
-                orderStatus="Delivered"
-                buttonBackColor="#B7C9D2"
-                buttonWidth={70}
-                ButtontextColor="white"
-              />
+              {orderList.map((ol) => (
+                <BigLotionCard2
+                  key={ol?._id}
+                  title={ol?.product?.title}
+                  dis={ol?.product?.description}
+                  price={ol?.product?.price}
+                  productImg={ol?.product?.imgURL}
+                  userImg={ol?.imgURL}
+                  backColor="white"
+                  orderStatus={ol?.status}
+                  buttonBackColor="#B7C9D2"
+                  buttonWidth={70}
+                  ButtontextColor="white"
+                />
+              ))}
             </ScrollView>
           </SafeAreaView>
         </ImageBackground>

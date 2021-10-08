@@ -43,6 +43,7 @@ function CheckOutCard({ productDetail }) {
         img: productDetail?.img,
         imgURL: productDetail?.imgURL,
         title: productDetail?.title,
+        description: productDetail?.description,
         quantity: quantity,
         price: totalAmount,
       };
