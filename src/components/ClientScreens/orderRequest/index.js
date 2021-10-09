@@ -7,13 +7,22 @@ import {
   ScrollView,
 } from "react-native";
 
-import BidRequestCard2 from "../../orgasms/bidRequestCard2";
 import { useNavigation } from "@react-navigation/native";
 import Header from "../../atoms/header";
 import AppTemplate from "../../ClientTemplate";
+import OrderRequestCard from "../../orgasms/orderRequestCard";
 
-function PremiumRequest() {
+function OrderRequest() {
   const navigation = useNavigation();
+  const [orders, setOrders] = React.useState([]);
+  const [number, setNumber] = React.useState(0);
+  React.useEffect(() => {
+    try {
+      fetch("https://api-cosmetic.herokuapp.com/order/get")
+        .then((res) => res.json())
+        .then((result) => setOrders(result));
+    } catch (err) {}
+  }, [number]);
 
   return (
     <AppTemplate>
@@ -27,7 +36,7 @@ function PremiumRequest() {
             <Header
               onPress={() => navigation.goBack()}
               img1={require("../../../assets/arrowLeft2.png")}
-              title="Premium Request"
+              title="Order"
               img2={require("../../../assets/menu2.png")}
               img3={require("../../../assets/loupe.png")}
             />
@@ -38,17 +47,21 @@ function PremiumRequest() {
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
             >
-              <BidRequestCard2
-                title="Skin Care Lotion"
-                dis="Sed ut  -  Perspiciatis unde omnis iste"
-                price="$ 29.00"
-                backColor="white"
-                orderStatus="Accepted"
-                buttonBackColor="#B7C9D2"
-                buttonWidth={70}
-                ButtontextColor="white"
-                reject={true}
-              />
+              {orders.map((order) => (
+                <OrderRequestCard
+                  key={order._id}
+                  id={order._id}
+                  title={order?.product?.title}
+                  dis={order?.product?.description}
+                  price={order?.product?.price}
+                  backColor="white"
+                  orderStatus={order?.status}
+                  buttonBackColor="#B7C9D2"
+                  buttonWidth={70}
+                  ButtontextColor="white"
+                  setNumber={setNumber}
+                />
+              ))}
             </ScrollView>
           </SafeAreaView>
         </ImageBackground>
@@ -56,7 +69,7 @@ function PremiumRequest() {
     </AppTemplate>
   );
 }
-export default PremiumRequest;
+export default OrderRequest;
 
 const style = StyleSheet.create({
   backgroundImage: {

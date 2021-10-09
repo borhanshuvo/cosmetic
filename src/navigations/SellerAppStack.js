@@ -14,6 +14,7 @@ import ClientAddCatogory from "../components/ClientScreens/addCatogory";
 import ClientTagClient from "../components/ClientScreens/tagClient";
 import ClientSpecailOffer from "../components/ClientScreens/specailOffer";
 import ClientStatics from "../components/ClientScreens/statics";
+import OrderRequest from "../components/ClientScreens/orderRequest";
 
 const Drawer = createDrawerNavigator();
 
@@ -35,6 +36,7 @@ const SellerAppStackNavigater = () => {
         name="ClientNotifications"
         component={ClientNotifications}
       />
+      <Drawer.Screen name="OrderRequest" component={OrderRequest} />
       <Drawer.Screen name="ClientBidRequest2" component={ClientBidRequest2} />
       <Drawer.Screen
         name="ClientPremiumRequest"

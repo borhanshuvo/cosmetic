@@ -20,13 +20,14 @@ import { useNavigation } from "@react-navigation/native";
 function CustomerProfile({ route }) {
   const navigation = useNavigation();
   const { id } = route?.params;
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState();
 
   useEffect(() => {
     fetch(`https://api-cosmetic.herokuapp.com/user/get/${id}`)
       .then((res) => res.json())
       .then((data) => setUser(data));
   }, [id]);
+  console.log(user)
 
   return (
     <AppTemplate>

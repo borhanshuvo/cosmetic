@@ -73,6 +73,12 @@ function ClientSidebar() {
           </TouchableOpacity>
           <TouchableOpacity
             style={style.viewText}
+            onPress={() => navigation.navigate("OrderRequest")}
+          >
+            <Text style={style.textLinks}>Orders</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={style.viewText}
             onPress={() => navigation.navigate("ClientBidRequest2")}
           >
             <Text style={style.textLinks}>Bids</Text>
