@@ -1,6 +1,7 @@
 import * as React from "react";
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { DrawerActions, useNavigation } from "@react-navigation/native";
+import config from "../../../config";
 function Header(props) {
   const { img1, img2, img3, userImg, title, onPress } = props;
   const navigation = useNavigation();
@@ -9,7 +10,7 @@ function Header(props) {
       <View style={{ width: "22%" }}>
         <TouchableOpacity onPress={onPress}>
           <Image
-            source={userImg ? { uri: userImg } : img1}
+            source={userImg ? { uri: `${config.APP_URL}${userImg}` } : img1}
             style={style.image11}
             resizeMethod="resize"
             resizeMode="contain"

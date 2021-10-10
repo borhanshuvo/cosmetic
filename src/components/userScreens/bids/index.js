@@ -6,22 +6,24 @@ import {
   SafeAreaView,
   ScrollView,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import BidRequestCard2 from "../../orgasms/bidRequestCard2";
+import BigLotionCard2 from "../../molecules/bigLotionCard2";
 import Header from "../../atoms/header";
-import AppTemplate from "../../ClientTemplate";
+import AppTemplate from "../../Usertemplate";
+import { useNavigation } from "@react-navigation/native";
+import { UserContext } from "../../../../App";
 
-function BidRequest2() {
+function Bids() {
   const navigation = useNavigation();
+  const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
   const [bids, setBids] = React.useState([]);
-  const [number, setNumber] = React.useState(0);
+
   React.useEffect(() => {
-    try {
-      fetch("https://api-cosmetic.herokuapp.com/bidRequest/get")
-        .then((res) => res.json())
-        .then((result) => setBids(result));
-    } catch (err) {}
-  }, [number]);
+    fetch(
+      `https://api-cosmetic.herokuapp.com/bidRequest/get/${loggedInUser?.user?.email}`
+    )
+      .then((res) => res.json())
+      .then((result) => setBids(result));
+  }, [loggedInUser?.user?.email]);
 
   return (
     <AppTemplate>
@@ -35,7 +37,7 @@ function BidRequest2() {
             <Header
               onPress={() => navigation.goBack()}
               img1={require("../../../assets/arrowLeft2.png")}
-              title="Bid Request"
+              title="Bids"
               img2={require("../../../assets/menu2.png")}
               img3={require("../../../assets/loupe.png")}
             />
@@ -47,19 +49,18 @@ function BidRequest2() {
               showsHorizontalScrollIndicator={false}
             >
               {bids.map((bid) => (
-                <BidRequestCard2
+                <BigLotionCard2
                   key={bid._id}
-                  id={bid._id}
                   title={bid?.product?.title}
                   dis={bid?.product?.description}
                   price={bid?.bidAmmount}
                   backColor="white"
                   orderStatus={bid?.status}
+                  userImg={bid?.imgURL}
+                  productImg={bid?.product?.imgURL}
                   buttonBackColor="#B7C9D2"
                   buttonWidth={70}
                   ButtontextColor="white"
-                  productImg={bid?.product?.imgURL}
-                  setNumber={setNumber}
                 />
               ))}
             </ScrollView>
@@ -69,7 +70,7 @@ function BidRequest2() {
     </AppTemplate>
   );
 }
-export default BidRequest2;
+export default Bids;
 
 const style = StyleSheet.create({
   backgroundImage: {

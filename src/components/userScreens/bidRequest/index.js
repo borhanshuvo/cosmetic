@@ -1,19 +1,29 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   ImageBackground,
   StyleSheet,
   SafeAreaView,
   ScrollView,
+  Image,
 } from "react-native";
-import BigLotionCard2 from "../../molecules/bigLotionCard2";
-
+import { useNavigation } from "@react-navigation/native";
 import Header from "../../atoms/header";
 import AppTemplate from "../../Usertemplate";
-import { useNavigation } from "@react-navigation/native";
+import BidRequestCard from "../../orgasms/bidRequestCard";
 
-function BidRequest() {
+function BidRequest({ route }) {
   const navigation = useNavigation();
+  const { id } = route?.params;
+  const [product, setProduct] = useState({});
+
+  useEffect(() => {
+    try {
+      fetch(`https://api-cosmetic.herokuapp.com/product/get/${id}`)
+        .then((res) => res.json())
+        .then((result) => setProduct(result));
+    } catch (err) {}
+  }, [id]);
 
   return (
     <AppTemplate>
@@ -27,7 +37,7 @@ function BidRequest() {
             <Header
               onPress={() => navigation.goBack()}
               img1={require("../../../assets/arrowLeft2.png")}
-              title="Bid Requests"
+              title="Bid Request"
               img2={require("../../../assets/menu2.png")}
               img3={require("../../../assets/loupe.png")}
             />
@@ -38,58 +48,9 @@ function BidRequest() {
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
             >
-              <BigLotionCard2
-                title="Skin Care Lotion"
-                dis="Sed ut  -  Perspiciatis unde omnis iste"
-                price="$ 29.00"
-                backColor="white"
-                orderStatus="Approved"
-                buttonBackColor="#B7C9D2"
-                buttonWidth={70}
-                ButtontextColor="white"
-              />
-              <BigLotionCard2
-                title="Skin Care Lotion"
-                dis="Sed ut  -  Perspiciatis unde omnis iste"
-                price="$ 29.00"
-                backColor="white"
-                orderStatus="Approved"
-                buttonBackColor="#B7C9D2"
-                buttonWidth={70}
-                ButtontextColor="white"
-              />
-              <BigLotionCard2
-                title="Skin Care Lotion"
-                dis="Sed ut  -  Perspiciatis unde omnis iste"
-                price="$ 29.00"
-                backColor="rgba(255, 255,255, 0.4)"
-                orderStatus="Not Approve"
-                buttonBackColor="#464646"
-                buttonWidth={80}
-                ButtontextColor="white"
-                buttonTextOpacity={0.9}
-              />
-              <BigLotionCard2
-                title="Skin Care Lotion"
-                dis="Sed ut  -  Perspiciatis unde omnis iste"
-                price="$ 29.00"
-                backColor="rgba(255, 255,255, 0.4)"
-                orderStatus="Seller Sent Different Bid"
-                buttonBackColor="white"
-                buttonWidth={150}
-                ButtontextColor="black"
-                buttonTextOpacity={0.6}
-              />
-              <BigLotionCard2
-                title="Skin Care Lotion"
-                dis="Sed ut  -  Perspiciatis unde omnis iste"
-                price="$ 29.00"
-                backColor="rgba(255, 255,255, 0.4)"
-                orderStatus="Delivered"
-                buttonBackColor="#B7C9D2"
-                buttonWidth={70}
-                ButtontextColor="white"
-              />
+              <View>
+                <BidRequestCard productDetails={product} />
+              </View>
             </ScrollView>
           </SafeAreaView>
         </ImageBackground>
@@ -100,13 +61,29 @@ function BidRequest() {
 export default BidRequest;
 
 const style = StyleSheet.create({
-  backgroundImage: {
-    height: "100%",
+  container: {
+    flex: 1,
+    paddingTop: 40,
+    alignItems: "center",
+    marginTop: 10,
+    borderWidth: 0.5,
+    borderRadius: 50,
+    borderColor: "#B1B9B5",
+    paddingLeft: 20,
+    width: "100%",
+  },
+  InputContainer: {
     paddingLeft: 24,
     paddingRight: 24,
   },
+
+  backgroundImage: {
+    height: "100%",
+  },
   head: {
     marginTop: 20,
+    paddingLeft: 24,
+    paddingRight: 24,
   },
   container: {
     flex: 1,

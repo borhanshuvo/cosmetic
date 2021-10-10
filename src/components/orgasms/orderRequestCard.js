@@ -1,5 +1,6 @@
 import * as React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+import config from "../../../config";
 
 function OrderRequestCard(props) {
   const {
@@ -14,6 +15,7 @@ function OrderRequestCard(props) {
     ButtontextColor,
     buttonTextOpacity,
     setNumber,
+    productImg
   } = props;
 
   const updateStatus = (status) => {
@@ -25,7 +27,6 @@ function OrderRequestCard(props) {
       })
         .then((res) => res.json())
         .then((result) => {
-          console.log(result);
           setNumber((prevState) => prevState + 1);
         });
     } catch (err) {}
@@ -42,7 +43,7 @@ function OrderRequestCard(props) {
           }}
         >
           <Image
-            source={require("../../assets/lotion2.png")}
+            source={{ uri: `${config.APP_URL}${productImg}` }}
             resizeMethod="resize"
             resizeMode="contain"
             style={style.image}
@@ -193,8 +194,8 @@ const style = StyleSheet.create({
   },
   view3: {
     width: 70,
-
     alignItems: "center",
+    marginBottom: 10,
   },
   view4: {
     marginLeft: 5,

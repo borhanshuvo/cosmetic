@@ -11,9 +11,18 @@ import BidRequestCard2 from "../../orgasms/bidRequestCard2";
 import { useNavigation } from "@react-navigation/native";
 import Header from "../../atoms/header";
 import AppTemplate from "../../ClientTemplate";
+import PremiumRequestCard from "../../orgasms/premiumRequestCard";
 
 function PremiumRequest() {
   const navigation = useNavigation();
+  const [users, setUsers] = React.useState([]);
+  const [number, setNumber] = React.useState(0);
+
+  React.useEffect(() => {
+    fetch(`https://api-cosmetic.herokuapp.com/user/get`)
+      .then((res) => res.json())
+      .then((data) => setUsers(data));
+  }, [number]);
 
   return (
     <AppTemplate>
@@ -38,17 +47,23 @@ function PremiumRequest() {
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
             >
-              <BidRequestCard2
-                title="Skin Care Lotion"
-                dis="Sed ut  -  Perspiciatis unde omnis iste"
-                price="$ 29.00"
-                backColor="white"
-                orderStatus="Accepted"
-                buttonBackColor="#B7C9D2"
-                buttonWidth={70}
-                ButtontextColor="white"
-                reject={true}
-              />
+              {users.map((user) => (
+                <PremiumRequestCard
+                  key={user._id}
+                  id={user._id}
+                  name={user?.name}
+                  email={user?.email}
+                  img={user?.imgURL}
+                  premium={user?.premium}
+                  backColor="white"
+                  buttonBackColor="#B7C9D2"
+                  buttonWidth={70}
+                  ButtontextColor="white"
+                  setNumber={setNumber}
+                  aboutMe={user?.aboutMe}
+                  role={user?.role}
+                />
+              ))}
             </ScrollView>
           </SafeAreaView>
         </ImageBackground>

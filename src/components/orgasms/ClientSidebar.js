@@ -8,6 +8,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { UserContext } from "../../../App";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import config from "../../../config";
 
 function ClientSidebar() {
   const navigation = useNavigation();
@@ -33,7 +34,7 @@ function ClientSidebar() {
             }}
           >
             <Image
-              source={{ uri: loggedInUser?.user?.imgURL }}
+              source={{ uri: `${config.APP_URL}${loggedInUser?.user?.imgURL}` }}
               style={style.image1}
             />
             <View style={{ marginLeft: 12 }}>
@@ -108,12 +109,6 @@ function ClientSidebar() {
           >
             <Text style={style.textLinks}>Add Catogory</Text>
           </TouchableOpacity>
-          {/* <TouchableOpacity
-            style={style.viewText}
-            onPress={() => navigation.navigate("ClientBuyerProfile")}
-          >
-            <Text style={style.textLinks}>Profile</Text>
-          </TouchableOpacity> */}
           <TouchableOpacity
             style={style.viewText}
             onPress={() => navigation.navigate("ClientTagClient")}
@@ -124,7 +119,7 @@ function ClientSidebar() {
             style={style.viewText}
             onPress={() => navigation.navigate("ClientSpecailOffer")}
           >
-            <Text style={style.textLinks}>Specail Offer</Text>
+            <Text style={style.textLinks}>Special Offer</Text>
           </TouchableOpacity>
         </View>
       </View>

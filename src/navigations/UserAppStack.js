@@ -6,6 +6,7 @@ import UserSidebar from "../components/orgasms/UserSidebar";
 import UserHome from "../components/userScreens/Home";
 import UserOrders from "../components/userScreens/orders";
 import UserBidRequest from "../components/userScreens/bidRequest";
+import UserBids from "../components/userScreens/bids";
 import UserMessages from "../components/userScreens/messages";
 import UserProductDetail from "../components/userScreens/productDetail";
 import UserNotifications from "../components/userScreens/notifications";
@@ -29,6 +30,7 @@ const UserAppStackNavigater = () => {
       <Drawer.Screen name="UserInbox" component={UserInbox} />
       <Drawer.Screen name="UserOrders" component={UserOrders} />
       <Drawer.Screen name="UserBidRequest" component={UserBidRequest} />
+      <Drawer.Screen name="UserBids" component={UserBids} />
       <Drawer.Screen name="UserMessages" component={UserMessages} />
       <Drawer.Screen name="UserProductDetail" component={UserProductDetail} />
       <Drawer.Screen name="UserNotifications" component={UserNotifications} />

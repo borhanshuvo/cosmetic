@@ -1,8 +1,10 @@
 import * as React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+import config from "../../../config";
 
 function BigLotionCard2(props) {
   const {
+    id,
     title,
     dis,
     price,
@@ -12,10 +14,23 @@ function BigLotionCard2(props) {
     buttonWidth,
     ButtontextColor,
     buttonTextOpacity,
-    reject,
-    messageShow,
-    message,
+    productImg,
+    setNumber,
   } = props;
+
+  const handleBidStatus = (status) => {
+    try {
+      fetch(`https://api-cosmetic.herokuapp.com/bidRequest/update/${id}`, {
+        method: "PUT",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ status }),
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          setNumber((prevState) => prevState + 1);
+        });
+    } catch (err) {}
+  };
   return (
     <View style={[style.view1, { backgroundColor: backColor }]}>
       <View style={style.view5}>
@@ -27,7 +42,7 @@ function BigLotionCard2(props) {
           }}
         >
           <Image
-            source={require("../../assets/lotion2.png")}
+            source={{ uri: `${config.APP_URL}${productImg}` }}
             resizeMethod="resize"
             resizeMode="contain"
             style={style.image}
@@ -38,46 +53,35 @@ function BigLotionCard2(props) {
             </Text>
 
             <Text style={{ fontSize: 6, color: "grey" }}>{dis}</Text>
-            {messageShow ? (
-              <View style={style.messageStyle}>
-                <Text
-                  style={{
-                    fontSize: 10,
-                    color: "black",
-                    opacity: 0.6,
-                  }}
-                >
-                  Buyer Wants to increase Bid
-                </Text>
-              </View>
-            ) : null}
 
-            <View style={{ flexDirection: "row", display: "flex" }}>
-              <TouchableOpacity>
-                <View
-                  style={{
-                    backgroundColor: buttonBackColor,
-                    width: buttonWidth,
-                    alignItems: "center",
-                    paddingTop: 4,
-                    paddingBottom: 4,
-                    borderRadius: 6,
-                    marginTop: 4,
-                  }}
-                >
-                  <Text
+            {orderStatus === "Pending" && (
+              <View style={{ flexDirection: "row", display: "flex" }}>
+                <TouchableOpacity onPress={() => handleBidStatus("Approved")}>
+                  <View
                     style={{
-                      fontSize: 10,
-                      color: ButtontextColor,
-                      opacity: buttonTextOpacity,
+                      backgroundColor: buttonBackColor,
+                      width: buttonWidth,
+                      alignItems: "center",
+                      paddingTop: 4,
+                      paddingBottom: 4,
+                      borderRadius: 6,
+                      marginTop: 4,
                     }}
                   >
-                    {orderStatus}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-              {reject ? (
-                <TouchableOpacity>
+                    <Text
+                      style={{
+                        fontSize: 10,
+                        color: ButtontextColor,
+                        opacity: buttonTextOpacity,
+                      }}
+                    >
+                      Accept
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => handleBidStatus("NotApproved")}
+                >
                   <View
                     style={{
                       width: buttonWidth,
@@ -102,14 +106,65 @@ function BigLotionCard2(props) {
                     </Text>
                   </View>
                 </TouchableOpacity>
-              ) : null}
-            </View>
+              </View>
+            )}
+            {orderStatus === "Approved" && (
+              <View style={{ flexDirection: "row", display: "flex" }}>
+                <View
+                  style={{
+                    backgroundColor: buttonBackColor,
+                    width: buttonWidth,
+                    alignItems: "center",
+                    paddingTop: 4,
+                    paddingBottom: 4,
+                    borderRadius: 6,
+                    marginTop: 4,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 10,
+                      color: ButtontextColor,
+                      opacity: buttonTextOpacity,
+                    }}
+                  >
+                    Approved
+                  </Text>
+                </View>
+              </View>
+            )}
+            {orderStatus === "NotApproved" && (
+              <View style={{ flexDirection: "row", display: "flex" }}>
+                <View
+                  style={{
+                    width: buttonWidth,
+                    alignItems: "center",
+                    paddingTop: 4,
+                    paddingBottom: 4,
+                    borderRadius: 6,
+                    marginTop: 4,
+                    marginLeft: 0,
+                    backgroundColor: "#464646",
+                    borderWidth: 1,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 10,
+                      color: "white",
+                    }}
+                  >
+                    Not Approved
+                  </Text>
+                </View>
+              </View>
+            )}
           </View>
         </View>
       </View>
 
       <View style={style.view3}>
-        <Text style={style.priceStyle}>{price}</Text>
+        <Text style={style.priceStyle}>${parseFloat(price).toFixed(2)}</Text>
       </View>
     </View>
   );
@@ -139,7 +194,7 @@ const style = StyleSheet.create({
   },
   view3: {
     width: 70,
-
+    marginBottom: 10,
     alignItems: "center",
   },
   view4: {

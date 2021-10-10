@@ -27,7 +27,6 @@ function CustomerProfile({ route }) {
       .then((res) => res.json())
       .then((data) => setUser(data));
   }, [id]);
-  console.log(user)
 
   return (
     <AppTemplate>

@@ -1,5 +1,12 @@
 import * as React from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  ToastAndroid,
+} from "react-native";
 
 // import Home from "../userScreens/Home";
 // import Orders from "../userScreens/orders";
@@ -8,10 +15,26 @@ import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { UserContext } from "../../../App";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import config from "../../../config";
 
 function Sidebar() {
   const navigation = useNavigation();
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
+  const [user, setUser] = React.useState();
+  const [number, setNumber] = React.useState(0);
+
+  React.useEffect(() => {
+    fetch(
+      `https://api-cosmetic.herokuapp.com/user/get/${loggedInUser?.user?._id}`
+    )
+      .then((res) => res.json())
+      .then((data) => setUser(data.user[0]));
+  }, [loggedInUser?.user?._id, number]);
+
+  const showToast = (i) => {
+    ToastAndroid.show(i, ToastAndroid.SHORT);
+  };
+
   const logout = async () => {
     try {
       await AsyncStorage.removeItem("userInfo");
@@ -19,6 +42,30 @@ function Sidebar() {
       navigation.navigate("SignUp");
     } catch (err) {}
   };
+
+  const handelRequest = (premium) => {
+    try {
+      fetch(
+        `https://api-cosmetic.herokuapp.com/user/update/${loggedInUser?.user?._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "content-type": "application/json",
+            authorization: `Bearer ${loggedInUser?.accessToken}`,
+          },
+          body: JSON.stringify({ premium }),
+        }
+      )
+        .then((res) => res.json())
+        .then((result) => {
+          if (!result?.error) {
+            showToast("Request sent successfully");
+            setNumber(number + 1);
+          }
+        });
+    } catch (err) {}
+  };
+
   return (
     <View style={style.view1}>
       <View>
@@ -32,7 +79,7 @@ function Sidebar() {
             }}
           >
             <Image
-              source={{ uri: loggedInUser?.user?.imgURL }}
+              source={{ uri: `${config.APP_URL}${loggedInUser?.user?.imgURL}` }}
               style={style.image1}
             />
             <View style={{ marginLeft: 12 }}>
@@ -72,7 +119,7 @@ function Sidebar() {
           </TouchableOpacity>
           <TouchableOpacity
             style={style.viewText}
-            onPress={() => navigation.navigate("UserBidRequest")}
+            onPress={() => navigation.navigate("UserBids")}
           >
             <Text style={style.textLinks}>My Bids</Text>
           </TouchableOpacity>
@@ -93,7 +140,7 @@ function Sidebar() {
             style={style.viewText}
             onPress={() => navigation.navigate("UserOrders")}
           >
-            <Text style={style.textLinks}>Orders</Text>
+            <Text style={style.textLinks}>My Orders</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={style.viewText}
@@ -101,6 +148,14 @@ function Sidebar() {
           >
             <Text style={style.textLinks}>Notifications</Text>
           </TouchableOpacity>
+          {(user?.premium === "NotPremium" || user?.premium === "Pending") && (
+            <TouchableOpacity
+              style={style.viewText}
+              onPress={() => handelRequest("Pending")}
+            >
+              <Text style={style.textLinks}>Premium Request</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
       <View>

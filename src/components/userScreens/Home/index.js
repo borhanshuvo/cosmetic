@@ -12,21 +12,31 @@ import {
 import Header from "../../atoms/header";
 import LotionCard from "../../molecules/lotionCard";
 import BigLotionCard from "../../molecules/bigLotionCard";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import { UserContext } from "../../../../App";
 import AppTemplate from "../../Usertemplate";
 
 function Home() {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
   const [products, setProducts] = React.useState([]);
+  const [user, setUser] = React.useState();
+
   React.useEffect(() => {
-    try {
+    if (isFocused) {
+      fetch(
+        `https://api-cosmetic.herokuapp.com/user/get/${loggedInUser?.user?._id}`
+      )
+        .then((res) => res.json())
+        .then((data) => setUser(data.user[0]));
+
       fetch("https://api-cosmetic.herokuapp.com/product/get")
         .then((res) => res.json())
         .then((result) => setProducts(result));
-    } catch (err) {}
-  }, []);
+    }
+  }, [loggedInUser?.user?._id, isFocused]);
+
   return (
     <AppTemplate>
       <View style={{ flex: 1, backgroundColor: "#EBEAEF" }}>
@@ -67,27 +77,31 @@ function Home() {
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
           >
-            <FlatList
-              showsHorizontalScrollIndicator={false}
-              horizontal={true}
-              style={{ width: "100%", marginTop: 10 }}
-              data={products}
-              keyExtractor={(item) => item._id}
-              renderItem={({ item }) => (
-                <LotionCard
-                  ButtonClick={() =>
-                    navigation.navigate("UserCheckOut", { id: item?._id })
-                  }
-                  onPress={() =>
-                    navigation.navigate("UserProductDetail", { id: item?._id })
-                  }
-                  title={item?.title}
-                  dis={item?.description}
-                  price={item?.price}
-                  img={item?.imgURL}
-                />
-              )}
-            />
+            {user?.premium === "Premium" && (
+              <FlatList
+                showsHorizontalScrollIndicator={false}
+                horizontal={true}
+                style={{ width: "100%", marginTop: 10 }}
+                data={products}
+                keyExtractor={(item) => item._id}
+                renderItem={({ item }) => (
+                  <LotionCard
+                    ButtonClick={() =>
+                      navigation.navigate("UserCheckOut", { id: item?._id })
+                    }
+                    onPress={() =>
+                      navigation.navigate("UserProductDetail", {
+                        id: item?._id,
+                      })
+                    }
+                    title={item?.title}
+                    dis={item?.description}
+                    price={item?.price}
+                    img={item?.imgURL}
+                  />
+                )}
+              />
+            )}
             <Text style={style.text2}>Popular</Text>
             <FlatList
               showsHorizontalScrollIndicator={false}
@@ -97,7 +111,9 @@ function Home() {
               keyExtractor={(item) => item._id}
               renderItem={({ item }) => (
                 <BigLotionCard
-                  onPress={() => navigation.navigate("UserProductDetail", { id: item?._id })}
+                  onPress={() =>
+                    navigation.navigate("UserProductDetail", { id: item?._id })
+                  }
                   title={item?.title}
                   dis={item?.description}
                   price={item?.price}
@@ -117,8 +133,12 @@ function Home() {
               keyExtractor={(item) => item._id}
               renderItem={({ item }) => (
                 <LotionCard
-                  ButtonClick={() => navigation.navigate("UserCheckOut", { id: item?._id })}
-                  onPress={() => navigation.navigate("UserProductDetail", { id: item?._id })}
+                  ButtonClick={() =>
+                    navigation.navigate("UserCheckOut", { id: item?._id })
+                  }
+                  onPress={() =>
+                    navigation.navigate("UserProductDetail", { id: item?._id })
+                  }
                   title={item?.title}
                   dis={item?.description}
                   price={item?.price}

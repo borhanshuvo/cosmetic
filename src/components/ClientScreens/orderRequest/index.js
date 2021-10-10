@@ -6,7 +6,6 @@ import {
   SafeAreaView,
   ScrollView,
 } from "react-native";
-
 import { useNavigation } from "@react-navigation/native";
 import Header from "../../atoms/header";
 import AppTemplate from "../../ClientTemplate";
@@ -60,6 +59,7 @@ function OrderRequest() {
                   buttonWidth={70}
                   ButtontextColor="white"
                   setNumber={setNumber}
+                  productImg={order?.product?.imgURL}
                 />
               ))}
             </ScrollView>

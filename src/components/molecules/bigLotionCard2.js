@@ -37,7 +37,7 @@ function BigLotionCard2(props) {
               {title}
             </Text>
 
-            <Text style={{ fontSize: 6, color: "grey", marginRight: 40}}>{dis}</Text>
+            <Text style={{ fontSize: 6, color: "grey", marginRight: 50}}>{dis}</Text>
             <View
               style={{
                 backgroundColor: buttonBackColor,
