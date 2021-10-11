@@ -17,15 +17,22 @@ import config from "../../../../config";
 function Statics() {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
+  const currentYear = new Date().getFullYear();
   const [totalEarning, setTotalEarning] = useState({});
+  const [year, setYear] = useState(currentYear);
+  const [stateValue, setStateValue] = useState({});
 
   useEffect(() => {
     if (isFocused) {
       fetch(`${config.APP_URL}/order/totalEarning`)
         .then((res) => res.json())
         .then((result) => setTotalEarning(result));
+
+      fetch(`${config.APP_URL}/order/statistics/${year}`)
+        .then((res) => res.json())
+        .then((result) => setStateValue(result));
     }
-  }, [isFocused]);
+  }, [isFocused, year]);
 
   return (
     <AppTemplate>
@@ -75,7 +82,7 @@ function Statics() {
                   </View>
                 </TouchableOpacity> */}
 
-                <Graph />
+                <Graph year={year} setYear={setYear} stateValue={stateValue} />
                 <View style={{ marginTop: 20, marginBottom: 20 }}>
                   <View style={style.Card}>
                     <View style={style.card2}>

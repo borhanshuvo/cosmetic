@@ -3,10 +3,10 @@ import { View, Text, StyleSheet } from "react-native";
 import GraphHeader from "../molecules/graphHeader";
 import GraphLine from "../molecules/graphLine";
 
-function Graph() {
+function Graph({ setYear, year, stateValue }) {
   return (
     <View style={style.Card}>
-      <GraphHeader />
+      <GraphHeader setYear={setYear} year={year} stateValue={stateValue} />
       <View
         style={{
           height: 180,
@@ -16,18 +16,66 @@ function Graph() {
           marginTop: 20,
         }}
       >
-        <GraphLine hi="80%" wi={20} day="Jan" />
-        <GraphLine hi="70%" wi={20} day="Feb" />
-        <GraphLine hi="75%" wi={20} day="Mar" />
-        <GraphLine hi="98%" wi={20} day="Apr" />
-        <GraphLine hi="87%" wi={20} day="May" />
-        <GraphLine hi="90%" wi={20} day="Jun" />
-        <GraphLine hi="10%" wi={20} day="Jul" />
-        <GraphLine hi="40%" wi={20} day="Aug" />
-        <GraphLine hi="80%" wi={20} day="Sep" />
-        <GraphLine hi="40%" wi={20} day="Oct" />
-        <GraphLine hi="30%" wi={20} day="Nov" />
-        <GraphLine hi="50%" wi={20} day="Dec" />
+        <GraphLine
+          hi={`${parseInt(stateValue?.jan) / 100}%`}
+          wi={20}
+          day="Jan"
+        />
+        <GraphLine
+          hi={`${parseInt(stateValue?.fab) / 100}%`}
+          wi={20}
+          day="Feb"
+        />
+        <GraphLine
+          hi={`${parseInt(stateValue?.mar) / 100}%`}
+          wi={20}
+          day="Mar"
+        />
+        <GraphLine
+          hi={`${parseInt(stateValue?.apr) / 100}%`}
+          wi={20}
+          day="Apr"
+        />
+        <GraphLine
+          hi={`${parseInt(stateValue?.may) / 100}%`}
+          wi={20}
+          day="May"
+        />
+        <GraphLine
+          hi={`${parseInt(stateValue?.jun) / 100}%`}
+          wi={20}
+          day="Jun"
+        />
+        <GraphLine
+          hi={`${parseInt(stateValue?.jul) / 100}%`}
+          wi={20}
+          day="Jul"
+        />
+        <GraphLine
+          hi={`${parseInt(stateValue?.aug) / 100}%`}
+          wi={20}
+          day="Aug"
+        />
+        <GraphLine
+          hi={`${parseInt(stateValue?.sep) / 100}%`}
+          wi={20}
+          day="Sep"
+        />
+        <GraphLine
+          hi={`${parseInt(stateValue?.oct) / 100}%`}
+          wi={20}
+          day="Oct"
+        />
+        <GraphLine
+          hi={`${parseInt(stateValue?.nov) / 100}%`}
+          wi={20}
+          day="Nov"
+        />
+        <GraphLine
+          hi={`${parseInt(stateValue?.dec) / 100}%`}
+          wi={20}
+          day="Dec"
+        />
       </View>
     </View>
   );

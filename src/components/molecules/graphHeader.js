@@ -2,10 +2,10 @@ import * as React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-function GraphHeader() {
+function GraphHeader({ setYear, year, stateValue }) {
   return (
     <View style={style.Card}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => setYear(year - 1)}>
         <Image
           source={require("../../assets/left.png")}
           style={style.iconsStyle}
@@ -14,10 +14,12 @@ function GraphHeader() {
         />
       </TouchableOpacity>
       <View style={{ alignItems: "center" }}>
-        <Text style={{ fontSize: 10, opacity: 0.6 }}>December</Text>
-        <Text style={{ fontSize: 12, opacity: 0.8 }}>35,000.00 USD</Text>
+        <Text style={{ fontSize: 10, opacity: 0.6 }}>{year}</Text>
+        <Text style={{ fontSize: 12, opacity: 0.8 }}>
+          ${parseFloat(stateValue?.yearlyIncome).toFixed(2)} USD
+        </Text>
       </View>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => setYear(year + 1)}>
         <Image
           source={require("../../assets/right.png")}
           style={style.iconsStyle}
