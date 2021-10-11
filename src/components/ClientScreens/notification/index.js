@@ -51,19 +51,18 @@ function Notifications() {
               showsHorizontalScrollIndicator={false}
             >
               {notification.map((nt) => (
-                <View key={nt?._id}>
-                  <NotificationCard
-                    id={nt?._id}
-                    title={nt?.title}
-                    dis={nt?.description}
-                    img={nt?.imgURL}
-                    email={loggedInUser?.user?.email}
-                    setNumber={setNumber}
-                    backColor="white"
-                    dotColor="#B7C9D2"
-                    toggle={true}
-                  />
-                </View>
+                <NotificationCard
+                  key={nt?._id}
+                  id={nt?._id}
+                  title={nt?.title}
+                  dis={nt?.description}
+                  img={nt?.imgURL}
+                  email={loggedInUser?.user?.email}
+                  setNumber={setNumber}
+                  backColor="white"
+                  dotColor="#B7C9D2"
+                  toggle={true}
+                />
               ))}
             </ScrollView>
           </SafeAreaView>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,14 +8,24 @@ import {
   SafeAreaView,
   ScrollView,
 } from "react-native";
-
 import Header from "../../atoms/header";
 import Graph from "../../orgasms/graph";
 import AppTemplate from "../../ClientTemplate";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
+import config from "../../../../config";
 
 function Statics() {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
+  const [totalEarning, setTotalEarning] = useState({});
+
+  useEffect(() => {
+    if (isFocused) {
+      fetch(`${config.APP_URL}/order/totalEarning`)
+        .then((res) => res.json())
+        .then((result) => setTotalEarning(result));
+    }
+  }, [isFocused]);
 
   return (
     <AppTemplate>
@@ -41,7 +51,7 @@ function Statics() {
               showsHorizontalScrollIndicator={false}
             >
               <View style={style.InputContainer}>
-                <View style={{ marginTop: 30 }}>
+                <View style={{ marginTop: 30, marginBottom: 30 }}>
                   <View style={style.smallCard}>
                     <View style={{ width: "35%" }}>
                       <Text style={{ fontSize: 10, opacity: 0.7 }}>
@@ -57,29 +67,32 @@ function Statics() {
                   </View>
                 </View>
 
-                <TouchableOpacity>
+                {/* <TouchableOpacity>
                   <View style={style.button}>
                     <Text style={{ fontSize: 12, color: "white" }}>
                       Withdraw
                     </Text>
                   </View>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
+
                 <Graph />
-                <View style={{ marginTop: 20 }}>
+                <View style={{ marginTop: 20, marginBottom: 20 }}>
                   <View style={style.Card}>
                     <View style={style.card2}>
                       <Text style={{ fontSize: 12, opacity: 0.5 }}>
                         Total Earnings
                       </Text>
                       <Text style={{ fontSize: 13, opacity: 0.7 }}>
-                        35,000.00 USD
+                        ${parseFloat(totalEarning?.result).toFixed(2)} USD
                       </Text>
                     </View>
                     <View style={style.card2}>
                       <Text style={{ fontSize: 12, opacity: 0.5 }}>
-                        Total Earnings
+                        Total Order
                       </Text>
-                      <Text style={{ fontSize: 13, opacity: 0.7 }}>542</Text>
+                      <Text style={{ fontSize: 13, opacity: 0.7 }}>
+                        {totalEarning?.order?.length}
+                      </Text>
                     </View>
                   </View>
                 </View>

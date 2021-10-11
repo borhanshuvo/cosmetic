@@ -1,6 +1,7 @@
 import * as React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import config from "../../../config";
 
 function MessagesCard(props) {
   const { id, title, dis, backColor, onPress, img } = props;
@@ -28,7 +29,7 @@ function MessagesCard(props) {
         >
           <Image
             source={{
-              uri: img,
+              uri: `${config.APP_URL}${img}`,
             }}
             resizeMethod="resize"
             resizeMode="contain"

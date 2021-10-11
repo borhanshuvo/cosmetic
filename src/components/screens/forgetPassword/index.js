@@ -47,6 +47,7 @@ function ForgetPassword() {
   const showToast = (i) => {
     ToastAndroid.show(i, ToastAndroid.SHORT);
   };
+  
   return (
     <View style={{ flex: 1, backgroundColor: "#EBEAEF" }}>
       <ImageBackground

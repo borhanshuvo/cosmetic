@@ -16,13 +16,18 @@ function Graph() {
           marginTop: 20,
         }}
       >
-        <GraphLine hi="80%" wi={20} day="S" />
-        <GraphLine hi="70%" wi={20} day="S" />
-        <GraphLine hi="75%" wi={20} day="M" />
-        <GraphLine hi="98%" wi={20} day="T" />
-        <GraphLine hi="87%" wi={20} day="W" />
-        <GraphLine hi="90%" wi={20} day="T" />
-        <GraphLine hi="40%" wi={20} day="F" />
+        <GraphLine hi="80%" wi={20} day="Jan" />
+        <GraphLine hi="70%" wi={20} day="Feb" />
+        <GraphLine hi="75%" wi={20} day="Mar" />
+        <GraphLine hi="98%" wi={20} day="Apr" />
+        <GraphLine hi="87%" wi={20} day="May" />
+        <GraphLine hi="90%" wi={20} day="Jun" />
+        <GraphLine hi="10%" wi={20} day="Jul" />
+        <GraphLine hi="40%" wi={20} day="Aug" />
+        <GraphLine hi="80%" wi={20} day="Sep" />
+        <GraphLine hi="40%" wi={20} day="Oct" />
+        <GraphLine hi="30%" wi={20} day="Nov" />
+        <GraphLine hi="50%" wi={20} day="Dec" />
       </View>
     </View>
   );

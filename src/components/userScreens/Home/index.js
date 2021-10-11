@@ -15,25 +15,29 @@ import BigLotionCard from "../../molecules/bigLotionCard";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 import { UserContext } from "../../../../App";
 import AppTemplate from "../../Usertemplate";
+import config from "../../../../config";
 
 function Home() {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
   const [products, setProducts] = React.useState([]);
+  const [offerProducts, setOfferProducts] = React.useState([]);
   const [user, setUser] = React.useState();
 
   React.useEffect(() => {
     if (isFocused) {
-      fetch(
-        `https://api-cosmetic.herokuapp.com/user/get/${loggedInUser?.user?._id}`
-      )
+      fetch(`${config.APP_URL}/user/get/${loggedInUser?.user?._id}`)
         .then((res) => res.json())
         .then((data) => setUser(data.user[0]));
 
-      fetch("https://api-cosmetic.herokuapp.com/product/get")
+      fetch(`${config.APP_URL}/product/get`)
         .then((res) => res.json())
         .then((result) => setProducts(result));
+
+      fetch(`${config.APP_URL}/specialOffer/get`)
+        .then((res) => res.json())
+        .then((result) => setOfferProducts(result));
     }
   }, [loggedInUser?.user?._id, isFocused]);
 
@@ -82,22 +86,24 @@ function Home() {
                 showsHorizontalScrollIndicator={false}
                 horizontal={true}
                 style={{ width: "100%", marginTop: 10 }}
-                data={products}
+                data={offerProducts}
                 keyExtractor={(item) => item._id}
                 renderItem={({ item }) => (
                   <LotionCard
                     ButtonClick={() =>
-                      navigation.navigate("UserCheckOut", { id: item?._id })
+                      navigation.navigate("UserCheckOut", {
+                        id: item?.product?._id,
+                      })
                     }
                     onPress={() =>
                       navigation.navigate("UserProductDetail", {
-                        id: item?._id,
+                        id: item?.product?._id,
                       })
                     }
-                    title={item?.title}
-                    dis={item?.description}
-                    price={item?.price}
-                    img={item?.imgURL}
+                    title={item?.product?.title}
+                    dis={item?.product?.description}
+                    price={item?.product?.price}
+                    img={item?.product?.imgURL}
                   />
                 )}
               />

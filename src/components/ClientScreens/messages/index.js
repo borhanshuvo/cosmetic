@@ -7,10 +7,10 @@ import {
   ScrollView,
 } from "react-native";
 import MessagesCard from "../../orgasms/messagesCard";
-
 import Header from "../../atoms/header";
 import AppTemplate from "../../ClientTemplate";
 import { useNavigation } from "@react-navigation/native";
+
 function Messages() {
   const navigation = useNavigation();
   const [users, setUsers] = React.useState([]);

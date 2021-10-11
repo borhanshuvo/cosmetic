@@ -36,7 +36,7 @@ function AddProductDetail() {
   async function openDocumentFile() {
     try {
       const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.images],
+        type: [DocumentPicker.types.allFiles],
       });
       console.log(
         res.uri,
@@ -142,7 +142,7 @@ function AddProductDetail() {
                 >
                   <TouchableOpacity
                     style={style.buttonblack}
-                    onPress={() => openDocumentFile()}
+                    onPressIn={() => openDocumentFile()}
                   >
                     <Text style={{ fontSize: 12, color: "white" }}>
                       Update From Gallery

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,18 +7,109 @@ import {
   StyleSheet,
   SafeAreaView,
   ScrollView,
+  Image,
   TextInput,
-  CheckBox,
+  ToastAndroid,
 } from "react-native";
-
-import Input from "../../atoms/input";
+import ModalDropdown from "react-native-modal-dropdown";
 import Header from "../../atoms/header";
 import AppTemplate from "../../ClientTemplate";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
+import config from "../../../../config";
 
 function SpecailOffer() {
-  const [isSelected, setSelection] = useState(false);
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
+  const showToast = (i) => {
+    ToastAndroid.show(i, ToastAndroid.SHORT);
+  };
+  const [products, setProducts] = useState([]);
+  const [indexNumber, setIndexNumber] = useState(null);
+  const [startDate, setStartDate] = useState("");
+  const [startMonth, setStartMonth] = useState("");
+  const [startYear, setStartYear] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [endMonth, setEndMonth] = useState("");
+  const [endYear, setEndYear] = useState("");
+
+  useEffect(() => {
+    if (isFocused) {
+      try {
+        fetch(`${config.APP_URL}/product/productName`)
+          .then((res) => res.json())
+          .then((result) => setProducts(result));
+      } catch (err) {}
+    }
+  }, [isFocused]);
+
+  const handelPress = () => {
+    if (startDate === "") {
+      showToast("Please Enter Date");
+    } else if (isNaN(startDate)) {
+      showToast("Only Number!");
+    } else if (startDate.length > 2) {
+      showToast("Maxium Two Value");
+    } else if (startMonth === "") {
+      showToast("Please Enter Month");
+    } else if (isNaN(startMonth)) {
+      showToast("Only Number!");
+    } else if (startMonth.length > 2) {
+      showToast("Maxium Two Value");
+    } else if (startYear === "") {
+      showToast("Please Enter Year");
+    } else if (isNaN(startYear)) {
+      showToast("Only Number!");
+    } else if (startYear.length > 4) {
+      showToast("Maxium Four Value");
+    } else if (endDate === "") {
+      showToast("Please Enter Date");
+    } else if (isNaN(endDate)) {
+      showToast("Only Number!");
+    } else if (endDate.length > 2) {
+      showToast("Maxium Two Value");
+    } else if (endMonth === "") {
+      showToast("Please Enter Month");
+    } else if (isNaN(endMonth)) {
+      showToast("Only Number!");
+    } else if (endMonth.length > 2) {
+      showToast("Maxium Two Value");
+    } else if (endYear === "") {
+      showToast("Please Enter Year");
+    } else if (isNaN(endYear)) {
+      showToast("Only Number!");
+    } else if (endYear.length > 4) {
+      showToast("Maxium Four Value");
+    } else {
+      fetch(`${config.APP_URL}/specialOffer/post`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          indexNumber,
+          startDate,
+          startMonth,
+          startYear,
+          endDate,
+          endMonth,
+          endYear,
+        }),
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          if (result.success) {
+            setIndexNumber(null);
+            setStartDate("");
+            setStartMonth("");
+            setStartYear("");
+            setEndDate("");
+            setEndMonth("");
+            setEndYear("");
+            setTimeout(() => {
+              navigation.navigate("ClientDashBoard");
+            }, 2000);
+          }
+        });
+    }
+  };
 
   return (
     <AppTemplate>
@@ -32,7 +123,7 @@ function SpecailOffer() {
             <Header
               onPress={() => navigation.goBack()}
               img1={require("../../../assets/arrowLeft2.png")}
-              title="Specail Offer"
+              title="Special Offer"
               img2={require("../../../assets/menu2.png")}
               img3={require("../../../assets/loupe.png")}
             />
@@ -45,63 +136,86 @@ function SpecailOffer() {
             >
               <View style={style.InputContainer}>
                 <View style={{ marginTop: 30 }}>
-                  <View
+                  <ModalDropdown
+                    isFullWidth
+                    textStyle={{ flex: 1, fontSize: 15 }}
+                    animated={true}
+                    renderRightComponent={() => (
+                      <Image
+                        source={require("../../../assets/down.png")}
+                        resizeMethod="resize"
+                        resizeMode="cover"
+                        style={{ height: 18, width: 18, marginRight: 25 }}
+                      />
+                    )}
+                    dropdownStyle={{
+                      width: "86%",
+                      marginLeft: -14,
+                      marginTop: 14,
+                    }}
+                    defaultValue="Select Category"
+                    options={products}
+                    onSelect={(e) => setIndexNumber(e)}
                     style={{
                       backgroundColor: "white",
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      paddingLeft: 15,
-                      paddingRight: 15,
-                      paddingTop: 10,
-                      paddingBottom: 11,
+                      height: 50,
+                      marginTop: 14,
                       borderRadius: 11,
+                      display: "flex",
+                      justifyContent: "center",
+                      paddingLeft: 14,
                     }}
-                  >
-                    <View style={{ width: "13%" }}>
-                      <CheckBox
-                        value={isSelected}
-                        onValueChange={setSelection}
-                        style={style.checkbox}
-                        tintColors={{ true: "#B7C9D2", false: "black" }}
-                      />
-                    </View>
-                    <View style={{ paddingLeft: 5 }}>
-                      <TextInput placeholder="Check For Enable Offer" />
-                    </View>
-                  </View>
+                  />
                 </View>
 
                 <View>
-                  <Text style={style.containerHedingStyle}>
-                    Start Date & Time
-                  </Text>
+                  <Text style={style.containerHedingStyle}>Start Date</Text>
                   <View style={style.viewContainer}>
-                    <Input placeholder="DD" wi="25%" pa={4} />
-                    <Input placeholder="MM" wi="25%" pa={4} />
-                    <Input placeholder="yyyy" wi="50%" pa={4} />
-                  </View>
-                  <View style={style.viewContainer}>
-                    <Input placeholder="00:00" wi="75%" pa={4} align="center" />
-                    <Input placeholder="AM" wi="25%" pa={4} />
+                    <TextInput
+                      style={style.input}
+                      placeholder="DD"
+                      value={startDate}
+                      onChangeText={(e) => setStartDate(e)}
+                    />
+                    <TextInput
+                      style={style.input}
+                      placeholder="MM"
+                      value={startMonth}
+                      onChangeText={(e) => setStartMonth(e)}
+                    />
+                    <TextInput
+                      style={style.input}
+                      placeholder="YYYY"
+                      value={startYear}
+                      onChangeText={(e) => setStartYear(e)}
+                    />
                   </View>
                 </View>
                 <View>
-                  <Text style={style.containerHedingStyle}>
-                    End Date & Time
-                  </Text>
+                  <Text style={style.containerHedingStyle}>End Date</Text>
                   <View style={style.viewContainer}>
-                    <Input placeholder="DD" wi="25%" pa={4} />
-                    <Input placeholder="MM" wi="25%" pa={4} />
-                    <Input placeholder="yyyy" wi="50%" pa={4} />
-                  </View>
-                  <View style={style.viewContainer}>
-                    <Input placeholder="00:00" wi="75%" pa={4} align="center" />
-                    <Input placeholder="AM" wi="25%" pa={4} />
+                    <TextInput
+                      style={style.input}
+                      placeholder="DD"
+                      value={endDate}
+                      onChangeText={(e) => setEndDate(e)}
+                    />
+                    <TextInput
+                      style={style.input}
+                      placeholder="MM"
+                      value={endMonth}
+                      onChangeText={(e) => setEndMonth(e)}
+                    />
+                    <TextInput
+                      style={style.input}
+                      placeholder="YYYY"
+                      value={endYear}
+                      onChangeText={(e) => setEndYear(e)}
+                    />
                   </View>
                 </View>
 
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => handelPress()}>
                   <View style={style.button}>
                     <Text style={{ fontSize: 12, color: "white" }}>
                       Continue
@@ -124,6 +238,7 @@ const style = StyleSheet.create({
     paddingTop: 12,
     opacity: 0.7,
     fontSize: 13,
+    marginBottom: 10,
   },
   checkbox: {
     alignSelf: "center",
@@ -174,7 +289,19 @@ const style = StyleSheet.create({
     paddingTop: 17,
     paddingBottom: 17,
     elevation: 5,
-    marginTop: 20,
+    marginTop: 150,
     marginBottom: 10,
+  },
+  input: {
+    width: "33.33%",
+    backgroundColor: "white",
+    marginLeft: 2,
+    marginRight: 2,
+    borderRadius: 10,
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 10,
+    paddingRight: 5,
+    height: 50,
   },
 });

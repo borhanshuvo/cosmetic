@@ -1,18 +1,20 @@
 import * as React from "react";
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
+import config from "../../../config";
 
 function Avatar(props) {
   const { hi, wi, icon, backcolor, img } = props;
   return (
     <View style={style.view1}>
       <View style={{ height: hi, width: wi }}>
-        <Image
-          source={{ uri: img }}
-          resizeMode="contain"
-          resizeMethod="resize"
-          style={{ height: "100%", width: "100%", borderRadius: 6 }}
-        />
-
+        {img && (
+          <Image
+            source={{ uri: `${config.APP_URL}${img}` }}
+            resizeMode="contain"
+            resizeMethod="resize"
+            style={{ height: "100%", width: "100%", borderRadius: 6 }}
+          />
+        )}
         <View
           style={{
             width: "100%",
