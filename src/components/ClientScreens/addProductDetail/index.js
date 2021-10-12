@@ -14,14 +14,20 @@ import Input from "../../atoms/input";
 import Header from "../../atoms/header";
 import AppTemplate from "../../ClientTemplate";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
-import DocumentPicker from "react-native-document-picker";
 import ModalDropdown from "react-native-modal-dropdown";
 import config from "../../../../config";
+import * as ImagePicker from "expo-image-picker";
 
 function AddProductDetail() {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const [categories, setCategories] = useState([]);
+  const [img, setImg] = useState(null);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [bid, setBid] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [price, setPrice] = useState("");
 
   useEffect(() => {
     if (isFocused) {
@@ -33,25 +39,18 @@ function AddProductDetail() {
     }
   }, [isFocused]);
 
-  async function openDocumentFile() {
-    try {
-      const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.allFiles],
-      });
-      console.log(
-        res.uri,
-        res.type, // mime type
-        res.name,
-        res.size
-      );
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        // User cancelled the picker, exit any dialogs or menus and move on
-      } else {
-        throw err;
-      }
+  const PickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      setImg(result);
     }
-  }
+  };
 
   return (
     <AppTemplate>
@@ -77,9 +76,15 @@ function AddProductDetail() {
               showsHorizontalScrollIndicator={false}
             >
               <View style={style.InputContainer}>
-                <View style={{ marginTop: 30 }}>
-                  <Input placeholder="Product Title" />
+                <View style={style.inputView}>
+                  <TextInput
+                    placeholder="Name"
+                    value={title}
+                    style={style.input}
+                    onChangeText={(e) => setTitle(e)}
+                  />
                 </View>
+
                 <TextInput
                   multiline={true}
                   numberOfLines={4}
@@ -142,10 +147,10 @@ function AddProductDetail() {
                 >
                   <TouchableOpacity
                     style={style.buttonblack}
-                    onPressIn={() => openDocumentFile()}
+                    onPress={PickImage}
                   >
                     <Text style={{ fontSize: 12, color: "white" }}>
-                      Update From Gallery
+                      Add From Gallery
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
@@ -159,6 +164,7 @@ function AddProductDetail() {
                       alignItems: "center",
                       display: "flex",
                     }}
+                    onPress={PickImage}
                   >
                     <Image
                       source={require("../../../assets/camera.png")}
@@ -242,5 +248,21 @@ const style = StyleSheet.create({
     marginTop: 20,
     alignItems: "center",
     marginBottom: 8,
+  },
+  inputView: {
+    backgroundColor: "white",
+    borderRadius: 11,
+    marginTop: 16,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  input: {
+    width: "85%",
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 10,
+    paddingBottom: 11,
   },
 });

@@ -10,11 +10,9 @@ import {
   Image,
   TextInput,
 } from "react-native";
-import Input from "../../atoms/input";
 import Header from "../../atoms/header";
 import AppTemplate from "../../ClientTemplate";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
-import DocumentPicker from "react-native-document-picker";
 import ModalDropdown from "react-native-modal-dropdown";
 import config from "../../../../config";
 
@@ -38,26 +36,6 @@ function EditProductDetail({ route }) {
       } catch (err) {}
     }
   }, [isFocused, id]);
-
-  async function openDocumentFile() {
-    try {
-      const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.allFiles],
-      });
-      console.log(
-        res.uri,
-        res.type, // mime type
-        res.name,
-        res.size
-      );
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        // User cancelled the picker, exit any dialogs or menus and move on
-      } else {
-        throw err;
-      }
-    }
-  }
 
   return (
     <AppTemplate>
@@ -179,10 +157,7 @@ function EditProductDetail({ route }) {
                     width: "100%",
                   }}
                 >
-                  <TouchableOpacity
-                    style={style.buttonblack}
-                    onPressIn={() => openDocumentFile()}
-                  >
+                  <TouchableOpacity style={style.buttonblack}>
                     <Text style={{ fontSize: 12, color: "white" }}>
                       Update From Gallery
                     </Text>
