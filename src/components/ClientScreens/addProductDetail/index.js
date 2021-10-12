@@ -9,8 +9,8 @@ import {
   ScrollView,
   Image,
   TextInput,
+  ToastAndroid,
 } from "react-native";
-import Input from "../../atoms/input";
 import Header from "../../atoms/header";
 import AppTemplate from "../../ClientTemplate";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
@@ -22,12 +22,16 @@ function AddProductDetail() {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const [categories, setCategories] = useState([]);
-  const [img, setImg] = useState(null);
+  const [image, setImg] = useState(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [bid, setBid] = useState("");
   const [quantity, setQuantity] = useState("");
+  const [category, setCategory] = useState("");
   const [price, setPrice] = useState("");
+  const showToast = (i) => {
+    ToastAndroid.show(i, ToastAndroid.SHORT);
+  };
 
   useEffect(() => {
     if (isFocused) {
@@ -40,15 +44,75 @@ function AddProductDetail() {
   }, [isFocused]);
 
   const PickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+    let photo = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4, 3],
       quality: 1,
     });
 
-    if (!result.cancelled) {
-      setImg(result);
+    if (!photo.cancelled) {
+      setImg(photo.uri);
+    }
+  };
+
+  const addProduct = () => {
+    if (title === "") {
+      showToast("Product title required!");
+    } else if (!isNaN(title)) {
+      showToast("Title must not contain anything other than alphabet");
+    } else if (description === "") {
+      showToast("Product description required!");
+    } else if (bid === "") {
+      showToast("Minimum bid required!");
+    } else if (isNaN(bid)) {
+      showToast("Bid only numeric value!");
+    } else if (category === "") {
+      showToast("Select category!");
+    } else if (quantity === "") {
+      showToast("Minimum quantity required!");
+    } else if (isNaN(quantity)) {
+      showToast("Quantity only numeric value!");
+    } else if (price === "") {
+      showToast("Product price required!");
+    } else if (isNaN(price)) {
+      showToast("Price only numeric value!");
+    } else if (image === null) {
+      showToast("Image required!");
+    } else {
+      const ext = image.substring(image.lastIndexOf(".") + 1);
+      const fileName = image.replace(/^.*[\\\/]/, "");
+      const formData = new FormData();
+      formData.append("img", {
+        name: fileName,
+        uri: image,
+        type: `image/${ext}`,
+      });
+      formData.append("title", title);
+      formData.append("description", description);
+      formData.append("bid", bid);
+      formData.append("price", price);
+      formData.append("quantity", quantity);
+      formData.append("category", category);
+      fetch(`${config.APP_URL}/product/post`, {
+        method: "POST",
+        body: formData,
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          if (result.success) {
+            showToast(result.success);
+            setTitle("");
+            setDescription("");
+            setBid("");
+            setCategory("");
+            setPrice("");
+            setQuantity("");
+            setImg(null);
+            setTimeout(() => {
+              navigation.navigate("ClientDashBoard");
+            }, 2000);
+          }
+        });
     }
   };
 
@@ -78,7 +142,7 @@ function AddProductDetail() {
               <View style={style.InputContainer}>
                 <View style={style.inputView}>
                   <TextInput
-                    placeholder="Name"
+                    placeholder="Product Title"
                     value={title}
                     style={style.input}
                     onChangeText={(e) => setTitle(e)}
@@ -89,6 +153,7 @@ function AddProductDetail() {
                   multiline={true}
                   numberOfLines={4}
                   placeholder="Description..."
+                  value={description}
                   style={{
                     backgroundColor: "white",
                     display: "flex",
@@ -96,15 +161,24 @@ function AddProductDetail() {
                     textAlignVertical: "top",
                     marginTop: 12,
                     borderRadius: 10,
-
                     justifyContent: "flex-start",
                     paddingLeft: 10,
                     paddingRight: 10,
                     paddingTop: 8,
                     paddingBottom: 8,
                   }}
+                  onChangeText={(e) => setDescription(e)}
                 />
-                <Input placeholder="Minimum Bid ($ 00.00)" />
+
+                <View style={style.inputView}>
+                  <TextInput
+                    placeholder="Minimum Bid"
+                    value={bid}
+                    style={style.input}
+                    onChangeText={(e) => setBid(e)}
+                  />
+                </View>
+
                 <ModalDropdown
                   isFullWidth
                   textStyle={{ flex: 1, fontSize: 15 }}
@@ -124,6 +198,7 @@ function AddProductDetail() {
                   }}
                   defaultValue="Select Category"
                   options={categories}
+                  onSelect={(i, v) => setCategory(v)}
                   style={{
                     backgroundColor: "white",
                     height: 50,
@@ -134,8 +209,25 @@ function AddProductDetail() {
                     paddingLeft: 14,
                   }}
                 />
-                <Input placeholder="Product Stock (Quantity)" />
-                <Input placeholder="Buy Now Price" />
+
+                <View style={style.inputView}>
+                  <TextInput
+                    placeholder="Product Stock (Quantity)"
+                    value={quantity}
+                    style={style.input}
+                    onChangeText={(e) => setQuantity(e)}
+                  />
+                </View>
+
+                <View style={style.inputView}>
+                  <TextInput
+                    placeholder="Buy Now Price"
+                    value={price}
+                    style={style.input}
+                    onChangeText={(e) => setPrice(e)}
+                  />
+                </View>
+
                 <View
                   style={{
                     display: "flex",
@@ -164,20 +256,31 @@ function AddProductDetail() {
                       alignItems: "center",
                       display: "flex",
                     }}
-                    onPress={PickImage}
                   >
-                    <Image
-                      source={require("../../../assets/camera.png")}
-                      resizeMode="contain"
-                      resizeMethod="resize"
-                      style={{
-                        height: 25,
-                        width: 25,
-                      }}
-                    />
+                    {image === null ? (
+                      <Image
+                        source={require("../../../assets/camera.png")}
+                        resizeMode="contain"
+                        resizeMethod="resize"
+                        style={{
+                          height: 25,
+                          width: 25,
+                        }}
+                      />
+                    ) : (
+                      <Image
+                        source={{ uri: image }}
+                        resizeMode="contain"
+                        resizeMethod="resize"
+                        style={{
+                          height: 30,
+                          width: 30,
+                        }}
+                      />
+                    )}
                   </TouchableOpacity>
                 </View>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => addProduct()}>
                   <View style={style.button}>
                     <Text style={{ fontSize: 12, color: "white" }}>
                       Continue

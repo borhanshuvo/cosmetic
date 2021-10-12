@@ -12,29 +12,31 @@ import {
 import Header from "../../atoms/header";
 import LotionCard from "../../molecules/lotionCard";
 import BigLotionCard from "../../molecules/bigLotionCard";
-const Data = [{}, {}, {}, {}, {}, {}, {}, {}];
 import AppTemplate from "../../ClientTemplate";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import { useContext } from "react";
 import { UserContext } from "../../../../App";
 import config from "../../../../config";
 
 function DashBoard() {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const [loggedInUser, setLoggedInUser] = useContext(UserContext);
   const [products, setProducts] = React.useState([]);
   const [offerProducts, setOfferProducts] = React.useState([]);
   React.useEffect(() => {
-    try {
-      fetch(`${config.APP_URL}/product/get`)
-        .then((res) => res.json())
-        .then((result) => setProducts(result));
+    if (isFocused) {
+      try {
+        fetch(`${config.APP_URL}/product/get`)
+          .then((res) => res.json())
+          .then((result) => setProducts(result));
 
-      fetch(`${config.APP_URL}/specialOffer/get`)
-        .then((res) => res.json())
-        .then((result) => setOfferProducts(result));
-    } catch (err) {}
-  }, []);
+        fetch(`${config.APP_URL}/specialOffer/get`)
+          .then((res) => res.json())
+          .then((result) => setOfferProducts(result));
+      } catch (err) {}
+    }
+  }, [isFocused]);
 
   return (
     <AppTemplate>
