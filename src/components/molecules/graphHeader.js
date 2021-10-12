@@ -16,7 +16,7 @@ function GraphHeader({ setYear, year, stateValue }) {
       <View style={{ alignItems: "center" }}>
         <Text style={{ fontSize: 10, opacity: 0.6 }}>{year}</Text>
         <Text style={{ fontSize: 12, opacity: 0.8 }}>
-          ${parseFloat(stateValue?.yearlyIncome).toFixed(2)} USD
+          {parseFloat(stateValue?.yearlyIncome).toFixed(2)} USD
         </Text>
       </View>
       <TouchableOpacity onPress={() => setYear(year + 1)}>

@@ -90,7 +90,7 @@ function Statics() {
                         Total Earnings
                       </Text>
                       <Text style={{ fontSize: 13, opacity: 0.7 }}>
-                        ${parseFloat(totalEarning?.result).toFixed(2)} USD
+                        {parseFloat(totalEarning?.result).toFixed(2)} USD
                       </Text>
                     </View>
                     <View style={style.card2}>

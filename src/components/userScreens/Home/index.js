@@ -82,31 +82,34 @@ function Home() {
             showsHorizontalScrollIndicator={false}
           >
             {user?.premium === "Premium" && (
-              <FlatList
-                showsHorizontalScrollIndicator={false}
-                horizontal={true}
-                style={{ width: "100%", marginTop: 10 }}
-                data={offerProducts}
-                keyExtractor={(item) => item._id}
-                renderItem={({ item }) => (
-                  <LotionCard
-                    ButtonClick={() =>
-                      navigation.navigate("UserCheckOut", {
-                        id: item?.product?._id,
-                      })
-                    }
-                    onPress={() =>
-                      navigation.navigate("UserProductDetail", {
-                        id: item?.product?._id,
-                      })
-                    }
-                    title={item?.product?.title}
-                    dis={item?.product?.description}
-                    price={item?.product?.price}
-                    img={item?.product?.imgURL}
-                  />
-                )}
-              />
+              <>
+                <Text style={style.text2}>Offer</Text>
+                <FlatList
+                  showsHorizontalScrollIndicator={false}
+                  horizontal={true}
+                  style={{ width: "100%", marginTop: 10 }}
+                  data={offerProducts}
+                  keyExtractor={(item) => item._id}
+                  renderItem={({ item }) => (
+                    <LotionCard
+                      ButtonClick={() =>
+                        navigation.navigate("UserCheckOut", {
+                          id: item?.product?._id,
+                        })
+                      }
+                      onPress={() =>
+                        navigation.navigate("UserProductDetail", {
+                          id: item?.product?._id,
+                        })
+                      }
+                      title={item?.product?.title}
+                      dis={item?.product?.description}
+                      price={item?.product?.price}
+                      img={item?.product?.imgURL}
+                    />
+                  )}
+                />
+              </>
             )}
             <Text style={style.text2}>Popular</Text>
             <FlatList

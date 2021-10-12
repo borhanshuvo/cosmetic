@@ -8,9 +8,9 @@ import {
   SafeAreaView,
   ScrollView,
   TextInput,
+  ToastAndroid,
 } from "react-native";
 
-import Input from "../../atoms/input";
 import Avatar from "../../atoms/avatar";
 import Header from "../../atoms/header";
 import AppTemplate from "../../Usertemplate";
@@ -20,6 +20,24 @@ import { UserContext } from "../../../../App";
 function EditProfile() {
   const navigation = useNavigation();
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
+  const name = loggedInUser?.user?.name;
+  const email = loggedInUser?.user?.email;
+  const [updateName, setUpdateName] = React.useState("");
+  const [aboutMe, setAboutMe] = React.useState(loggedInUser?.user?.aboutMe);
+  const [instagramUsername, setInstagramUsername] = React.useState(
+    loggedInUser?.user?.instagramUsername
+  );
+  const showToast = (i) => {
+    ToastAndroid.show(i, ToastAndroid.SHORT);
+  };
+
+  const updateProfile = () => {
+    if (updateName === "") {
+      showToast("Name required!");
+    } else {
+      console.log(updateName);
+    }
+  };
   return (
     <AppTemplate>
       <View style={{ flex: 1, backgroundColor: "#EBEAEF" }}>
@@ -51,15 +69,29 @@ function EditProfile() {
                   backcolor="white"
                   img={loggedInUser?.user?.imgURL}
                 />
-                <View style={{ marginTop: 30 }}>
-                  <Input placeholder="Full Name" />
+                <View style={style.inputView}>
+                  <TextInput
+                    placeholder="Jassica"
+                    defaultValue={name}
+                    style={style.input}
+                    onChangeText={(e) => setUpdateName(e)}
+                  />
                 </View>
 
-                <Input placeholder="Email" />
+                <View style={style.inputView}>
+                  <TextInput
+                    placeholder="Email"
+                    value={email}
+                    style={style.input}
+                    //onChangeText={(e) => setName(e)}
+                  />
+                </View>
+
                 <TextInput
                   multiline={true}
                   numberOfLines={4}
                   placeholder="About me..."
+                  defaultValue={aboutMe}
                   style={{
                     backgroundColor: "white",
                     display: "flex",
@@ -67,7 +99,6 @@ function EditProfile() {
                     textAlignVertical: "top",
                     marginTop: 12,
                     borderRadius: 10,
-
                     justifyContent: "flex-start",
                     paddingLeft: 10,
                     paddingRight: 10,
@@ -75,8 +106,17 @@ function EditProfile() {
                     paddingBottom: 8,
                   }}
                 />
-                <Input placeholder="Instagram Username" />
-                <TouchableOpacity>
+
+                <View style={style.inputView}>
+                  <TextInput
+                    placeholder="Email"
+                    defaultValue={instagramUsername}
+                    style={style.input}
+                    //onChangeText={(e) => setName(e)}
+                  />
+                </View>
+
+                <TouchableOpacity onPress={() => updateProfile()}>
                   <View style={style.button}>
                     <Text style={{ fontSize: 12, color: "white" }}>
                       Update Now
@@ -134,5 +174,21 @@ const style = StyleSheet.create({
     elevation: 5,
     marginTop: 20,
     marginBottom: 10,
+  },
+  inputView: {
+    backgroundColor: "white",
+    borderRadius: 11,
+    marginTop: 16,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  input: {
+    width: "85%",
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 10,
+    paddingBottom: 11,
   },
 });

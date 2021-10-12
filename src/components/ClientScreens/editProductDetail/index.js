@@ -18,10 +18,12 @@ import DocumentPicker from "react-native-document-picker";
 import ModalDropdown from "react-native-modal-dropdown";
 import config from "../../../../config";
 
-function EditProductDetail() {
+function EditProductDetail({ route }) {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const [categories, setCategories] = useState([]);
+  const { id } = route?.params;
+  const [product, setProduct] = useState({});
 
   useEffect(() => {
     if (isFocused) {
@@ -29,9 +31,13 @@ function EditProductDetail() {
         fetch(`${config.APP_URL}/category/categoryName`)
           .then((res) => res.json())
           .then((result) => setCategories(result));
+
+        fetch(`${config.APP_URL}/product/get/${id}`)
+          .then((res) => res.json())
+          .then((result) => setProduct(result));
       } catch (err) {}
     }
-  }, [isFocused]);
+  }, [isFocused, id]);
 
   async function openDocumentFile() {
     try {
@@ -65,7 +71,7 @@ function EditProductDetail() {
             <Header
               onPress={() => navigation.goBack()}
               img1={require("../../../assets/arrowLeft2.png")}
-              title="Add a Product"
+              title="Edit a Product"
               img2={require("../../../assets/menu2.png")}
               img3={require("../../../assets/loupe.png")}
             />
@@ -77,13 +83,20 @@ function EditProductDetail() {
               showsHorizontalScrollIndicator={false}
             >
               <View style={style.InputContainer}>
-                <View style={{ marginTop: 30 }}>
-                  <Input placeholder="Product Title" />
+                <View style={style.inputView}>
+                  <TextInput
+                    placeholder="Name"
+                    defaultValue={product?.title}
+                    style={style.input}
+                    // onChangeText={(e) => setUpdateName(e)}
+                  />
                 </View>
+
                 <TextInput
                   multiline={true}
                   numberOfLines={4}
                   placeholder="Description..."
+                  defaultValue={product?.description}
                   style={{
                     backgroundColor: "white",
                     display: "flex",
@@ -99,7 +112,16 @@ function EditProductDetail() {
                     paddingBottom: 8,
                   }}
                 />
-                <Input placeholder="Minimum Bid ($ 00.00)" />
+
+                <View style={style.inputView}>
+                  <TextInput
+                    placeholder="Bid"
+                    defaultValue={product?.bid}
+                    style={style.input}
+                    // onChangeText={(e) => setUpdateName(e)}
+                  />
+                </View>
+
                 <ModalDropdown
                   isFullWidth
                   textStyle={{ flex: 1, fontSize: 15 }}
@@ -117,7 +139,7 @@ function EditProductDetail() {
                     marginLeft: -14,
                     marginTop: 14,
                   }}
-                  defaultValue="Select Category"
+                  defaultValue={product?.category}
                   options={categories}
                   style={{
                     backgroundColor: "white",
@@ -129,8 +151,25 @@ function EditProductDetail() {
                     paddingLeft: 14,
                   }}
                 />
-                <Input placeholder="Product Stock (Quantity)" />
-                <Input placeholder="Buy Now Price" />
+
+                <View style={style.inputView}>
+                  <TextInput
+                    placeholder="Quantity"
+                    defaultValue={product?.quantity}
+                    style={style.input}
+                    // onChangeText={(e) => setUpdateName(e)}
+                  />
+                </View>
+
+                <View style={style.inputView}>
+                  <TextInput
+                    placeholder="Price"
+                    defaultValue={product?.price}
+                    style={style.input}
+                    // onChangeText={(e) => setUpdateName(e)}
+                  />
+                </View>
+
                 <View
                   style={{
                     display: "flex",
@@ -242,5 +281,21 @@ const style = StyleSheet.create({
     marginTop: 20,
     alignItems: "center",
     marginBottom: 8,
+  },
+  inputView: {
+    backgroundColor: "white",
+    borderRadius: 11,
+    marginTop: 16,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  input: {
+    width: "85%",
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 10,
+    paddingBottom: 11,
   },
 });

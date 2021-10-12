@@ -17,16 +17,22 @@ import AppTemplate from "../../ClientTemplate";
 import { useNavigation } from "@react-navigation/native";
 import { useContext } from "react";
 import { UserContext } from "../../../../App";
+import config from "../../../../config";
 
 function DashBoard() {
   const navigation = useNavigation();
   const [loggedInUser, setLoggedInUser] = useContext(UserContext);
   const [products, setProducts] = React.useState([]);
+  const [offerProducts, setOfferProducts] = React.useState([]);
   React.useEffect(() => {
     try {
-      fetch("https://api-cosmetic.herokuapp.com/product/get")
+      fetch(`${config.APP_URL}/product/get`)
         .then((res) => res.json())
         .then((result) => setProducts(result));
+
+      fetch(`${config.APP_URL}/specialOffer/get`)
+        .then((res) => res.json())
+        .then((result) => setOfferProducts(result));
     } catch (err) {}
   }, []);
 
@@ -68,18 +74,19 @@ function DashBoard() {
               showsHorizontalScrollIndicator={false}
               horizontal={true}
               style={{ width: "100%", marginTop: 10 }}
-              data={products}
+              data={offerProducts}
               keyExtractor={(item) => item._id}
               renderItem={({ item }) => (
                 <LotionCard
-                  ButtonClick={() =>
-                    navigation.navigate("ClientAddProductDetail")
+                  onPress={() =>
+                    navigation.navigate("ClientEditProductDetail", {
+                      id: item?.product?._id,
+                    })
                   }
-                  onPress={() => navigation.navigate("ClientAddProductDetail")}
-                  title={item?.title}
-                  dis={item?.description}
-                  price={item?.price}
-                  img={item?.imgURL}
+                  title={item?.product?.title}
+                  dis={item?.product?.description}
+                  price={item?.product?.price}
+                  img={item?.product?.imgURL}
                 />
               )}
             />
@@ -92,7 +99,11 @@ function DashBoard() {
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => (
                 <BigLotionCard
-                  onPress={() => navigation.navigate("ClientAddProductDetail")}
+                  onPress={() =>
+                    navigation.navigate("ClientEditProductDetail", {
+                      id: item?._id,
+                    })
+                  }
                   title={item?.title}
                   dis={item?.description}
                   price={item?.price}
@@ -110,10 +121,11 @@ function DashBoard() {
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => (
                 <LotionCard
-                  ButtonClick={() =>
-                    navigation.navigate("ClientAddProductDetail")
+                  onPress={() =>
+                    navigation.navigate("ClientEditProductDetail", {
+                      id: item?._id,
+                    })
                   }
-                  onPress={() => navigation.navigate("ClientAddProductDetail")}
                   title={item?.title}
                   dis={item?.description}
                   price={item?.price}

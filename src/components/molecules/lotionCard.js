@@ -1,9 +1,11 @@
 import * as React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+import { UserContext } from "../../../App";
 import config from "../../../config";
 
 function LotionCard(props) {
   const { title, dis, price, onPress, ButtonClick, img } = props;
+  const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
   return (
     <TouchableOpacity style={style.view1} onPress={onPress}>
       <View>
@@ -23,16 +25,18 @@ function LotionCard(props) {
           <Text style={{ fontSize: 9, color: "black", opacity: 0.7 }}>
             ${parseFloat(price).toFixed(2)}
           </Text>
-          <TouchableOpacity onPress={ButtonClick}>
-            <View style={style.view2}>
-              <Image
-                source={require("../../assets/basket.png")}
-                resizeMethod="resize"
-                resizeMode="contain"
-                style={style.image2}
-              />
-            </View>
-          </TouchableOpacity>
+          {loggedInUser?.user?.role !== "admin" && (
+            <TouchableOpacity onPress={ButtonClick}>
+              <View style={style.view2}>
+                <Image
+                  source={require("../../assets/basket.png")}
+                  resizeMethod="resize"
+                  resizeMode="contain"
+                  style={style.image2}
+                />
+              </View>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     </TouchableOpacity>
