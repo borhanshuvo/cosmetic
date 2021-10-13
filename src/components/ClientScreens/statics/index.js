@@ -21,6 +21,21 @@ function Statics() {
   const [totalEarning, setTotalEarning] = useState({});
   const [year, setYear] = useState(currentYear);
   const [stateValue, setStateValue] = useState({});
+  const date = new Date();
+  const month = new Array();
+  month[0] = "January";
+  month[1] = "February";
+  month[2] = "March";
+  month[3] = "April";
+  month[4] = "May";
+  month[5] = "June";
+  month[6] = "July";
+  month[7] = "August";
+  month[8] = "September";
+  month[9] = "October";
+  month[10] = "November";
+  month[11] = "December";
+  const currentMonth = month[date.getMonth()];
 
   useEffect(() => {
     if (isFocused) {
@@ -62,14 +77,71 @@ function Statics() {
                   <View style={style.smallCard}>
                     <View style={{ width: "35%" }}>
                       <Text style={{ fontSize: 10, opacity: 0.7 }}>
-                        Total Balance
+                        {currentMonth} Balance
                       </Text>
                       <Text style={{ fontSize: 13, opacity: 0.7 }}>USD</Text>
                     </View>
                     <View style={{ width: "45%" }}>
-                      <Text style={{ fontSize: 24, opacity: 0.7 }}>
-                        5,000.00
-                      </Text>
+                      {currentMonth === "January" && (
+                        <Text style={{ fontSize: 24, opacity: 0.7 }}>
+                          {parseFloat(stateValue?.jan).toFixed(2)}
+                        </Text>
+                      )}
+                      {currentMonth === "February" && (
+                        <Text style={{ fontSize: 24, opacity: 0.7 }}>
+                          {parseFloat(stateValue?.feb).toFixed(2)}
+                        </Text>
+                      )}
+                      {currentMonth === "March" && (
+                        <Text style={{ fontSize: 24, opacity: 0.7 }}>
+                          {parseFloat(stateValue?.mar).toFixed(2)}
+                        </Text>
+                      )}
+                      {currentMonth === "April" && (
+                        <Text style={{ fontSize: 24, opacity: 0.7 }}>
+                          {parseFloat(stateValue?.apr).toFixed(2)}
+                        </Text>
+                      )}
+                      {currentMonth === "May" && (
+                        <Text style={{ fontSize: 24, opacity: 0.7 }}>
+                          {parseFloat(stateValue?.may).toFixed(2)}
+                        </Text>
+                      )}
+                      {currentMonth === "June" && (
+                        <Text style={{ fontSize: 24, opacity: 0.7 }}>
+                          {parseFloat(stateValue?.jun).toFixed(2)}
+                        </Text>
+                      )}
+                      {currentMonth === "July" && (
+                        <Text style={{ fontSize: 24, opacity: 0.7 }}>
+                          {parseFloat(stateValue?.jul).toFixed(2)}
+                        </Text>
+                      )}
+                      {currentMonth === "August" && (
+                        <Text style={{ fontSize: 24, opacity: 0.7 }}>
+                          {parseFloat(stateValue?.aug).toFixed(2)}
+                        </Text>
+                      )}
+                      {currentMonth === "September" && (
+                        <Text style={{ fontSize: 24, opacity: 0.7 }}>
+                          {parseFloat(stateValue?.sep).toFixed(2)}
+                        </Text>
+                      )}
+                      {currentMonth === "October" && (
+                        <Text style={{ fontSize: 24, opacity: 0.7 }}>
+                          {parseFloat(stateValue?.oct).toFixed(2)}
+                        </Text>
+                      )}
+                      {currentMonth === "November" && (
+                        <Text style={{ fontSize: 24, opacity: 0.7 }}>
+                          {parseFloat(stateValue?.nov).toFixed(2)}
+                        </Text>
+                      )}
+                      {currentMonth === "December" && (
+                        <Text style={{ fontSize: 24, opacity: 0.7 }}>
+                          {parseFloat(stateValue?.dec).toFixed(2)}
+                        </Text>
+                      )}
                     </View>
                   </View>
                 </View>

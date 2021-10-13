@@ -31,6 +31,7 @@ function SpecailOffer() {
   const [endDate, setEndDate] = useState("");
   const [endMonth, setEndMonth] = useState("");
   const [endYear, setEndYear] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (isFocused) {
@@ -111,6 +112,14 @@ function SpecailOffer() {
     }
   };
 
+  const checkNumber = (e) => {
+    if (isNaN(e)) {
+      setError("Please enter numeric value!");
+    } else {
+      setError("");
+    }
+  };
+
   return (
     <AppTemplate>
       <View style={{ flex: 1, backgroundColor: "#EBEAEF" }}>
@@ -153,7 +162,7 @@ function SpecailOffer() {
                       marginLeft: -14,
                       marginTop: 14,
                     }}
-                    defaultValue="Select Category"
+                    defaultValue="Select Product"
                     options={products}
                     onSelect={(e) => setIndexNumber(e)}
                     style={{
@@ -173,21 +182,30 @@ function SpecailOffer() {
                   <View style={style.viewContainer}>
                     <TextInput
                       style={style.input}
-                      placeholder="DD"
+                      placeholder="31"
                       value={startDate}
-                      onChangeText={(e) => setStartDate(e)}
+                      onChangeText={(e) => {
+                        setStartDate(e);
+                        checkNumber(e);
+                      }}
                     />
                     <TextInput
                       style={style.input}
-                      placeholder="MM"
+                      placeholder="12"
                       value={startMonth}
-                      onChangeText={(e) => setStartMonth(e)}
+                      onChangeText={(e) => {
+                        setStartMonth(e);
+                        checkNumber(e);
+                      }}
                     />
                     <TextInput
                       style={style.input}
-                      placeholder="YYYY"
+                      placeholder="2000"
                       value={startYear}
-                      onChangeText={(e) => setStartYear(e)}
+                      onChangeText={(e) => {
+                        setStartYear(e);
+                        checkNumber(e);
+                      }}
                     />
                   </View>
                 </View>
@@ -196,24 +214,46 @@ function SpecailOffer() {
                   <View style={style.viewContainer}>
                     <TextInput
                       style={style.input}
-                      placeholder="DD"
+                      placeholder="31"
                       value={endDate}
-                      onChangeText={(e) => setEndDate(e)}
+                      onChangeText={(e) => {
+                        setEndDate(e);
+                        checkNumber(e);
+                      }}
                     />
                     <TextInput
                       style={style.input}
-                      placeholder="MM"
+                      placeholder="12"
                       value={endMonth}
-                      onChangeText={(e) => setEndMonth(e)}
+                      onChangeText={(e) => {
+                        setEndMonth(e);
+                        checkNumber(e);
+                      }}
                     />
                     <TextInput
                       style={style.input}
-                      placeholder="YYYY"
+                      placeholder="2000"
                       value={endYear}
-                      onChangeText={(e) => setEndYear(e)}
+                      onChangeText={(e) => {
+                        setEndYear(e);
+                        checkNumber(e);
+                      }}
                     />
                   </View>
                 </View>
+
+                {error !== "" && (
+                  <Text
+                    style={{
+                      color: "red",
+                      textAlign: "center",
+                      marginTop: 10,
+                      fontSize: 10,
+                    }}
+                  >
+                    {error}
+                  </Text>
+                )}
 
                 <TouchableOpacity onPress={() => handelPress()}>
                   <View style={style.button}>

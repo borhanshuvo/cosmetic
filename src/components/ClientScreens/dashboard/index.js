@@ -89,6 +89,7 @@ function DashBoard() {
                   dis={item?.product?.description}
                   price={item?.product?.price}
                   img={item?.product?.imgURL}
+                  endingDate={item?.endingDate}
                 />
               )}
             />

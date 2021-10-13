@@ -47,7 +47,7 @@ function ClientSidebar() {
             </View>
           </View>
           <View>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
               <Image
                 source={require("../../assets/back.png")}
                 resizeMode="cover"

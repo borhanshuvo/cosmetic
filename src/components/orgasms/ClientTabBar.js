@@ -72,7 +72,7 @@ function ClientTabBar({ item = [], navi }) {
       >
         {nav?.name === "ClientNotifications" ? (
           <Image
-            source={require("../../assets/notigrey.png")}
+            source={require("../../assets/notiWhite.png")}
             resizeMode="contain"
             resizeMethod="resize"
             style={style.iconsStyle}
