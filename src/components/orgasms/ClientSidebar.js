@@ -72,23 +72,33 @@ function ClientSidebar() {
           >
             <Text style={style.textLinks}>DashBoard</Text>
           </TouchableOpacity>
+
           <TouchableOpacity
             style={style.viewText}
             onPress={() => navigation.navigate("OrderRequest")}
           >
             <Text style={style.textLinks}>Orders</Text>
           </TouchableOpacity>
+
           <TouchableOpacity
             style={style.viewText}
             onPress={() => navigation.navigate("ClientBidRequest2")}
           >
             <Text style={style.textLinks}>Bids</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity
+            style={style.viewText}
+            onPress={() => navigation.navigate("ClientPremiumBidRequest2")}
+          >
+            <Text style={style.textLinks}>Premium Bids</Text>
+          </TouchableOpacity>
+
           <TouchableOpacity
             style={style.viewText}
             onPress={() => navigation.navigate("ClientPremiumRequest")}
           >
-            <Text style={style.textLinks}>Premium Request</Text>
+            <Text style={style.textLinks}>Premium User</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -97,24 +107,28 @@ function ClientSidebar() {
           >
             <Text style={style.textLinks}>Statics</Text>
           </TouchableOpacity>
+
           <TouchableOpacity
             style={style.viewText}
             onPress={() => navigation.navigate("ClientMessages")}
           >
             <Text style={style.textLinks}>Chat</Text>
           </TouchableOpacity>
+
           <TouchableOpacity
             style={style.viewText}
             onPress={() => navigation.navigate("ClientAddCatogory")}
           >
             <Text style={style.textLinks}>Add Catogory</Text>
           </TouchableOpacity>
+
           <TouchableOpacity
             style={style.viewText}
             onPress={() => navigation.navigate("ClientTagClient")}
           >
             <Text style={style.textLinks}>Tag Client</Text>
           </TouchableOpacity>
+
           <TouchableOpacity
             style={style.viewText}
             onPress={() => navigation.navigate("ClientSpecailOffer")}

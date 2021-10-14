@@ -8,15 +8,15 @@ import {
   Image,
 } from "react-native";
 import Header from "../../atoms/header";
-import ProductDetailCard from "../../orgasms/productDetailCard";
 import AppTemplate from "../../Usertemplate";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import { useEffect } from "react";
 import config from "../../../../config";
 import { UserContext } from "../../../../App";
+import OfferProductDetailCard from "../../orgasms/offerProductDetailCard";
 
-function ProductDetail({ route }) {
+function OfferProductDetail({ route }) {
   const navigation = useNavigation();
   const { id } = route?.params;
   const [product, setProduct] = useState({});
@@ -24,7 +24,7 @@ function ProductDetail({ route }) {
 
   useEffect(() => {
     try {
-      fetch(`${config.APP_URL}/product/get/${id}`, {
+      fetch(`${config.APP_URL}/specialOffer/get/${id}`, {
         headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
       })
         .then((res) => res.json())
@@ -61,7 +61,7 @@ function ProductDetail({ route }) {
               img3={require("../../../assets/loupe.png")}
             />
             <Image
-              source={{ uri: `${config.APP_URL}${product?.imgURL}` }}
+              source={{ uri: `${config.APP_URL}${product?.product?.imgURL}` }}
               style={style.image}
               resizeMethod="resize"
               resizeMode="contain"
@@ -76,7 +76,7 @@ function ProductDetail({ route }) {
             showsHorizontalScrollIndicator={false}
           >
             <View style={{ marginTop: 5 }}>
-              <ProductDetailCard product={product} />
+              <OfferProductDetailCard product={product} />
             </View>
           </ScrollView>
         </SafeAreaView>
@@ -84,7 +84,7 @@ function ProductDetail({ route }) {
     </AppTemplate>
   );
 }
-export default ProductDetail;
+export default OfferProductDetail;
 
 const style = StyleSheet.create({
   backgroundImage: {

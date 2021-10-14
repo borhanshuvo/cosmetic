@@ -7,6 +7,7 @@ import ClientMessages from "../components/ClientScreens/messages";
 import ClientInbox from "../components/ClientScreens/Inbox";
 import ClientNotifications from "../components/ClientScreens/notification";
 import ClientBidRequest2 from "../components/ClientScreens/bidRequest2";
+import ClientPremiumBidRequest2 from "../components/ClientScreens/premiumBidRequest2";
 import ClientPremiumRequest from "../components/ClientScreens/premiumRequest";
 import ClientDashBoard from "../components/ClientScreens/dashboard";
 import ClientAddProductDetail from "../components/ClientScreens/addProductDetail";
@@ -40,6 +41,10 @@ const SellerAppStackNavigater = () => {
       />
       <Drawer.Screen name="OrderRequest" component={OrderRequest} />
       <Drawer.Screen name="ClientBidRequest2" component={ClientBidRequest2} />
+      <Drawer.Screen
+        name="ClientPremiumBidRequest2"
+        component={ClientPremiumBidRequest2}
+      />
       <Drawer.Screen
         name="ClientPremiumRequest"
         component={ClientPremiumRequest}

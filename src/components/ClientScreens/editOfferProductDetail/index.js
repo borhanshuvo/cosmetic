@@ -94,6 +94,7 @@ function EditOfferProductDetail({ route }) {
       );
       fetch(`${config.APP_URL}/specialOffer/update/${product?._id}`, {
         method: "PUT",
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
         body: formData,
       })
         .then((res) => res.json())
@@ -133,6 +134,7 @@ function EditOfferProductDetail({ route }) {
       );
       fetch(`${config.APP_URL}/specialOffer/update/${product?._id}`, {
         method: "PUT",
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
         body: formData,
       })
         .then((res) => res.json())

@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { UserContext } from "../../../App";
 import config from "../../../config";
 
-function BigLotionCard2(props) {
+function PremiumBidRequestCard2(props) {
   const {
     id,
     title,
@@ -174,7 +174,7 @@ function BigLotionCard2(props) {
     </View>
   );
 }
-export default BigLotionCard2;
+export default PremiumBidRequestCard2;
 
 const style = StyleSheet.create({
   view1: {

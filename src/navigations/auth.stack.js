@@ -14,29 +14,6 @@ const Stack = createNativeStackNavigator();
 
 function AuthStack() {
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
-  // const [token, setToken] = React.useState({});
-
-  // React.useEffect(() => {
-  //   const checkExpireyTime = () => {
-  //     if (loggedInUser?.accessToken) {
-  //       const token = jwt_decode(loggedInUser?.accessToken);
-  //       const currentTime = Math.round(new Date().getTime() / 1000);
-
-  //       const logout = async () => {
-  //         await AsyncStorage.removeItem("userInfo");
-  //         setLoggedInUser({});
-  //       };
-
-  //       setTimeout(() => {
-  //         logout();
-  //       }, token?.exp);
-  //     }
-  //   };
-  //   checkExpireyTime();
-  //   return () => {
-  //     checkExpireyTime();
-  //   };
-  // }, [loggedInUser?.accessToken]);
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>

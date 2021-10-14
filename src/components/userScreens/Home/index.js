@@ -99,13 +99,13 @@ function Home() {
                   renderItem={({ item }) => (
                     <LotionCard
                       ButtonClick={() =>
-                        navigation.navigate("UserCheckOut", {
-                          id: item?.product?._id,
+                        navigation.navigate("UserOfferCheckOut", {
+                          id: item?._id,
                         })
                       }
                       onPress={() =>
-                        navigation.navigate("UserProductDetail", {
-                          id: item?.product?._id,
+                        navigation.navigate("UserOfferProductDetail", {
+                          id: item?._id,
                         })
                       }
                       title={item?.product?.title}

@@ -114,6 +114,7 @@ function Sidebar() {
           >
             <Text style={style.textLinks}>Home</Text>
           </TouchableOpacity>
+
           <TouchableOpacity
             style={style.viewText}
             onPress={() => navigation.navigate("UserBids")}
@@ -121,30 +122,43 @@ function Sidebar() {
             <Text style={style.textLinks}>My Bids</Text>
           </TouchableOpacity>
 
+          {user?.premium === "Premium" && (
+            <TouchableOpacity
+              style={style.viewText}
+              onPress={() => navigation.navigate("UserPremiumBids")}
+            >
+              <Text style={style.textLinks}>My Premium Bids</Text>
+            </TouchableOpacity>
+          )}
+
           <TouchableOpacity
             style={style.viewText}
             onPress={() => navigation.navigate("UserCheckOut")}
           >
             <Text style={style.textLinks}>Saved by Me</Text>
           </TouchableOpacity>
+
           <TouchableOpacity
             style={style.viewText}
             onPress={() => navigation.navigate("UserMessages")}
           >
             <Text style={style.textLinks}>Chat</Text>
           </TouchableOpacity>
+
           <TouchableOpacity
             style={style.viewText}
             onPress={() => navigation.navigate("UserOrders")}
           >
             <Text style={style.textLinks}>My Orders</Text>
           </TouchableOpacity>
+
           <TouchableOpacity
             style={style.viewText}
             onPress={() => navigation.navigate("UserNotifications")}
           >
             <Text style={style.textLinks}>Notifications</Text>
           </TouchableOpacity>
+
           {(user?.premium === "NotPremium" || user?.premium === "Pending") && (
             <TouchableOpacity
               style={style.viewText}
