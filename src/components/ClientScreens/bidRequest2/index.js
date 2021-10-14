@@ -6,7 +6,7 @@ import {
   SafeAreaView,
   ScrollView,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import BidRequestCard2 from "../../orgasms/bidRequestCard2";
 import Header from "../../atoms/header";
 import AppTemplate from "../../ClientTemplate";
@@ -18,15 +18,19 @@ function BidRequest2() {
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
   const [bids, setBids] = React.useState([]);
   const [number, setNumber] = React.useState(0);
+  const isFocused = useIsFocused();
+
   React.useEffect(() => {
-    try {
-      fetch(`${config.APP_URL}/bidRequest/get`, {
-        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
-      })
-        .then((res) => res.json())
-        .then((result) => setBids(result));
-    } catch (err) {}
-  }, [number]);
+    if (isFocused) {
+      try {
+        fetch(`${config.APP_URL}/bidRequest/get`, {
+          headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+        })
+          .then((res) => res.json())
+          .then((result) => setBids(result));
+      } catch (err) {}
+    }
+  }, [number, isFocused]);
 
   return (
     <AppTemplate>

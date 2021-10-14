@@ -22,7 +22,7 @@ function PremiumBidRequestCard2(props) {
 
   const handleBidStatus = (status) => {
     try {
-      fetch(`${config.APP_URL}/bidRequest/update/${id}`, {
+      fetch(`${config.APP_URL}/premiumBidRequest/update/${id}`, {
         method: "PUT",
         headers: {
           "content-type": "application/json",
@@ -96,7 +96,7 @@ function PremiumBidRequestCard2(props) {
                       borderRadius: 6,
                       marginTop: 4,
                       marginLeft: 10,
-                      borderColor: "black",
+                      borderColor: "#B7C9D2",
                       borderWidth: 1,
                     }}
                   >

@@ -140,7 +140,7 @@ function Sidebar() {
 
           <TouchableOpacity
             style={style.viewText}
-            onPress={() => navigation.navigate("UserMessages")}
+            onPress={() => navigation.navigate("UserInbox")}
           >
             <Text style={style.textLinks}>Chat</Text>
           </TouchableOpacity>

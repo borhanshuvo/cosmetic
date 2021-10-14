@@ -50,7 +50,7 @@ function BidRequestCard({ productDetails }) {
             setBidAmmount("");
             showToast(result.success);
             setTimeout(() => {
-              navigation.navigate("UserHome");
+              navigation.navigate("UserBids");
             }, 2000);
           }
         });

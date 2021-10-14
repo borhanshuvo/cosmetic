@@ -27,6 +27,8 @@ function Inbox() {
             onPress={() => navigation.goBack()}
             img1={require("../../../assets/arrowLeft2.png")}
             title="Chat"
+            img2={require("../../../assets/menu2.png")}
+            img3={require("../../../assets/loupe.png")}
           />
         </View>
         <View

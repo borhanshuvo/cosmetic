@@ -39,7 +39,7 @@ function AddProductDetail() {
     if (isFocused) {
       try {
         fetch(`${config.APP_URL}/category/categoryName`, {
-          authorization: `Bearer ${loggedInUser?.accessToken}`,
+          headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
         })
           .then((res) => res.json())
           .then((result) => setCategories(result));

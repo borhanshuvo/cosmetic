@@ -88,6 +88,7 @@ function EditProductDetail({ route }) {
       formData.append("category", productCategory || product?.category);
       fetch(`${config.APP_URL}/product/update/${product?._id}`, {
         method: "PUT",
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
         body: formData,
       })
         .then((res) => res.json())
@@ -121,6 +122,7 @@ function EditProductDetail({ route }) {
       formData.append("category", productCategory || product?.category);
       fetch(`${config.APP_URL}/product/update/${product?._id}`, {
         method: "PUT",
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
         body: formData,
       })
         .then((res) => res.json())

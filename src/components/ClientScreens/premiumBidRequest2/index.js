@@ -6,8 +6,7 @@ import {
   SafeAreaView,
   ScrollView,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import BidRequestCard2 from "../../orgasms/bidRequestCard2";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import Header from "../../atoms/header";
 import AppTemplate from "../../ClientTemplate";
 import config from "../../../../config";
@@ -19,15 +18,18 @@ function PremiumBidRequest2() {
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
   const [bids, setBids] = React.useState([]);
   const [number, setNumber] = React.useState(0);
+  const isFocused = useIsFocused();
   React.useEffect(() => {
-    try {
-      fetch(`${config.APP_URL}/premiumBidRequest/get`, {
-        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
-      })
-        .then((res) => res.json())
-        .then((result) => setBids(result));
-    } catch (err) {}
-  }, [number]);
+    if(isFocused) {
+      try {
+        fetch(`${config.APP_URL}/premiumBidRequest/get`, {
+          headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+        })
+          .then((res) => res.json())
+          .then((result) => setBids(result));
+      } catch (err) {}
+    }
+  }, [number, isFocused]);
 
   return (
     <AppTemplate>
@@ -41,7 +43,7 @@ function PremiumBidRequest2() {
             <Header
               onPress={() => navigation.goBack()}
               img1={require("../../../assets/arrowLeft2.png")}
-              title="Bid Request"
+              title="Premium Bid Request"
               img2={require("../../../assets/menu2.png")}
               img3={require("../../../assets/loupe.png")}
             />

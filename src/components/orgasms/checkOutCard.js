@@ -79,7 +79,7 @@ function CheckOutCard({ productDetail }) {
               setquantity(1);
               showToast(result.success);
               setTimeout(() => {
-                navigation.navigate("UserHome");
+                navigation.navigate("UserOrders");
               }, 2000);
             }
           });

@@ -96,7 +96,7 @@ function BigLotionCard2(props) {
                       borderRadius: 6,
                       marginTop: 4,
                       marginLeft: 10,
-                      borderColor: "black",
+                      borderColor: "#B7C9D2",
                       borderWidth: 1,
                     }}
                   >

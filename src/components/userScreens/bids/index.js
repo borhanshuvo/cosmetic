@@ -9,22 +9,25 @@ import {
 import BigLotionCard2 from "../../molecules/bigLotionCard2";
 import Header from "../../atoms/header";
 import AppTemplate from "../../Usertemplate";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import { UserContext } from "../../../../App";
 import config from "../../../../config";
 
 function Bids() {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
   const [bids, setBids] = React.useState([]);
 
   React.useEffect(() => {
-    fetch(`${config.APP_URL}/bidRequest/get/${loggedInUser?.user?.email}`, {
-      headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
-    })
-      .then((res) => res.json())
-      .then((result) => setBids(result));
-  }, [loggedInUser?.user?.email]);
+    if (isFocused) {
+      fetch(`${config.APP_URL}/bidRequest/get/${loggedInUser?.user?.email}`, {
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+      })
+        .then((res) => res.json())
+        .then((result) => setBids(result));
+    }
+  }, [loggedInUser?.user?.email, isFocused]);
 
   return (
     <AppTemplate>

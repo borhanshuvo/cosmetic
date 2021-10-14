@@ -27,6 +27,8 @@ function Inbox() {
             onPress={() => navigation.goBack()}
             img1={require("../../../assets/arrowLeft2.png")}
             title="Chat"
+            img2={require("../../../assets/menu2.png")}
+            img3={require("../../../assets/loupe.png")}
           />
         </View>
         <View
@@ -119,14 +121,14 @@ function Inbox() {
                   width: "30%",
                 }}
               >
-                <Image
+                {/* <Image
                   source={require("../../../assets/smile.png")}
                   style={style.image}
                 />
                 <Image
                   source={require("../../../assets/attach.png")}
                   style={style.image}
-                />
+                /> */}
                 <Image
                   source={require("../../../assets/send.png")}
                   style={style.image}
