@@ -10,14 +10,19 @@ import { useNavigation } from "@react-navigation/native";
 import Header from "../../atoms/header";
 import AppTemplate from "../../ClientTemplate";
 import OrderRequestCard from "../../orgasms/orderRequestCard";
+import config from "../../../../config";
+import { UserContext } from "../../../../App";
 
 function OrderRequest() {
   const navigation = useNavigation();
   const [orders, setOrders] = React.useState([]);
   const [number, setNumber] = React.useState(0);
+  const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
   React.useEffect(() => {
     try {
-      fetch("https://api-cosmetic.herokuapp.com/order/get")
+      fetch(`${config.APP_URL}/order/get`, {
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+      })
         .then((res) => res.json())
         .then((result) => setOrders(result));
     } catch (err) {}

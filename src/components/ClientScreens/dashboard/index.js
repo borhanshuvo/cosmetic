@@ -27,11 +27,15 @@ function DashBoard() {
   React.useEffect(() => {
     if (isFocused) {
       try {
-        fetch(`${config.APP_URL}/product/get`)
+        fetch(`${config.APP_URL}/product/get`, {
+          headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+        })
           .then((res) => res.json())
           .then((result) => setProducts(result));
 
-        fetch(`${config.APP_URL}/specialOffer/get`)
+        fetch(`${config.APP_URL}/specialOffer/get`, {
+          headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+        })
           .then((res) => res.json())
           .then((result) => setOfferProducts(result));
       } catch (err) {}

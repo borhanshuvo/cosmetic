@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -15,16 +15,22 @@ import Header from "../../atoms/header";
 import MessagesCard from "../../orgasms/messagesCard";
 import AppTemplate from "../../ClientTemplate";
 import { useNavigation } from "@react-navigation/native";
+import config from "../../../../config";
+import { UserContext } from "../../../../App";
 
 function TagClient() {
   const navigation = useNavigation();
   const [users, setUsers] = useState([]);
+  const [loggedInUser, setLoggedInUser] = useContext(UserContext);
 
   const handelSearch = (e) => {
     const search = e;
-    fetch("https://api-cosmetic.herokuapp.com/user/search", {
+    fetch(`${config.APP_URL}/user/search`, {
       method: "POST",
-      headers: { "content-type": "application/json" },
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${loggedInUser?.accessToken}`,
+      },
       body: JSON.stringify({ search }),
     })
       .then((res) => res.json())

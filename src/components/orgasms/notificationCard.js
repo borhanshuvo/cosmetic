@@ -13,17 +13,22 @@ import Menu, {
   MenuOption,
   MenuTrigger,
 } from "react-native-popup-menu";
+import { UserContext } from "../../../App";
 import config from "../../../config";
 function MessagesCard(props) {
   const { title, dis, dotColor, backColor, toggle, img, id, email, setNumber } =
     props;
+  const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
   const showToast = (i) => {
     ToastAndroid.show(i, ToastAndroid.SHORT);
   };
   const deleteProduct = (id) => {
-    fetch(`https://api-cosmetic.herokuapp.com/user/deleteNotification/${id}`, {
+    fetch(`${config.APP_URL}/user/deleteNotification/${id}`, {
       method: "DELETE",
-      headers: { "content-type": "application/json" },
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${loggedInUser?.accessToken}`,
+      },
       body: JSON.stringify({ email }),
     })
       .then((res) => res.json())

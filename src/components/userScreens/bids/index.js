@@ -11,6 +11,7 @@ import Header from "../../atoms/header";
 import AppTemplate from "../../Usertemplate";
 import { useNavigation } from "@react-navigation/native";
 import { UserContext } from "../../../../App";
+import config from "../../../../config";
 
 function Bids() {
   const navigation = useNavigation();
@@ -18,9 +19,9 @@ function Bids() {
   const [bids, setBids] = React.useState([]);
 
   React.useEffect(() => {
-    fetch(
-      `https://api-cosmetic.herokuapp.com/bidRequest/get/${loggedInUser?.user?.email}`
-    )
+    fetch(`${config.APP_URL}/bidRequest/get/${loggedInUser?.user?.email}`, {
+      headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+    })
       .then((res) => res.json())
       .then((result) => setBids(result));
   }, [loggedInUser?.user?.email]);

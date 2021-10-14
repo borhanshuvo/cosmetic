@@ -1,5 +1,6 @@
 import * as React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+import { UserContext } from "../../../App";
 import config from "../../../config";
 
 function BigLotionCard2(props) {
@@ -17,12 +18,16 @@ function BigLotionCard2(props) {
     productImg,
     setNumber,
   } = props;
+  onst [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
 
   const handleBidStatus = (status) => {
     try {
-      fetch(`https://api-cosmetic.herokuapp.com/bidRequest/update/${id}`, {
+      fetch(`${config.APP_URL}/bidRequest/update/${id}`, {
         method: "PUT",
-        headers: { "content-type": "application/json" },
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${loggedInUser?.accessToken}`,
+        },
         body: JSON.stringify({ status }),
       })
         .then((res) => res.json())

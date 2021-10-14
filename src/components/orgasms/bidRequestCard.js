@@ -36,9 +36,12 @@ function BidRequestCard({ productDetails }) {
         imgURL: productDetails?.imgURL,
       };
 
-      fetch("https://api-cosmetic.herokuapp.com/bidRequest/post", {
+      fetch(`${config.APP_URL}/bidRequest/post`, {
         method: "POST",
-        headers: { "content-type": "application/json" },
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${loggedInUser?.accessToken}`,
+        },
         body: JSON.stringify({ name, email, img, imgURL, product, bidAmmount }),
       })
         .then((res) => res.json())

@@ -16,14 +16,19 @@ import Header from "../../atoms/header";
 const Data = [{}, {}, {}, {}, {}, {}, {}, {}];
 import AppTemplate from "../../ClientTemplate";
 import { useNavigation } from "@react-navigation/native";
+import config from "../../../../config";
+import { UserContext } from "../../../../App";
 
 function CustomerProfile({ route }) {
   const navigation = useNavigation();
   const { id } = route?.params;
   const [user, setUser] = useState();
+  const [loggedInUser, setLoggedInUser] = useContext(UserContext);
 
   useEffect(() => {
-    fetch(`https://api-cosmetic.herokuapp.com/user/get/${id}`)
+    fetch(`${config.APP_URL}/user/get/${id}`, {
+      headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+    })
       .then((res) => res.json())
       .then((data) => setUser(data));
   }, [id]);

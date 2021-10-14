@@ -10,6 +10,7 @@ import {
   ToastAndroid,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import config from "../../../../config";
 
 function ForgetPassword() {
   const navigation = useNavigation();
@@ -23,7 +24,7 @@ function ForgetPassword() {
         email: "Please Enter Email",
       });
     } else {
-      fetch("https://api-cosmetic.herokuapp.com/user/resetPasswordMail", {
+      fetch(`${config.APP_URL}/user/resetPasswordMail`, {
         method: "PUT",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ email }),
@@ -47,7 +48,7 @@ function ForgetPassword() {
   const showToast = (i) => {
     ToastAndroid.show(i, ToastAndroid.SHORT);
   };
-  
+
   return (
     <View style={{ flex: 1, backgroundColor: "#EBEAEF" }}>
       <ImageBackground

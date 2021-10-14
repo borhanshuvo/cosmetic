@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -16,6 +16,7 @@ import Header from "../../atoms/header";
 import AppTemplate from "../../ClientTemplate";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 import config from "../../../../config";
+import { UserContext } from "../../../../App";
 
 function SpecailOffer() {
   const navigation = useNavigation();
@@ -32,11 +33,14 @@ function SpecailOffer() {
   const [endMonth, setEndMonth] = useState("");
   const [endYear, setEndYear] = useState("");
   const [error, setError] = useState("");
+  const [loggedInUser, setLoggedInUser] = useContext(UserContext);
 
   useEffect(() => {
     if (isFocused) {
       try {
-        fetch(`${config.APP_URL}/product/productName`)
+        fetch(`${config.APP_URL}/product/productName`, {
+          headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+        })
           .then((res) => res.json())
           .then((result) => setProducts(result));
       } catch (err) {}
@@ -83,7 +87,10 @@ function SpecailOffer() {
     } else {
       fetch(`${config.APP_URL}/specialOffer/post`, {
         method: "POST",
-        headers: { "content-type": "application/json" },
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${loggedInUser?.accessToken}`,
+        },
         body: JSON.stringify({
           indexNumber,
           startDate,

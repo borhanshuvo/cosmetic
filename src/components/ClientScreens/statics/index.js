@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -13,6 +13,7 @@ import Graph from "../../orgasms/graph";
 import AppTemplate from "../../ClientTemplate";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 import config from "../../../../config";
+import { UserContext } from "../../../../App";
 
 function Statics() {
   const navigation = useNavigation();
@@ -36,14 +37,19 @@ function Statics() {
   month[10] = "November";
   month[11] = "December";
   const currentMonth = month[date.getMonth()];
+  const [loggedInUser, setLoggedInUser] = useContext(UserContext);
 
   useEffect(() => {
     if (isFocused) {
-      fetch(`${config.APP_URL}/order/totalEarning`)
+      fetch(`${config.APP_URL}/order/totalEarning`, {
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+      })
         .then((res) => res.json())
         .then((result) => setTotalEarning(result));
 
-      fetch(`${config.APP_URL}/order/statistics/${year}`)
+      fetch(`${config.APP_URL}/order/statistics/${year}`, {
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+      })
         .then((res) => res.json())
         .then((result) => setStateValue(result));
     }

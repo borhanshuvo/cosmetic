@@ -24,7 +24,7 @@ function PremiumRequestCard(props) {
 
   const updateStatus = (premium) => {
     try {
-      fetch(`https://api-cosmetic.herokuapp.com/user/update/${id}`, {
+      fetch(`${config.APP_URL}/user/update/${id}`, {
         method: "PUT",
         headers: {
           "content-type": "application/json",

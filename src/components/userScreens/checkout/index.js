@@ -11,15 +11,20 @@ import CheckOutCard from "../../orgasms/checkOutCard";
 import { useNavigation } from "@react-navigation/native";
 import Header from "../../atoms/header";
 import AppTemplate from "../../Usertemplate";
+import config from "../../../../config";
+import { UserContext } from "../../../../App";
 
 function CheckOut({ route }) {
   const navigation = useNavigation();
   const { id } = route?.params;
   const [product, setProduct] = useState({});
+  const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
 
   useEffect(() => {
     try {
-      fetch(`https://api-cosmetic.herokuapp.com/product/get/${id}`)
+      fetch(`${config.APP_URL}/product/get/${id}`, {
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+      })
         .then((res) => res.json())
         .then((result) => setProduct(result));
     } catch (err) {}

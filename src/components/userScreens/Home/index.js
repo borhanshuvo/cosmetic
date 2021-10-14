@@ -27,15 +27,21 @@ function Home() {
 
   React.useEffect(() => {
     if (isFocused) {
-      fetch(`${config.APP_URL}/user/get/${loggedInUser?.user?._id}`)
+      fetch(`${config.APP_URL}/user/get/${loggedInUser?.user?._id}`, {
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+      })
         .then((res) => res.json())
         .then((data) => setUser(data.user[0]));
 
-      fetch(`${config.APP_URL}/product/get`)
+      fetch(`${config.APP_URL}/product/get`, {
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+      })
         .then((res) => res.json())
         .then((result) => setProducts(result));
 
-      fetch(`${config.APP_URL}/specialOffer/get`)
+      fetch(`${config.APP_URL}/specialOffer/get`, {
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+      })
         .then((res) => res.json())
         .then((result) => setOfferProducts(result));
     }

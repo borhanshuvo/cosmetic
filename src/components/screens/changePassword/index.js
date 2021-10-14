@@ -10,6 +10,7 @@ import {
   ToastAndroid,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import config from "../../../../config";
 
 function ChangePassword() {
   const navigation = useNavigation();
@@ -22,7 +23,7 @@ function ChangePassword() {
   const [errors, setErrors] = useState({});
 
   const checkVerificationCode = () => {
-    fetch("https://api-cosmetic.herokuapp.com/user/checkVerificationCode", {
+    fetch(`${config.APP_URL}/user/checkVerificationCode`, {
       method: "PUT",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ code }),
@@ -56,7 +57,7 @@ function ChangePassword() {
         confirmPassword: "Password not macth",
       });
     } else {
-      fetch("https://api-cosmetic.herokuapp.com/user/changePassword", {
+      fetch(`${config.APP_URL}/user/changePassword`, {
         method: "PUT",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ code, password }),

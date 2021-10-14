@@ -10,6 +10,7 @@ import {
 import { UserContext } from "../../../App";
 import CounterCheckOut from "../molecules/counterCheckOut";
 import { useNavigation } from "@react-navigation/native";
+import config from "../../../config";
 
 function CheckOutCard({ productDetail }) {
   const navigation = useNavigation();
@@ -48,9 +49,12 @@ function CheckOutCard({ productDetail }) {
         price: totalAmount,
       };
       try {
-        fetch("https://api-cosmetic.herokuapp.com/order/post", {
+        fetch(`${config.APP_URL}/order/post`, {
           method: "POST",
-          headers: { "content-type": "application/json" },
+          headers: {
+            "content-type": "application/json",
+            authorization: `Bearer ${loggedInUser?.accessToken}`,
+          },
           body: JSON.stringify({
             name,
             email,

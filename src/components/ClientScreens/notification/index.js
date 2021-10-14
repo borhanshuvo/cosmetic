@@ -11,6 +11,7 @@ import Header from "../../atoms/header";
 import AppTemplate from "../../ClientTemplate";
 import { useNavigation } from "@react-navigation/native";
 import { UserContext } from "../../../../App";
+import config from "../../../../config";
 
 function Notifications() {
   const navigation = useNavigation();
@@ -19,9 +20,12 @@ function Notifications() {
   const [number, setNumber] = React.useState(0);
   React.useEffect(() => {
     const email = loggedInUser.user.email;
-    fetch("https://api-cosmetic.herokuapp.com/user/getUserNotification", {
+    fetch(`${config.APP_URL}/user/getUserNotification`, {
       method: "POST",
-      headers: { "content-type": "application/json" },
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${loggedInUser?.accessToken}`,
+      },
       body: JSON.stringify({ email }),
     })
       .then((res) => res.json())

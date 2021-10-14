@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   View,
   Text,
@@ -15,6 +15,8 @@ import Header from "../../atoms/header";
 import AppTemplate from "../../ClientTemplate";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
+import config from "../../../../config";
+import { UserContext } from "../../../../App";
 
 function AddCatogory() {
   const navigation = useNavigation();
@@ -22,11 +24,14 @@ function AddCatogory() {
   const [categoryName, setCategoryName] = useState("");
   const [errors, setErrors] = useState({});
   const [number, setNumber] = useState(0);
+  const [loggedInUser, setLoggedInUser] = useContext(UserContext);
   const showToast = (i) => {
     ToastAndroid.show(i, ToastAndroid.SHORT);
   };
   useEffect(() => {
-    fetch(`https://api-cosmetic.herokuapp.com/category/get`)
+    fetch(`${config.APP_URL}/category/get`, {
+      headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+    })
       .then((res) => res.json())
       .then((data) => setCategories(data));
   }, [number]);
@@ -35,9 +40,12 @@ function AddCatogory() {
     if (categoryName === "") {
       showToast("Please Enter Category Name");
     } else {
-      fetch(`https://api-cosmetic.herokuapp.com/category/post`, {
+      fetch(`${config.APP_URL}/category/post`, {
         method: "POST",
-        headers: { "content-type": "application/json" },
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${loggedInUser?.accessToken}`,
+        },
         body: JSON.stringify({ categoryName }),
       })
         .then((res) => res.json())

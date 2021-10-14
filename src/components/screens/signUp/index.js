@@ -13,6 +13,7 @@ import Input from "../../atoms/input";
 import { useNavigation } from "@react-navigation/native";
 import { UserContext } from "../../../../App";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import config from "../../../../config";
 
 function SignUp() {
   const navigation = useNavigation();
@@ -28,7 +29,7 @@ function SignUp() {
     if (email === "" || password === "") {
       setFieldValid("Username or Password Empty");
     } else {
-      fetch("https://api-cosmetic.herokuapp.com/login/post", {
+      fetch(`${config.APP_URL}/login/post`, {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ email, password }),

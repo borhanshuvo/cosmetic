@@ -10,14 +10,19 @@ import { useNavigation } from "@react-navigation/native";
 import BidRequestCard2 from "../../orgasms/bidRequestCard2";
 import Header from "../../atoms/header";
 import AppTemplate from "../../ClientTemplate";
+import config from "../../../../config";
+import { UserContext } from "../../../../App";
 
 function BidRequest2() {
   const navigation = useNavigation();
+  const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
   const [bids, setBids] = React.useState([]);
   const [number, setNumber] = React.useState(0);
   React.useEffect(() => {
     try {
-      fetch("https://api-cosmetic.herokuapp.com/bidRequest/get")
+      fetch(`${config.APP_URL}/bidRequest/get`, {
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+      })
         .then((res) => res.json())
         .then((result) => setBids(result));
     } catch (err) {}

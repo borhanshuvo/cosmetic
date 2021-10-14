@@ -24,9 +24,9 @@ function Sidebar() {
   const [number, setNumber] = React.useState(0);
 
   React.useEffect(() => {
-    fetch(
-      `https://api-cosmetic.herokuapp.com/user/get/${loggedInUser?.user?._id}`
-    )
+    fetch(`${config.APP_URL}/user/get/${loggedInUser?.user?._id}`, {
+      headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+    })
       .then((res) => res.json())
       .then((data) => setUser(data.user[0]));
   }, [loggedInUser?.user?._id, number]);
@@ -45,17 +45,14 @@ function Sidebar() {
 
   const handelRequest = (premium) => {
     try {
-      fetch(
-        `https://api-cosmetic.herokuapp.com/user/update/${loggedInUser?.user?._id}`,
-        {
-          method: "PUT",
-          headers: {
-            "content-type": "application/json",
-            authorization: `Bearer ${loggedInUser?.accessToken}`,
-          },
-          body: JSON.stringify({ premium }),
-        }
-      )
+      fetch(`${config.APP_URL}/user/update/${loggedInUser?.user?._id}`, {
+        method: "PUT",
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${loggedInUser?.accessToken}`,
+        },
+        body: JSON.stringify({ premium }),
+      })
         .then((res) => res.json())
         .then((result) => {
           if (!result?.error) {

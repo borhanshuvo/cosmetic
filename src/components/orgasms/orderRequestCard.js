@@ -1,5 +1,6 @@
 import * as React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+import { UserContext } from "../../../App";
 import config from "../../../config";
 
 function OrderRequestCard(props) {
@@ -15,14 +16,18 @@ function OrderRequestCard(props) {
     ButtontextColor,
     buttonTextOpacity,
     setNumber,
-    productImg
+    productImg,
   } = props;
+  const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
 
   const updateStatus = (status) => {
     try {
-      fetch(`https://api-cosmetic.herokuapp.com/order/update/${id}`, {
+      fetch(`${config.APP_URL}/order/update/${id}`, {
         method: "PUT",
-        headers: { "content-type": "application/json" },
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${loggedInUser?.accessToken}`,
+        },
         body: JSON.stringify({ status }),
       })
         .then((res) => res.json())

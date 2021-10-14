@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -17,6 +17,7 @@ import { useNavigation, useIsFocused } from "@react-navigation/native";
 import ModalDropdown from "react-native-modal-dropdown";
 import config from "../../../../config";
 import * as ImagePicker from "expo-image-picker";
+import { UserContext } from "../../../../App";
 
 function AddProductDetail() {
   const navigation = useNavigation();
@@ -29,6 +30,7 @@ function AddProductDetail() {
   const [quantity, setQuantity] = useState("");
   const [category, setCategory] = useState("");
   const [price, setPrice] = useState("");
+  const [loggedInUser, setLoggedInUser] = useContext(UserContext);
   const showToast = (i) => {
     ToastAndroid.show(i, ToastAndroid.SHORT);
   };
@@ -36,7 +38,9 @@ function AddProductDetail() {
   useEffect(() => {
     if (isFocused) {
       try {
-        fetch(`${config.APP_URL}/category/categoryName`)
+        fetch(`${config.APP_URL}/category/categoryName`, {
+          authorization: `Bearer ${loggedInUser?.accessToken}`,
+        })
           .then((res) => res.json())
           .then((result) => setCategories(result));
       } catch (err) {}
@@ -95,6 +99,7 @@ function AddProductDetail() {
       formData.append("category", category);
       fetch(`${config.APP_URL}/product/post`, {
         method: "POST",
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
         body: formData,
       })
         .then((res) => res.json())

@@ -14,6 +14,7 @@ import {
 
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
+import config from "../../../../config";
 
 function Register() {
   const [visible, setvisible] = useState(false);
@@ -79,7 +80,7 @@ function Register() {
       formData.append("instagramUsername", instagramUsername);
       formData.append("password", password);
 
-      fetch("https://api-cosmetic.herokuapp.com/user/post", {
+      fetch(`${config.APP_URL}/user/post`, {
         method: "POST",
         body: formData,
       })

@@ -11,6 +11,7 @@ import { useNavigation, useIsFocused } from "@react-navigation/native";
 import Header from "../../atoms/header";
 import AppTemplate from "../../Usertemplate";
 import { UserContext } from "../../../../App";
+import config from "../../../../config";
 
 function Orders() {
   const navigation = useNavigation();
@@ -21,9 +22,12 @@ function Orders() {
   React.useEffect(() => {
     if (isFocused) {
       try {
-        fetch("https://api-cosmetic.herokuapp.com/order/info", {
+        fetch(`${config.APP_URL}/order/info`, {
           method: "POST",
-          headers: { "content-type": "application/json" },
+          headers: {
+            "content-type": "application/json",
+            authorization: `Bearer ${loggedInUser?.accessToken}`,
+          },
           body: JSON.stringify({ email }),
         })
           .then((res) => res.json())

@@ -10,13 +10,18 @@ import MessagesCard from "../../orgasms/messagesCard";
 import Header from "../../atoms/header";
 import AppTemplate from "../../ClientTemplate";
 import { useNavigation } from "@react-navigation/native";
+import config from "../../../../config";
+import { UserContext } from "../../../../App";
 
 function Messages() {
   const navigation = useNavigation();
   const [users, setUsers] = React.useState([]);
+  const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
   React.useEffect(() => {
     try {
-      fetch("https://api-cosmetic.herokuapp.com/user/get")
+      fetch(`${config.APP_URL}/user/get`, {
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+      })
         .then((res) => res.json())
         .then((result) => setUsers(result));
     } catch (err) {}

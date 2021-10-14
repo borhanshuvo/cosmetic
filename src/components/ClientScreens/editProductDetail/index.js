@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -17,6 +17,7 @@ import { useNavigation, useIsFocused } from "@react-navigation/native";
 import ModalDropdown from "react-native-modal-dropdown";
 import config from "../../../../config";
 import * as ImagePicker from "expo-image-picker";
+import { UserContext } from "../../../../App";
 
 function EditProductDetail({ route }) {
   const navigation = useNavigation();
@@ -34,15 +35,20 @@ function EditProductDetail({ route }) {
   const [productCategory, setProductCategory] = useState("");
   const [productQuantity, setProductQuantity] = useState("");
   const [productPrice, setProductPrice] = useState("");
+  const [loggedInUser, setLoggedInUser] = useContext(UserContext);
 
   useEffect(() => {
     if (isFocused) {
       try {
-        fetch(`${config.APP_URL}/category/categoryName`)
+        fetch(`${config.APP_URL}/category/categoryName`, {
+          headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+        })
           .then((res) => res.json())
           .then((result) => setCategories(result));
 
-        fetch(`${config.APP_URL}/product/get/${id}`)
+        fetch(`${config.APP_URL}/product/get/${id}`, {
+          headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+        })
           .then((res) => res.json())
           .then((result) => setProduct(result));
       } catch (err) {}
