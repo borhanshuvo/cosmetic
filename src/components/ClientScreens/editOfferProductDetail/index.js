@@ -18,7 +18,7 @@ import ModalDropdown from "react-native-modal-dropdown";
 import config from "../../../../config";
 import * as ImagePicker from "expo-image-picker";
 
-function EditProductDetail({ route }) {
+function EditOfferProductDetail({ route }) {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const { id } = route?.params;
@@ -42,7 +42,7 @@ function EditProductDetail({ route }) {
           .then((res) => res.json())
           .then((result) => setCategories(result));
 
-        fetch(`${config.APP_URL}/product/get/${id}`)
+        fetch(`${config.APP_URL}/specialOffer/get/${id}`)
           .then((res) => res.json())
           .then((result) => setProduct(result));
       } catch (err) {}
@@ -61,7 +61,7 @@ function EditProductDetail({ route }) {
     }
   };
 
-  const updateProduct = () => {
+  const updateOfferProduct = () => {
     if (image !== null) {
       const ext = image.substring(image.lastIndexOf(".") + 1);
       const fileName = image.replace(/^.*[\\\/]/, "");
@@ -71,16 +71,22 @@ function EditProductDetail({ route }) {
         uri: image,
         type: `image/${ext}`,
       });
-      formData.append("title", productTitle || product?.title);
+      formData.append("title", productTitle || product?.product?.title);
       formData.append(
         "description",
-        productDescription || product?.description
+        productDescription || product?.product?.description
       );
-      formData.append("bid", productBid || product?.bid);
-      formData.append("price", productPrice || product?.price);
-      formData.append("quantity", productQuantity || product?.quantity);
-      formData.append("category", productCategory || product?.category);
-      fetch(`${config.APP_URL}/product/update/${product?._id}`, {
+      formData.append("bid", productBid || product?.product?.bid);
+      formData.append("price", productPrice || product?.product?.price);
+      formData.append(
+        "quantity",
+        productQuantity || product?.product?.quantity
+      );
+      formData.append(
+        "category",
+        productCategory || product?.product?.category
+      );
+      fetch(`${config.APP_URL}/specialOffer/update/${product?._id}`, {
         method: "PUT",
         body: formData,
       })
@@ -104,16 +110,22 @@ function EditProductDetail({ route }) {
         });
     } else {
       const formData = new FormData();
-      formData.append("title", productTitle || product?.title);
+      formData.append("product.title", productTitle || product?.product?.title);
       formData.append(
-        "description",
-        productDescription || product?.description
+        "product.description",
+        productDescription || product?.product?.description
       );
-      formData.append("bid", productBid || product?.bid);
-      formData.append("price", productPrice || product?.price);
-      formData.append("quantity", productQuantity || product?.quantity);
-      formData.append("category", productCategory || product?.category);
-      fetch(`${config.APP_URL}/product/update/${product?._id}`, {
+      formData.append("product.bid", productBid || product?.product?.bid);
+      formData.append("product.price", productPrice || product?.product?.price);
+      formData.append(
+        "product.quantity",
+        productQuantity || product?.product?.quantity
+      );
+      formData.append(
+        "product.category",
+        productCategory || product?.product?.category
+      );
+      fetch(`${config.APP_URL}/specialOffer/update/${product?._id}`, {
         method: "PUT",
         body: formData,
       })
@@ -165,7 +177,7 @@ function EditProductDetail({ route }) {
                 <View style={style.inputView}>
                   <TextInput
                     placeholder="Name"
-                    defaultValue={product?.title}
+                    defaultValue={product?.product?.title}
                     style={style.input}
                     onChangeText={(e) => setProductTitle(e)}
                   />
@@ -175,7 +187,7 @@ function EditProductDetail({ route }) {
                   multiline={true}
                   numberOfLines={4}
                   placeholder="Description..."
-                  defaultValue={product?.description}
+                  defaultValue={product?.product?.description}
                   onChangeText={(e) => setProductDescription(e)}
                   style={{
                     backgroundColor: "white",
@@ -196,7 +208,7 @@ function EditProductDetail({ route }) {
                 <View style={style.inputView}>
                   <TextInput
                     placeholder="Bid"
-                    defaultValue={product?.bid}
+                    defaultValue={product?.product?.bid}
                     style={style.input}
                     onChangeText={(e) => setProductBid(e)}
                   />
@@ -219,7 +231,7 @@ function EditProductDetail({ route }) {
                     marginLeft: -14,
                     marginTop: 14,
                   }}
-                  defaultValue={product?.category}
+                  defaultValue={product?.product?.category}
                   onSelect={(i, v) => setProductCategory(v)}
                   options={categories}
                   style={{
@@ -236,7 +248,7 @@ function EditProductDetail({ route }) {
                 <View style={style.inputView}>
                   <TextInput
                     placeholder="Quantity"
-                    defaultValue={product?.quantity}
+                    defaultValue={product?.product?.quantity}
                     style={style.input}
                     onChangeText={(e) => setProductQuantity(e)}
                   />
@@ -245,7 +257,7 @@ function EditProductDetail({ route }) {
                 <View style={style.inputView}>
                   <TextInput
                     placeholder="Price"
-                    defaultValue={product?.price}
+                    defaultValue={product?.product?.price}
                     style={style.input}
                     onChangeText={(e) => setProductPrice(e)}
                   />
@@ -282,7 +294,9 @@ function EditProductDetail({ route }) {
                   >
                     {image === null ? (
                       <Image
-                        source={{ uri: `${config.APP_URL}${product?.imgURL}` }}
+                        source={{
+                          uri: `${config.APP_URL}${product?.product?.imgURL}`,
+                        }}
                         resizeMode="contain"
                         resizeMethod="resize"
                         style={{
@@ -303,7 +317,7 @@ function EditProductDetail({ route }) {
                     )}
                   </View>
                 </View>
-                <TouchableOpacity onPress={() => updateProduct()}>
+                <TouchableOpacity onPress={() => updateOfferProduct()}>
                   <View style={style.button}>
                     <Text style={{ fontSize: 12, color: "white" }}>
                       Continue
@@ -318,7 +332,7 @@ function EditProductDetail({ route }) {
     </AppTemplate>
   );
 }
-export default EditProductDetail;
+export default EditOfferProductDetail;
 
 const style = StyleSheet.create({
   container: {

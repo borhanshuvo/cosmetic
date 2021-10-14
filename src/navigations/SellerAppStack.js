@@ -11,6 +11,7 @@ import ClientPremiumRequest from "../components/ClientScreens/premiumRequest";
 import ClientDashBoard from "../components/ClientScreens/dashboard";
 import ClientAddProductDetail from "../components/ClientScreens/addProductDetail";
 import ClientEditProductDetail from "../components/ClientScreens/editProductDetail";
+import ClientEditOfferProductDetail from "../components/ClientScreens/editOfferProductDetail";
 import ClientAddCatogory from "../components/ClientScreens/addCatogory";
 import ClientTagClient from "../components/ClientScreens/tagClient";
 import ClientSpecailOffer from "../components/ClientScreens/specailOffer";
@@ -50,6 +51,10 @@ const SellerAppStackNavigater = () => {
       <Drawer.Screen
         name="ClientEditProductDetail"
         component={ClientEditProductDetail}
+      />
+      <Drawer.Screen
+        name="ClientEditOfferProductDetail"
+        component={ClientEditOfferProductDetail}
       />
       <Drawer.Screen name="ClientAddCatogory" component={ClientAddCatogory} />
       <Drawer.Screen name="ClientTagClient" component={ClientTagClient} />

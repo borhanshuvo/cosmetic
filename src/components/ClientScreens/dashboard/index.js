@@ -81,8 +81,8 @@ function DashBoard() {
               renderItem={({ item }) => (
                 <LotionCard
                   onPress={() =>
-                    navigation.navigate("ClientEditProductDetail", {
-                      id: item?.product?._id,
+                    navigation.navigate("ClientEditOfferProductDetail", {
+                      id: item?._id,
                     })
                   }
                   title={item?.product?.title}
