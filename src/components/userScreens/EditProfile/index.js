@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -10,32 +10,96 @@ import {
   TextInput,
   ToastAndroid,
 } from "react-native";
-
+import * as ImagePicker from "expo-image-picker";
 import Avatar from "../../atoms/avatar";
 import Header from "../../atoms/header";
 import AppTemplate from "../../Usertemplate";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import { UserContext } from "../../../../App";
+import config from "../../../../config";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function EditProfile() {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
-  const name = loggedInUser?.user?.name;
-  const email = loggedInUser?.user?.email;
-  const [updateName, setUpdateName] = React.useState("");
-  const [aboutMe, setAboutMe] = React.useState(loggedInUser?.user?.aboutMe);
-  const [instagramUsername, setInstagramUsername] = React.useState(
-    loggedInUser?.user?.instagramUsername
-  );
+  const [image, setImg] = useState(null);
+  const [username, setUsername] = useState("");
+  const [userAboutMe, setUserAboutMe] = useState("");
+  const [userInstagramUsername, setUserInstagramUsername] = useState("");
+
   const showToast = (i) => {
     ToastAndroid.show(i, ToastAndroid.SHORT);
   };
 
+  const PickImage = async () => {
+    let photo = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!photo.cancelled) {
+      setImg(photo.uri);
+    }
+  };
+
   const updateProfile = () => {
-    if (updateName === "") {
-      showToast("Name required!");
+    if (image !== null) {
+      const ext = image.substring(image.lastIndexOf(".") + 1);
+      const fileName = image.replace(/^.*[\\\/]/, "");
+      const formData = new FormData();
+      formData.append("avatar", {
+        name: fileName,
+        uri: image,
+        type: `image/${ext}`,
+      });
+      formData.append("name", username || loggedInUser?.user?.name);
+      formData.append("aboutMe", userAboutMe || loggedInUser?.user?.aboutMe);
+      formData.append(
+        "instagramUsername",
+        userInstagramUsername || loggedInUser?.user?.instagramUsername
+      );
+      fetch(`${config.APP_URL}/user/update/${loggedInUser?.user?._id}`, {
+        method: "PUT",
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+        body: formData,
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          showToast("User updated successfully!");
+          AsyncStorage.removeItem("userInfo");
+          const data = {
+            accessToken: loggedInUser?.accessToken,
+            user: result,
+          };
+          setLoggedInUser(data);
+          AsyncStorage.setItem("userInfo", JSON.stringify(data));
+        });
     } else {
-      console.log(updateName);
+      const formData = new FormData();
+      formData.append("name", username || loggedInUser?.user?.name);
+      formData.append("aboutMe", userAboutMe || loggedInUser?.user?.aboutMe);
+      formData.append(
+        "instagramUsername",
+        userInstagramUsername || loggedInUser?.user?.instagramUsername
+      );
+      fetch(`${config.APP_URL}/user/update/${loggedInUser?.user?._id}`, {
+        method: "PUT",
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+        body: formData,
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          showToast("User updated successfully!");
+          AsyncStorage.removeItem("userInfo");
+          const data = {
+            accessToken: loggedInUser?.accessToken,
+            user: result,
+          };
+          setLoggedInUser(data);
+          AsyncStorage.setItem("userInfo", JSON.stringify(data));
+        });
     }
   };
   return (
@@ -68,22 +132,23 @@ function EditProfile() {
                   icon={require("../../../assets/camera.png")}
                   backcolor="white"
                   img={loggedInUser?.user?.imgURL}
+                  onPress={PickImage}
+                  image={image}
                 />
                 <View style={style.inputView}>
                   <TextInput
                     placeholder="Jassica"
-                    defaultValue={name}
+                    defaultValue={loggedInUser?.user?.name}
                     style={style.input}
-                    onChangeText={(e) => setUpdateName(e)}
+                    onChangeText={(e) => setUsername(e)}
                   />
                 </View>
 
                 <View style={style.inputView}>
                   <TextInput
                     placeholder="Email"
-                    value={email}
+                    value={loggedInUser?.user?.email}
                     style={style.input}
-                    //onChangeText={(e) => setName(e)}
                   />
                 </View>
 
@@ -91,7 +156,8 @@ function EditProfile() {
                   multiline={true}
                   numberOfLines={4}
                   placeholder="About me..."
-                  defaultValue={aboutMe}
+                  defaultValue={loggedInUser?.user?.aboutMe}
+                  onChangeText={(e) => setUserAboutMe(e)}
                   style={{
                     backgroundColor: "white",
                     display: "flex",
@@ -110,9 +176,9 @@ function EditProfile() {
                 <View style={style.inputView}>
                   <TextInput
                     placeholder="Email"
-                    defaultValue={instagramUsername}
+                    defaultValue={loggedInUser?.user?.instagramUsername}
                     style={style.input}
-                    //onChangeText={(e) => setName(e)}
+                    onChangeText={(e) => setUserInstagramUsername(e)}
                   />
                 </View>
 

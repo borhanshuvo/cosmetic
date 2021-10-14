@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import config from "../../../config";
 
 function Avatar(props) {
-  const { hi, wi, icon, backcolor, img } = props;
+  const { hi, wi, icon, backcolor, img, onPress, image } = props;
   return (
     <View style={style.view1}>
       <View style={{ height: hi, width: wi }}>
@@ -20,7 +20,7 @@ function Avatar(props) {
             width: "100%",
           }}
         >
-          <TouchableOpacity>
+          <TouchableOpacity onPress={onPress}>
             <View
               style={{
                 width: 25,
@@ -35,15 +35,27 @@ function Avatar(props) {
                 display: "flex",
               }}
             >
-              <Image
-                source={icon}
-                resizeMode="contain"
-                resizeMethod="resize"
-                style={{
-                  height: "60%",
-                  width: "60%",
-                }}
-              />
+              {image !== null ? (
+                <Image
+                  source={{ uri: image }}
+                  resizeMode="contain"
+                  resizeMethod="resize"
+                  style={{
+                    height: "60%",
+                    width: "60%",
+                  }}
+                />
+              ) : (
+                <Image
+                  source={icon}
+                  resizeMode="contain"
+                  resizeMethod="resize"
+                  style={{
+                    height: "60%",
+                    width: "60%",
+                  }}
+                />
+              )}
             </View>
           </TouchableOpacity>
         </View>
