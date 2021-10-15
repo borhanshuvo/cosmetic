@@ -9,9 +9,28 @@ import {
 import MessagesCard from "../../orgasms/messagesCard";
 import Header from "../../atoms/header";
 import AppTemplate from "../../Usertemplate";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
+import config from "../../../../config";
+import { UserContext } from "../../../../App";
 function Messages() {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
+  const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
+  const [admins, setAdmins] = React.useState([]);
+
+  React.useEffect(() => {
+    if (isFocused) {
+      fetch(`${config.APP_URL}/user/get/admin`, {
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          setAdmins(result);
+        });
+    }
+  }, [isFocused]);
+  console.log(admins);
+
   return (
     <AppTemplate>
       <View style={{ flex: 1, backgroundColor: "#EBEAEF" }}>
@@ -35,94 +54,18 @@ function Messages() {
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
             >
-              <MessagesCard
-                onPress={() => navigation.navigate("UserInbox")}
-                title="Jassica Jons"
-                dis="Sed ut  -  Perspiciatis unde omnis iste Perspiciatis unde omnis iste
-              Perspiciatis unde omnis iste...              "
-                backColor="white"
-                dotColor="#B7C9D2"
-              />
-              <MessagesCard
-                onPress={() => navigation.navigate("UserInbox")}
-                title="Jassica Jons"
-                dis="Sed ut  -  Perspiciatis unde omnis iste Perspiciatis unde omnis iste
-              Perspiciatis unde omnis iste...              "
-                backColor="white"
-                dotColor="#B7C9D2"
-              />
-              <MessagesCard
-                onPress={() => navigation.navigate("UserInbox")}
-                title="Jassica Jons"
-                dis="Sed ut  -  Perspiciatis unde omnis iste Perspiciatis unde omnis iste
-                 Perspiciatis unde omnis iste...              "
-                backColor="rgba(255, 255,255, 0.4)"
-                dotColor="transparent"
-              />
-              <MessagesCard
-                onPress={() => navigation.navigate("UserInbox")}
-                title="Jassica Jons"
-                dis="Sed ut  -  Perspiciatis unde omnis iste Perspiciatis unde omnis iste
-                 Perspiciatis unde omnis iste...              "
-                backColor="rgba(255, 255,255, 0.4)"
-                dotColor="transparent"
-              />
-              <MessagesCard
-                onPress={() => navigation.navigate("UserInbox")}
-                title="Jassica Jons"
-                dis="Sed ut  -  Perspiciatis unde omnis iste Perspiciatis unde omnis iste
-                 Perspiciatis unde omnis iste...              "
-                backColor="rgba(255, 255,255, 0.4)"
-                dotColor="transparent"
-              />
-              <MessagesCard
-                onPress={() => navigation.navigate("UserInbox")}
-                title="Jassica Jons"
-                dis="Sed ut  -  Perspiciatis unde omnis iste Perspiciatis unde omnis iste
-                 Perspiciatis unde omnis iste...              "
-                backColor="rgba(255, 255,255, 0.4)"
-                dotColor="transparent"
-              />
-              <MessagesCard
-                onPress={() => navigation.navigate("UserInbox")}
-                title="Jassica Jons"
-                dis="Sed ut  -  Perspiciatis unde omnis iste Perspiciatis unde omnis iste
-                 Perspiciatis unde omnis iste...              "
-                backColor="rgba(255, 255,255, 0.4)"
-                dotColor="transparent"
-              />
-              <MessagesCard
-                onPress={() => navigation.navigate("UserInbox")}
-                title="Jassica Jons"
-                dis="Sed ut  -  Perspiciatis unde omnis iste Perspiciatis unde omnis iste
-                 Perspiciatis unde omnis iste...              "
-                backColor="rgba(255, 255,255, 0.4)"
-                dotColor="transparent"
-              />
-              <MessagesCard
-                onPress={() => navigation.navigate("UserInbox")}
-                title="Jassica Jons"
-                dis="Sed ut  -  Perspiciatis unde omnis iste Perspiciatis unde omnis iste
-                 Perspiciatis unde omnis iste...              "
-                backColor="rgba(255, 255,255, 0.4)"
-                dotColor="transparent"
-              />
-              <MessagesCard
-                onPress={() => navigation.navigate("UserInbox")}
-                title="Jassica Jons"
-                dis="Sed ut  -  Perspiciatis unde omnis iste Perspiciatis unde omnis iste
-                 Perspiciatis unde omnis iste...              "
-                backColor="rgba(255, 255,255, 0.4)"
-                dotColor="transparent"
-              />
-              <MessagesCard
-                onPress={() => navigation.navigate("UserInbox")}
-                title="Jassica Jons"
-                dis="Sed ut  -  Perspiciatis unde omnis iste Perspiciatis unde omnis iste
-                 Perspiciatis unde omnis iste...              "
-                backColor="rgba(255, 255,255, 0.4)"
-                dotColor="transparent"
-              />
+              {admins.map((admin) => (
+                <MessagesCard
+                  key={admin?._id}
+                  onPress={() => navigation.navigate("UserInbox")}
+                  title={admin?.name}
+                  email={admin?.email}
+                  dis={admin?.aboutMe}
+                  img={admin?.imgURL}
+                  backColor="white"
+                  dotColor="#B7C9D2"
+                />
+              ))}
             </ScrollView>
           </SafeAreaView>
         </ImageBackground>

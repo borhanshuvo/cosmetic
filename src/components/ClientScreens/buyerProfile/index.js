@@ -51,6 +51,7 @@ function BuyerProfile() {
                   icon={require("../../../assets/badge.png")}
                   backcolor="#707070"
                   img={loggedInUser?.user?.imgURL}
+                  image={null}
                 />
                 <View style={style.view2}>
                   <Text style={{ opacity: 0.8 }}>

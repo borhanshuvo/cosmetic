@@ -4,16 +4,17 @@ import { useNavigation } from "@react-navigation/native";
 import config from "../../../config";
 
 function MessagesCard(props) {
-  const { id, title, dis, backColor, onPress, img } = props;
+  const { id, title, dis, backColor, onPress, img, email } = props;
   const navigation = useNavigation();
 
-  const selectUser = (id) => {
-    navigation.navigate("ClientCustomerProfile", { id: id });
+  const selectUser = () => {
+    navigation.navigate("UserInbox");
   };
+
   return (
     <TouchableOpacity
       style={[style.view1, { backgroundColor: backColor }]}
-      onPress={() => selectUser(id)}
+      onPress={() => selectUser()}
     >
       <View style={style.view5}>
         <View style={style.viewtop}>

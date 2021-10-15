@@ -68,6 +68,10 @@ function EditProfile() {
         .then((res) => res.json())
         .then((result) => {
           showToast("User updated successfully!");
+          setUsername("");
+          setUserAboutMe("");
+          setUserInstagramUsername("");
+          setImg(null);
           AsyncStorage.removeItem("userInfo");
           const data = {
             accessToken: loggedInUser?.accessToken,
@@ -92,6 +96,10 @@ function EditProfile() {
         .then((res) => res.json())
         .then((result) => {
           showToast("User updated successfully!");
+          setUsername("");
+          setUserAboutMe("");
+          setUserInstagramUsername("");
+          setImg(null);
           AsyncStorage.removeItem("userInfo");
           const data = {
             accessToken: loggedInUser?.accessToken,
@@ -149,6 +157,7 @@ function EditProfile() {
                     placeholder="Email"
                     value={loggedInUser?.user?.email}
                     style={style.input}
+                    editable={false}
                   />
                 </View>
 

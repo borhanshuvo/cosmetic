@@ -6,32 +6,31 @@ import {
   SafeAreaView,
   ScrollView,
 } from "react-native";
-import NotificationCard from "../../orgasms/notificationCard";
 import Header from "../../atoms/header";
 import AppTemplate from "../../Usertemplate";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import { UserContext } from "../../../../App";
 import config from "../../../../config";
+import SaveNotificationCard from "../../orgasms/saveNotificationCard";
 
-function Notifications() {
+function SaveNotification() {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
-  const [notification, setNotification] = React.useState([]);
-  const [number, setNumber] = React.useState(0);
-  
+  const [saveNotifications, setSaveNotifications] = React.useState([]);
+
   React.useEffect(() => {
-    const email = loggedInUser?.user?.email;
-    fetch(`${config.APP_URL}/user/getUserNotification`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        authorization: `Bearer ${loggedInUser?.accessToken}`,
-      },
-      body: JSON.stringify({ email }),
-    })
-      .then((res) => res.json())
-      .then((data) => setNotification(data));
-  }, [number]);
+    if (isFocused) {
+      fetch(
+        `${config.APP_URL}/saveNotification/get/${loggedInUser?.user?.email}`,
+        {
+          headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+        }
+      )
+        .then((res) => res.json())
+        .then((result) => setSaveNotifications(result));
+    }
+  }, [loggedInUser?.user?.email, isFocused]);
 
   return (
     <AppTemplate>
@@ -45,7 +44,7 @@ function Notifications() {
             <Header
               onPress={() => navigation.goBack()}
               img1={require("../../../assets/arrowLeft2.png")}
-              title="Notification"
+              title="Save Notification"
               img2={require("../../../assets/menu2.png")}
               img3={require("../../../assets/loupe.png")}
             />
@@ -56,20 +55,14 @@ function Notifications() {
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
             >
-              {notification.map((nt) => (
-                <View key={nt?._id}>
-                  <NotificationCard
-                    id={nt?._id}
-                    title={nt?.title}
-                    dis={nt?.description}
-                    img={nt?.imgURL}
-                    email={loggedInUser?.user?.email}
-                    setNumber={setNumber}
-                    backColor="white"
-                    dotColor="#B7C9D2"
-                    toggle={true}
-                  />
-                </View>
+              {saveNotifications.map((saveNotification) => (
+                <SaveNotificationCard
+                  key={saveNotification._id}
+                  title={saveNotification?.title}
+                  dis={saveNotification?.description}
+                  backColor="white"
+                  img={saveNotification?.imgURL}
+                />
               ))}
             </ScrollView>
           </SafeAreaView>
@@ -78,7 +71,7 @@ function Notifications() {
     </AppTemplate>
   );
 }
-export default Notifications;
+export default SaveNotification;
 
 const style = StyleSheet.create({
   backgroundImage: {

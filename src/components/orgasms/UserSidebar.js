@@ -133,14 +133,14 @@ function Sidebar() {
 
           <TouchableOpacity
             style={style.viewText}
-            onPress={() => navigation.navigate("UserCheckOut")}
+            onPress={() => navigation.navigate("UserSaveNotifications")}
           >
             <Text style={style.textLinks}>Saved by Me</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={style.viewText}
-            onPress={() => navigation.navigate("UserInbox")}
+            onPress={() => navigation.navigate("UserMessages")}
           >
             <Text style={style.textLinks}>Chat</Text>
           </TouchableOpacity>

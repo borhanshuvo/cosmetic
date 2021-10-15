@@ -13,6 +13,7 @@ import UserMessages from "../components/userScreens/messages";
 import UserProductDetail from "../components/userScreens/productDetail";
 import UserOfferProductDetail from "../components/userScreens/offerProductDetail";
 import UserNotifications from "../components/userScreens/notifications";
+import UserSaveNotifications from "../components/userScreens/saveNotification";
 import UserCheckOut from "../components/userScreens/checkout";
 import UserOfferCheckOut from "../components/userScreens/offerCheckout";
 import UserEditProfile from "../components/userScreens/EditProfile";
@@ -47,6 +48,10 @@ const UserAppStackNavigater = () => {
         component={UserOfferProductDetail}
       />
       <Drawer.Screen name="UserNotifications" component={UserNotifications} />
+      <Drawer.Screen
+        name="UserSaveNotifications"
+        component={UserSaveNotifications}
+      />
       <Drawer.Screen name="UserCheckOut" component={UserCheckOut} />
       <Drawer.Screen name="UserOfferCheckOut" component={UserOfferCheckOut} />
       <Drawer.Screen name="UserEditProfile" component={UserEditProfile} />

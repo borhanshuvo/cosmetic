@@ -15,6 +15,7 @@ import Menu, {
 } from "react-native-popup-menu";
 import { UserContext } from "../../../App";
 import config from "../../../config";
+
 function MessagesCard(props) {
   const { title, dis, dotColor, backColor, toggle, img, id, email, setNumber } =
     props;
@@ -22,6 +23,7 @@ function MessagesCard(props) {
   const showToast = (i) => {
     ToastAndroid.show(i, ToastAndroid.SHORT);
   };
+
   const deleteProduct = (id) => {
     fetch(`${config.APP_URL}/user/deleteNotification/${id}`, {
       method: "DELETE",
@@ -41,7 +43,33 @@ function MessagesCard(props) {
         }
       });
   };
-  const saveProduct = (id) => {};
+
+  const saveProduct = () => {
+    fetch(`${config.APP_URL}/saveNotification/post`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${loggedInUser?.accessToken}`,
+      },
+      body: JSON.stringify({
+        notifyId: id,
+        title,
+        description: dis,
+        imgURL: img,
+        name: loggedInUser?.user?.name,
+        email: loggedInUser?.user?.email,
+      }),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        if (result.success) {
+          showToast(result.success);
+        } else {
+          showToast(result.error);
+        }
+      });
+  };
+
   return (
     <MenuProvider skipInstanceCheck={true}>
       <View style={[style.view1, { backgroundColor: backColor }]}>
@@ -69,7 +97,7 @@ function MessagesCard(props) {
                           DELETE
                         </Text>
                       </TouchableOpacity>
-                      <TouchableOpacity onPress={() => saveProduct(id)}>
+                      <TouchableOpacity onPress={() => saveProduct()}>
                         <Text style={{ marginTop: 5, marginLeft: 5 }}>
                           SAVE
                         </Text>
