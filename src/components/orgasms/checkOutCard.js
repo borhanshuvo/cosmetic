@@ -6,7 +6,9 @@ import {
   TouchableOpacity,
   TextInput,
   ToastAndroid,
+  Modal,
 } from "react-native";
+import { WebView } from "react-native-webview";
 import { UserContext } from "../../../App";
 import CounterCheckOut from "../molecules/counterCheckOut";
 import { useNavigation } from "@react-navigation/native";
@@ -25,17 +27,13 @@ function CheckOutCard({ productDetail }) {
   const showToast = (i) => {
     ToastAndroid.show(i, ToastAndroid.SHORT);
   };
+  const [payment, setPayment] = React.useState({
+    showModal: false,
+  });
 
-  const orderSubmit = () => {
-    if (address === "") {
-      showToast("Enter Your Address");
-    } else if (streetAddress === "") {
-      showToast("Enter Your Street Address");
-    } else if (city === "") {
-      showToast("Enter Your City");
-    } else if (phone === "") {
-      showToast("Enter Your Phone Number");
-    } else {
+  const handleResponse = (data) => {
+    if (data.title === "success") {
+      setPayment({ showModal: false });
       const name = loggedInUser?.user?.name;
       const email = loggedInUser?.user?.email;
       const img = loggedInUser?.user?.avatar;
@@ -86,6 +84,26 @@ function CheckOutCard({ productDetail }) {
       } catch (err) {
         showToast("Something wrong!");
       }
+    } else if (data.title === "cancel") {
+      setPayment({ showModal: false });
+    } else {
+      return;
+    }
+  };
+
+  const orderSubmit = () => {
+    if (address === "") {
+      showToast("Enter Your Address");
+    } else if (streetAddress === "") {
+      showToast("Enter Your Street Address");
+    } else if (city === "") {
+      showToast("Enter Your City");
+    } else if (phone === "") {
+      showToast("Enter Your Phone Number");
+    } else if (isNaN(phone)) {
+      showToast("Phone Number only numeric!");
+    } else {
+      setPayment({ showModal: true });
     }
   };
 
@@ -151,7 +169,24 @@ function CheckOutCard({ productDetail }) {
               </Text>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity onPress={() => orderSubmit()}>
+          <Modal
+            visible={payment.showModal}
+            onRequestClose={() => setPayment({ showModal: false })}
+          >
+            <WebView
+              source={{
+                uri: `http://192.168.0.104:5000/order/payment`,
+                method: "POST",
+                body: `title=${productDetail?.title}&description=${productDetail?.description}&quantity=${quantity}&totalAmount=${totalAmount}&price=${productDetail?.price}`,
+              }}
+              onNavigationStateChange={(data) => handleResponse(data)}
+            />
+          </Modal>
+          <TouchableOpacity
+            onPress={() => {
+              orderSubmit();
+            }}
+          >
             <View style={style.button}>
               <Text style={{ fontSize: 15, color: "white" }}>Check Out</Text>
             </View>

@@ -90,18 +90,20 @@ function MessagesCard(props) {
                       />
                     </View>
                   </MenuTrigger>
-                  <MenuOptions style={{ backgroundColor: "transparent" }}>
+                  <MenuOptions style={{ backgroundColor: "transparent"  }}>
                     <View style={{ backgroundColor: "white" }}>
                       <TouchableOpacity onPress={() => deleteProduct(id)}>
                         <Text style={{ marginTop: 5, marginLeft: 5 }}>
                           DELETE
                         </Text>
                       </TouchableOpacity>
-                      <TouchableOpacity onPress={() => saveProduct()}>
-                        <Text style={{ marginTop: 5, marginLeft: 5 }}>
-                          SAVE
-                        </Text>
-                      </TouchableOpacity>
+                      {loggedInUser?.user?.role !== "admin" && (
+                        <TouchableOpacity onPress={() => saveProduct()}>
+                          <Text style={{ marginTop: 5, marginLeft: 5 }}>
+                            SAVE
+                          </Text>
+                        </TouchableOpacity>
+                      )}
                       <MenuOption />
                     </View>
                   </MenuOptions>

@@ -13,7 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import Header from "../../atoms/header";
 import { TextInput } from "react-native-gesture-handler";
 
-function Inbox() {
+function ClientInbox() {
   const navigation = useNavigation();
   return (
     <View style={{ flex: 1, backgroundColor: "#EBEAEF" }}>
@@ -147,7 +147,7 @@ function Inbox() {
     </View>
   );
 }
-export default Inbox;
+export default ClientInbox;
 
 const style = StyleSheet.create({
   backgroundImage: {

@@ -6,12 +6,12 @@ import {
   SafeAreaView,
   ScrollView,
 } from "react-native";
-import MessagesCard from "../../orgasms/messagesCard";
 import Header from "../../atoms/header";
 import AppTemplate from "../../ClientTemplate";
 import { useNavigation } from "@react-navigation/native";
 import config from "../../../../config";
 import { UserContext } from "../../../../App";
+import MessagesCard2 from "../../orgasms/messagesCard2";
 
 function Messages() {
   const navigation = useNavigation();
@@ -51,7 +51,7 @@ function Messages() {
             >
               {users.map((user) => (
                 <View key={user?._id}>
-                  <MessagesCard
+                  <MessagesCard2
                     onPress={() => navigation.navigate("ClientInbox")}
                     title={user?.name}
                     dis={user?.aboutMe}
