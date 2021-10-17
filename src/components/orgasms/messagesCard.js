@@ -8,7 +8,7 @@ function MessagesCard(props) {
   const navigation = useNavigation();
 
   const selectUser = () => {
-    navigation.navigate("UserInbox");
+    navigation.navigate("UserInbox", { id: id });
   };
 
   return (

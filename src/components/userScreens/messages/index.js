@@ -19,16 +19,13 @@ function Messages() {
   const [admins, setAdmins] = React.useState([]);
 
   React.useEffect(() => {
-    if (isFocused) {
-      fetch(`${config.APP_URL}/user/get/admin`, {
-        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
-      })
+    try {
+      fetch(`${config.APP_URL}/conversation/getUser/${loggedInUser?.user?._id}`)
         .then((res) => res.json())
-        .then((result) => {
-          setAdmins(result);
-        });
-    }
-  }, [isFocused]);
+        .then((result) => setAdmins(result?.conversation));
+    } catch (err) {}
+  }, []);
+
   console.log(admins);
 
   return (
@@ -57,11 +54,10 @@ function Messages() {
               {admins.map((admin) => (
                 <MessagesCard
                   key={admin?._id}
-                  onPress={() => navigation.navigate("UserInbox")}
-                  title={admin?.name}
-                  email={admin?.email}
-                  dis={admin?.aboutMe}
-                  img={admin?.imgURL}
+                  id={admin._id}
+                  title={admin?.creator?.name}
+                  dis="admin@gmail.com"
+                  img={admin?.creator?.image}
                   backColor="white"
                   dotColor="#B7C9D2"
                 />

@@ -17,15 +17,15 @@ function Messages() {
   const navigation = useNavigation();
   const [users, setUsers] = React.useState([]);
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
+
   React.useEffect(() => {
     try {
-      fetch(`${config.APP_URL}/user/get`, {
-        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
-      })
+      fetch(`${config.APP_URL}/conversation/getUser/${loggedInUser?.user?._id}`)
         .then((res) => res.json())
-        .then((result) => setUsers(result));
+        .then((result) => setUsers(result?.conversation));
     } catch (err) {}
   }, []);
+
   return (
     <AppTemplate>
       <View style={{ flex: 1, backgroundColor: "#EBEAEF" }}>
@@ -49,13 +49,13 @@ function Messages() {
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
             >
-              {users.map((user) => (
+              {users?.map((user) => (
                 <View key={user?._id}>
                   <MessagesCard2
-                    onPress={() => navigation.navigate("ClientInbox")}
-                    title={user?.name}
-                    dis={user?.aboutMe}
-                    img={user?.imgURL}
+                    id={user?._id}
+                    title={user?.participant?.name}
+                    dis="test@example.com"
+                    img={user?.participant?.image}
                     backColor="white"
                   />
                 </View>

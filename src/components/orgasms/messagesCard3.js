@@ -3,12 +3,12 @@ import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import config from "../../../config";
 
-function MessagesCard2(props) {
+function MessagesCard3(props) {
   const { id, title, dis, backColor, onPress, img, email } = props;
   const navigation = useNavigation();
 
   const selectUser = () => {
-    navigation.navigate("ClientInbox", { id: id });
+    navigation.navigate("ClientCustomerProfile", { id: id });
   };
 
   return (
@@ -52,7 +52,7 @@ function MessagesCard2(props) {
     </TouchableOpacity>
   );
 }
-export default MessagesCard2;
+export default MessagesCard3;
 
 const style = StyleSheet.create({
   view1: {

@@ -12,11 +12,11 @@ import {
   FlatList,
 } from "react-native";
 import Header from "../../atoms/header";
-import MessagesCard from "../../orgasms/messagesCard";
 import AppTemplate from "../../ClientTemplate";
 import { useNavigation } from "@react-navigation/native";
 import config from "../../../../config";
 import { UserContext } from "../../../../App";
+import MessagesCard3 from "../../orgasms/messagesCard3";
 
 function TagClient() {
   const navigation = useNavigation();
@@ -109,7 +109,7 @@ function TagClient() {
                 {users.length > 0 ? (
                   users.map((user) => (
                     <View key={user._id}>
-                      <MessagesCard
+                      <MessagesCard3
                         id={user._id}
                         title={user.name}
                         dis={user.email}

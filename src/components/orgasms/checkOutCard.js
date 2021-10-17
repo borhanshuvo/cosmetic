@@ -175,7 +175,7 @@ function CheckOutCard({ productDetail }) {
           >
             <WebView
               source={{
-                uri: `http://192.168.0.104:5000/order/payment`,
+                uri: `${config.APP_URL}/order/payment`,
                 method: "POST",
                 body: `title=${productDetail?.title}&description=${productDetail?.description}&quantity=${quantity}&totalAmount=${totalAmount}&price=${productDetail?.price}`,
               }}
