@@ -26,8 +26,6 @@ function Messages() {
     } catch (err) {}
   }, []);
 
-  console.log(admins);
-
   return (
     <AppTemplate>
       <View style={{ flex: 1, backgroundColor: "#EBEAEF" }}>
@@ -56,7 +54,7 @@ function Messages() {
                   key={admin?._id}
                   id={admin._id}
                   title={admin?.creator?.name}
-                  dis="admin@gmail.com"
+                  dis={admin?.creator?.email}
                   img={admin?.creator?.image}
                   backColor="white"
                   dotColor="#B7C9D2"

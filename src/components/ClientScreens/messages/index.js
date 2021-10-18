@@ -20,7 +20,12 @@ function Messages() {
 
   React.useEffect(() => {
     try {
-      fetch(`${config.APP_URL}/conversation/getUser/${loggedInUser?.user?._id}`)
+      fetch(
+        `${config.APP_URL}/conversation/getUser/${loggedInUser?.user?._id}`,
+        {
+          headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+        }
+      )
         .then((res) => res.json())
         .then((result) => setUsers(result?.conversation));
     } catch (err) {}
@@ -54,7 +59,7 @@ function Messages() {
                   <MessagesCard2
                     id={user?._id}
                     title={user?.participant?.name}
-                    dis="test@example.com"
+                    dis={user?.participant?.email}
                     img={user?.participant?.image}
                     backColor="white"
                   />

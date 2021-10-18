@@ -72,7 +72,7 @@ function Inbox({ route }) {
         }),
       })
         .then((res) => res.json())
-        .then((result) => console.log(result));
+        .then((result) => setClientMessage(""));
     }
   };
   return (
@@ -102,6 +102,12 @@ function Inbox({ route }) {
           <View style={{ height: "84%", display: "flex" }}>
             <SafeAreaView style={style.container}>
               <ScrollView
+                ref={(ref) => {
+                  this.scrollView = ref;
+                }}
+                onContentSizeChange={() =>
+                  this.scrollView.scrollToEnd({ animated: true })
+                }
                 style={style.scrollView}
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
@@ -119,19 +125,25 @@ function Inbox({ route }) {
                   }}
                 >
                   {messages.map((message) => (
-                    <View>
+                    <View key={message._id}>
                       {loggedInUser?.user?._id === message?.sender?.id ? (
                         <InboxMessages
                           dis={message?.text}
+                          img={message?.sender?.image}
+                          time={message?.createdAt}
                           backColor="rgba(255, 255,255, 0.4)"
                           left={20}
                           justify="flex-end"
+                          textDesign={false}
                         />
                       ) : (
                         <InboxMessages
                           dis={message?.text}
+                          img={message?.sender?.image}
+                          time={message?.createdAt}
                           backColor="white"
                           right={20}
+                          textDesign={true}
                         />
                       )}
                     </View>

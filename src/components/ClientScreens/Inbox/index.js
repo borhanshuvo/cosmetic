@@ -33,14 +33,18 @@ function ClientInbox({ route }) {
   };
 
   React.useEffect(() => {
-    fetch(`${config.APP_URL}/conversation/getConversationInfo/${id}`)
+    fetch(`${config.APP_URL}/conversation/getConversationInfo/${id}`, {
+      headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+    })
       .then((res) => res.json())
       .then((result) => {
         setSender(result?.conversation?.creator);
         setReceiver(result?.conversation?.participant);
       });
 
-    fetch(`${config.APP_URL}/message/get/${id}`)
+    fetch(`${config.APP_URL}/message/get/${id}`, {
+      headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+    })
       .then((res) => res.json())
       .then((result) => setMessages(result?.messages));
   }, [id]);
@@ -66,7 +70,10 @@ function ClientInbox({ route }) {
     } else {
       fetch(`${config.APP_URL}/message/send`, {
         method: "POST",
-        headers: { "content-type": "application/json" },
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${loggedInUser?.accessToken}`,
+        },
         body: JSON.stringify({
           text: clientMessage,
           sender,
@@ -108,7 +115,12 @@ function ClientInbox({ route }) {
           <View style={{ height: "84%", display: "flex" }}>
             <SafeAreaView style={style.container}>
               <ScrollView
-                style={style.scrollView}
+                ref={(ref) => {
+                  this.scrollView = ref;
+                }}
+                onContentSizeChange={() =>
+                  this.scrollView.scrollToEnd({ animated: true })
+                }
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={{
@@ -125,19 +137,25 @@ function ClientInbox({ route }) {
                   }}
                 >
                   {messages.map((message) => (
-                    <View>
+                    <View key={message._id}>
                       {loggedInUser?.user?._id === message?.sender?.id ? (
                         <InboxMessages
                           dis={message?.text}
+                          img={message?.sender?.image}
+                          time={message?.createdAt}
                           backColor="rgba(255, 255,255, 0.4)"
                           left={20}
+                          textDesign={false}
                           justify="flex-end"
                         />
                       ) : (
                         <InboxMessages
                           dis={message?.text}
+                          img={message?.sender?.image}
+                          time={message?.createdAt}
                           backColor="white"
                           right={20}
+                          textDesign={true}
                         />
                       )}
                     </View>

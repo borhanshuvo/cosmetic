@@ -1,52 +1,76 @@
 import * as React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+import config from "../../../config";
+import moment from "moment";
 
 function InboxMessages(props) {
-  const { title, dis, dotColor, backColor, onPress, left, right, justify } =
-    props;
+  const {
+    title,
+    dis,
+    dotColor,
+    backColor,
+    onPress,
+    left,
+    right,
+    justify,
+    img,
+    time,
+    textDesign,
+  } = props;
   return (
-    <TouchableOpacity
-      style={[
-        style.view1,
-        {
-          backgroundColor: backColor,
-          borderBottomRightRadius: right,
-          borderBottomLeftRadius: left,
-          alignSelf: justify,
-        },
-      ]}
-      onPress={onPress}
-    >
-      <View style={style.view5}>
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            width: "20%",
-          }}
-        >
-          <Image
-            source={require("../../assets/icon.png")}
-            resizeMethod="resize"
-            resizeMode="contain"
-            style={style.image}
-          />
-        </View>
-        <View style={style.view4}>
-          <Text
+    <View>
+      <TouchableOpacity
+        style={[
+          style.view1,
+          {
+            backgroundColor: backColor,
+            borderBottomRightRadius: right,
+            borderBottomLeftRadius: left,
+            alignSelf: justify,
+          },
+        ]}
+        onPress={onPress}
+      >
+        <View style={style.view5}>
+          <View
             style={{
-              fontSize: 11,
-              color: "grey",
-              marginTop: 4,
-              width: "90%",
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              width: "20%",
             }}
           >
-            {dis}
-          </Text>
+            <Image
+              source={{ uri: `${config.APP_URL}${img}` }}
+              resizeMethod="resize"
+              resizeMode="contain"
+              style={style.image}
+            />
+          </View>
+          <View style={style.view4}>
+            <Text
+              style={{
+                fontSize: 11,
+                color: "grey",
+                marginTop: 4,
+                width: "90%",
+              }}
+            >
+              {dis}
+            </Text>
+          </View>
         </View>
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+      <Text
+        style={{
+          textAlign: `${textDesign ? "left" : "right"}`,
+          fontSize: 8,
+          color: "rgba(0, 0, 255, 0.6)",
+        }}
+      >
+        {moment(time).fromNow()}
+      </Text>
+    </View>
   );
 }
 export default InboxMessages;
@@ -65,7 +89,6 @@ const style = StyleSheet.create({
     paddingRight: 25,
     borderTopEndRadius: 20,
     borderTopLeftRadius: 20,
-
     justifyContent: "space-between",
   },
   view5: {
@@ -86,7 +109,7 @@ const style = StyleSheet.create({
   image: {
     height: 40,
     width: 40,
-    borderRadius: 8,
+    borderRadius: 50,
   },
   viewtop: {
     height: 10,
