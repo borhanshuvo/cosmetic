@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import config from "../../../config";
 
 function BigLotionCard(props) {
-  const { title, dis, price, color, onPress, img } = props;
+  const { title, dis, price, color, onPress, img, quantity } = props;
   return (
     <TouchableOpacity
       style={[style.view1, { backgroundColor: color }]}
@@ -20,7 +20,7 @@ function BigLotionCard(props) {
         </View>
         <View style={style.view4}>
           <Text style={{ fontSize: 10, color: "black", opacity: 0.7 }}>
-            {title}
+            {title} ({quantity})
           </Text>
           <Text style={{ fontSize: 6, color: "grey" }}>{dis}</Text>
         </View>

@@ -20,7 +20,12 @@ function Messages() {
 
   React.useEffect(() => {
     try {
-      fetch(`${config.APP_URL}/conversation/getUser/${loggedInUser?.user?._id}`)
+      fetch(
+        `${config.APP_URL}/conversation/getUser/${loggedInUser?.user?._id}`,
+        {
+          headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+        }
+      )
         .then((res) => res.json())
         .then((result) => setAdmins(result?.conversation));
     } catch (err) {}

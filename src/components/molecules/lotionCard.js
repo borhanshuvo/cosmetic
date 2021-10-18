@@ -4,7 +4,8 @@ import { UserContext } from "../../../App";
 import config from "../../../config";
 
 function LotionCard(props) {
-  const { title, dis, price, onPress, ButtonClick, img, endingDate } = props;
+  const { title, dis, price, onPress, ButtonClick, img, endingDate, quantity } =
+    props;
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
   return (
     <TouchableOpacity style={style.view1} onPress={onPress}>
@@ -18,7 +19,7 @@ function LotionCard(props) {
       </View>
       <View style={style.view4}>
         <Text style={{ fontSize: 10, color: "black", opacity: 0.7 }}>
-          {title}
+          {title} ({quantity})
         </Text>
         <Text style={{ fontSize: 6, color: "grey" }}>{dis}</Text>
         <View style={style.view3}>

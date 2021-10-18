@@ -32,14 +32,18 @@ function Inbox({ route }) {
   };
 
   React.useEffect(() => {
-    fetch(`${config.APP_URL}/conversation/getConversationInfo/${id}`)
+    fetch(`${config.APP_URL}/conversation/getConversationInfo/${id}`, {
+      headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+    })
       .then((res) => res.json())
       .then((result) => {
         setSender(result?.conversation?.participant);
         setReceiver(result?.conversation?.creator);
       });
 
-    fetch(`${config.APP_URL}/message/get/${id}`)
+    fetch(`${config.APP_URL}/message/get/${id}`, {
+      headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+    })
       .then((res) => res.json())
       .then((result) => setMessages(result?.messages));
   }, [id]);
@@ -63,7 +67,10 @@ function Inbox({ route }) {
     } else {
       fetch(`${config.APP_URL}/message/send`, {
         method: "POST",
-        headers: { "content-type": "application/json" },
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${loggedInUser?.accessToken}`,
+        },
         body: JSON.stringify({
           text: clientMessage,
           sender,

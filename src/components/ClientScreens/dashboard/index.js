@@ -94,6 +94,7 @@ function DashBoard() {
                   price={item?.product?.price}
                   img={item?.product?.imgURL}
                   endingDate={item?.endingDate}
+                  quantity={item?.product?.quantity}
                 />
               )}
             />
@@ -115,6 +116,7 @@ function DashBoard() {
                   dis={item?.description}
                   price={item?.price}
                   img={item?.imgURL}
+                  quantity={item?.quantity}
                   color="white"
                 />
               )}
@@ -137,6 +139,7 @@ function DashBoard() {
                   dis={item?.description}
                   price={item?.price}
                   img={item?.imgURL}
+                  quantity={item?.quantity}
                 />
               )}
             />

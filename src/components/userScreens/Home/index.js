@@ -112,6 +112,7 @@ function Home() {
                       dis={item?.product?.description}
                       price={item?.product?.price}
                       img={item?.product?.imgURL}
+                      quantity={item?.product?.quantity}
                       endingDate={item?.endingDate}
                     />
                   )}
@@ -134,6 +135,7 @@ function Home() {
                   dis={item?.description}
                   price={item?.price}
                   img={item?.imgURL}
+                  quantity={item?.quantity}
                   color="white"
                 />
               )}
@@ -159,6 +161,7 @@ function Home() {
                   dis={item?.description}
                   price={item?.price}
                   img={item?.imgURL}
+                  quantity={item?.quantity}
                 />
               )}
             />
