@@ -106,6 +106,7 @@ const style = StyleSheet.create({
     marginTop: 10,
     marginLeft: 100,
     height: 15,
+    marginBottom: 10,
   },
   view2: {
     backgroundColor: "#B7C9D2",

@@ -20,8 +20,15 @@ function BigLotionCard(props) {
         </View>
         <View style={style.view4}>
           <Text style={{ fontSize: 10, color: "black", opacity: 0.7 }}>
-            {title} ({quantity})
+            {title}
           </Text>
+          {quantity === "0" ? (
+            <Text style={{ fontSize: 6, color: "red" }}>Out Of Stock</Text>
+          ) : (
+            <Text style={{ fontSize: 6, color: "grey" }}>
+              In Stock - {quantity}
+            </Text>
+          )}
           <Text style={{ fontSize: 6, color: "grey" }}>{dis}</Text>
         </View>
       </View>

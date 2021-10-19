@@ -127,7 +127,7 @@ function DashBoard() {
               horizontal={true}
               style={{ width: "100%", marginTop: 10 }}
               data={products}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item) => item._id}
               renderItem={({ item }) => (
                 <BigLotionCard
                   onPress={() =>
@@ -150,7 +150,7 @@ function DashBoard() {
               horizontal={true}
               style={{ width: "100%", marginTop: 10 }}
               data={products}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item) => item._id}
               renderItem={({ item }) => (
                 <LotionCard
                   onPress={() =>
