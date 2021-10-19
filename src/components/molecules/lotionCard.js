@@ -4,11 +4,31 @@ import { UserContext } from "../../../App";
 import config from "../../../config";
 
 function LotionCard(props) {
-  const { title, dis, price, onPress, ButtonClick, img, endingDate, quantity } =
-    props;
+  const {
+    id,
+    title,
+    dis,
+    price,
+    onPress,
+    ButtonClick,
+    img,
+    endingDate,
+    quantity,
+    handleProductDelete,
+  } = props;
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
   return (
     <TouchableOpacity style={style.view1} onPress={onPress}>
+      {loggedInUser?.user?.role === "admin" && (
+        <TouchableOpacity onPress={() => handleProductDelete(id, endingDate)}>
+          <Image
+            source={require("../../assets/delete.png")}
+            resizeMethod="resize"
+            resizeMode="contain"
+            style={style.image3}
+          />
+        </TouchableOpacity>
+      )}
       <View>
         <Image
           source={{ uri: `${config.APP_URL}${img}` }}
@@ -19,8 +39,15 @@ function LotionCard(props) {
       </View>
       <View style={style.view4}>
         <Text style={{ fontSize: 10, color: "black", opacity: 0.7 }}>
-          {title} ({quantity})
+          {title}
         </Text>
+        {quantity === "0" ? (
+          <Text style={{ fontSize: 6, color: "red" }}>Out Of Stock</Text>
+        ) : (
+          <Text style={{ fontSize: 6, color: "grey" }}>
+            In Stock - {quantity}
+          </Text>
+        )}
         <Text style={{ fontSize: 6, color: "grey" }}>{dis}</Text>
         <View style={style.view3}>
           <Text style={{ fontSize: 9, color: "black", opacity: 0.7 }}>
@@ -44,7 +71,7 @@ function LotionCard(props) {
             <Text
               style={{
                 fontSize: 8,
-                color: "grey",
+                color: "red",
                 marginTop: 5,
               }}
             >
@@ -74,6 +101,11 @@ const style = StyleSheet.create({
   },
   image2: {
     height: 30,
+  },
+  image3: {
+    marginTop: 10,
+    marginLeft: 100,
+    height: 15,
   },
   view2: {
     backgroundColor: "#B7C9D2",

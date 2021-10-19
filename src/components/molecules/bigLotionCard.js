@@ -32,7 +32,7 @@ function BigLotionCard(props) {
             fontSize: 9,
             color: "black",
             opacity: 0.7,
-            marginBottom: 18,
+            marginBottom: 30,
           }}
         >
           ${parseFloat(price).toFixed(2)}

@@ -42,6 +42,28 @@ function DashBoard() {
     }
   }, [isFocused]);
 
+  const handleProductDelete = (id, endingDate) => {
+    if (endingDate) {
+      fetch(`${config.APP_URL}/specialOffer/delete/${id}`, {
+        method: "DELETE",
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          setOfferProducts(result);
+        });
+    } else {
+      fetch(`${config.APP_URL}/product/delete/${id}`, {
+        method: "DELETE",
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          setProducts(result);
+        });
+    }
+  };
+
   return (
     <AppTemplate>
       <View style={{ flex: 1, backgroundColor: "#EBEAEF" }}>
@@ -75,7 +97,6 @@ function DashBoard() {
             showsHorizontalScrollIndicator={false}
           >
             <Text style={style.text2}>Best Selling</Text>
-
             <FlatList
               showsHorizontalScrollIndicator={false}
               horizontal={true}
@@ -89,12 +110,14 @@ function DashBoard() {
                       id: item?._id,
                     })
                   }
+                  id={item?._id}
                   title={item?.product?.title}
                   dis={item?.product?.description}
                   price={item?.product?.price}
                   img={item?.product?.imgURL}
                   endingDate={item?.endingDate}
                   quantity={item?.product?.quantity}
+                  handleProductDelete={handleProductDelete}
                 />
               )}
             />
@@ -135,11 +158,13 @@ function DashBoard() {
                       id: item?._id,
                     })
                   }
+                  id={item?._id}
                   title={item?.title}
                   dis={item?.description}
                   price={item?.price}
                   img={item?.imgURL}
                   quantity={item?.quantity}
+                  handleProductDelete={handleProductDelete}
                 />
               )}
             />

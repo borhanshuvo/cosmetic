@@ -1,25 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 function CounterCheck(props) {
-  const { value, quantity, setquantity, price } = props;
+  const { value, quantity, setquantity, price, productQuantity } = props;
 
   return (
     <View style={style.main}>
       <Text style={[style.text1.opacity, { fontSize: 12 }]}>{value}</Text>
       <View style={style.view1}>
-        <TouchableOpacity>
-          <Text
-            style={{
-              fontSize: 12,
-              color: "black",
-              marginRight: 10,
-              opacity: 0.8,
-            }}
-          >
-            ${parseFloat(price).toFixed(2)}
-          </Text>
-        </TouchableOpacity>
+        <Text
+          style={{
+            fontSize: 12,
+            color: "black",
+            marginRight: 10,
+            opacity: 0.8,
+          }}
+        >
+          ${parseFloat(price).toFixed(2)}
+        </Text>
+
         <View style={style.counter}>
           <TouchableOpacity
             onPress={() => {
@@ -30,7 +29,13 @@ function CounterCheck(props) {
           </TouchableOpacity>
 
           <Text style={style.text1}>{quantity}</Text>
-          <TouchableOpacity onPress={() => setquantity(quantity + 1)}>
+          <TouchableOpacity
+            onPress={() => {
+              parseInt(productQuantity) > quantity
+                ? setquantity(quantity + 1)
+                : quantity;
+            }}
+          >
             <Text style={style.text1}>+</Text>
           </TouchableOpacity>
         </View>

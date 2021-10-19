@@ -8,7 +8,7 @@ import {
   Image,
 } from "react-native";
 import CheckOutCard from "../../orgasms/checkOutCard";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import Header from "../../atoms/header";
 import AppTemplate from "../../Usertemplate";
 import config from "../../../../config";
@@ -16,19 +16,22 @@ import { UserContext } from "../../../../App";
 
 function OfferCheckOut({ route }) {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const { id } = route?.params;
   const [product, setProduct] = useState({});
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
 
   useEffect(() => {
-    try {
-      fetch(`${config.APP_URL}/specialOffer/get/${id}`, {
-        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
-      })
-        .then((res) => res.json())
-        .then((result) => setProduct(result));
-    } catch (err) {}
-  }, [id]);
+    if (isFocused) {
+      try {
+        fetch(`${config.APP_URL}/specialOffer/get/${id}`, {
+          headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+        })
+          .then((res) => res.json())
+          .then((result) => setProduct(result));
+      } catch (err) {}
+    }
+  }, [isFocused, id]);
 
   return (
     <AppTemplate>
@@ -54,7 +57,11 @@ function OfferCheckOut({ route }) {
               showsHorizontalScrollIndicator={false}
             >
               <View>
-                <CheckOutCard productDetail={product?.product} />
+                <CheckOutCard
+                  productDetail={product?.product}
+                  offerDate={product?.startingDate}
+                  id={product?._id}
+                />
               </View>
             </ScrollView>
           </SafeAreaView>

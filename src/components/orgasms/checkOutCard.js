@@ -11,11 +11,12 @@ import {
 import { WebView } from "react-native-webview";
 import { UserContext } from "../../../App";
 import CounterCheckOut from "../molecules/counterCheckOut";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import config from "../../../config";
 
-function CheckOutCard({ productDetail }) {
+function CheckOutCard({ productDetail, offerDate, id }) {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
   const [quantity, setquantity] = React.useState(1);
   const price = productDetail?.price;
@@ -30,6 +31,12 @@ function CheckOutCard({ productDetail }) {
   const [payment, setPayment] = React.useState({
     showModal: false,
   });
+
+  React.useEffect(() => {
+    if (isFocused) {
+      setquantity(1);
+    }
+  }, [isFocused]);
 
   const handleResponse = (data) => {
     if (data.title === "success") {
@@ -70,15 +77,45 @@ function CheckOutCard({ productDetail }) {
             if (result.error) {
               showToast(result.error);
             } else {
-              setAddress("");
-              setStreetAddress("");
-              setPhone("");
-              setCity("");
-              setquantity(1);
-              showToast(result.success);
-              setTimeout(() => {
-                navigation.navigate("UserOrders");
-              }, 2000);
+              const currentQuantity = `${
+                parseInt(productDetail?.quantity) - quantity
+              }`;
+              if (offerDate) {
+                const formData = new FormData();
+                formData.append("product.quantity", currentQuantity);
+                fetch(`${config.APP_URL}/specialOffer/update/${id}`, {
+                  method: "PUT",
+                  headers: {
+                    authorization: `Bearer ${loggedInUser?.accessToken}`,
+                  },
+                  body: formData,
+                })
+                  .then((res) => res.json())
+                  .then((result) => console.log(result));
+              } else {
+                fetch(
+                  `${config.APP_URL}/product/update/${productDetail?._id}`,
+                  {
+                    method: "PUT",
+                    headers: {
+                      "content-type": "application/json",
+                      authorization: `Bearer ${loggedInUser?.accessToken}`,
+                    },
+                    body: JSON.stringify({ quantity: currentQuantity }),
+                  }
+                )
+                  .then((res) => res.json())
+                  .then((result) => console.log(result));
+              }
+                setAddress("");
+                setStreetAddress("");
+                setPhone("");
+                setCity("");
+                setquantity(1);
+                showToast(result.success);
+                setTimeout(() => {
+                  navigation.navigate("UserOrders");
+                }, 2000);
             }
           });
       } catch (err) {
@@ -146,28 +183,33 @@ function CheckOutCard({ productDetail }) {
       <View style={{ marginTop: 10 }}>
         <View style={style.main}>
           <View style={style.view1}>
-            <Text style={style.text1}>Quantity</Text>
-            <Text style={style.text1}>{quantity}</Text>
+            <Text style={style.text1}>
+              Quantity ({productDetail?.quantity})
+            </Text>
+            <Text style={style.text1}>
+              {parseInt(productDetail?.quantity) !== 0
+                ? parseInt(productDetail?.quantity) - quantity
+                : 0}
+            </Text>
           </View>
           <View style={style.line}></View>
           <View style={style.card}></View>
           <View style={{ marginTop: 10 }}>
             <CounterCheckOut
               value={productDetail?.title}
+              productQuantity={productDetail?.quantity}
               quantity={quantity}
               setquantity={setquantity}
               price={productDetail?.price}
             />
           </View>
           <View style={style.buttons}>
-            <TouchableOpacity>
-              <Text style={{ fontSize: 13, color: "black" }}>Total Amount</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={style.button2}>
+            <Text style={{ fontSize: 13, color: "black" }}>Total Amount</Text>
+            <View style={style.button2}>
               <Text style={{ fontSize: 15, color: "black", opacity: 0.6 }}>
                 ${parseFloat(totalAmount).toFixed(2)}
               </Text>
-            </TouchableOpacity>
+            </View>
           </View>
           <Modal
             visible={payment.showModal}
@@ -177,18 +219,25 @@ function CheckOutCard({ productDetail }) {
               source={{
                 uri: `${config.APP_URL}/order/payment`,
                 method: "POST",
-                body: `title=${productDetail?.title}&description=${productDetail?.description}&quantity=${quantity}&totalAmount=${totalAmount}&price=${productDetail?.price}`,
+                body: `title=${productDetail?.title}&quantity=${quantity}&totalAmount=${totalAmount}&price=${productDetail?.price}`,
               }}
               onNavigationStateChange={(data) => handleResponse(data)}
             />
           </Modal>
           <TouchableOpacity
+            disabled={parseInt(productDetail?.quantity) === 0 ? true : false}
             onPress={() => {
               orderSubmit();
             }}
           >
             <View style={style.button}>
-              <Text style={{ fontSize: 15, color: "white" }}>Check Out</Text>
+              {parseInt(productDetail?.quantity) === 0 ? (
+                <Text style={{ fontSize: 15, color: "white" }}>
+                  Out of Stock
+                </Text>
+              ) : (
+                <Text style={{ fontSize: 15, color: "white" }}>Check Out</Text>
+              )}
             </View>
           </TouchableOpacity>
         </View>
