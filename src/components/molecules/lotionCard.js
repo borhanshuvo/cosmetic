@@ -77,9 +77,9 @@ function LotionCard(props) {
               }}
             >
               End Date :{" "}
-              {`${new Date(endingDate)} - ${new Date(
-                endingDate
-              ).getHours()}:${new Date(endingDate).getMinutes()}:${new Date(
+              {`${new Date(endingDate).toDateString()} - ${
+                new Date(endingDate).getHours() - 6
+              }:${new Date(endingDate).getMinutes()}:${new Date(
                 endingDate
               ).getSeconds()}`}
             </Text>

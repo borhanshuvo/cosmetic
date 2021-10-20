@@ -50,7 +50,8 @@ function DashBoard() {
       })
         .then((res) => res.json())
         .then((result) => {
-          setOfferProducts(result);
+          const delPro = offerProducts.filter((pd) => pd._id !== result._id);
+          setOfferProducts(delPro);
         });
     } else {
       fetch(`${config.APP_URL}/product/delete/${id}`, {
@@ -59,7 +60,8 @@ function DashBoard() {
       })
         .then((res) => res.json())
         .then((result) => {
-          setProducts(result);
+          const delPro = products.filter((pd) => pd._id !== result._id);
+          setProducts(delPro);
         });
     }
   };
