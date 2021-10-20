@@ -96,7 +96,7 @@ function DashBoard() {
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
           >
-            <Text style={style.text2}>Best Selling</Text>
+            <Text style={style.text2}>Auction</Text>
             <FlatList
               showsHorizontalScrollIndicator={false}
               horizontal={true}

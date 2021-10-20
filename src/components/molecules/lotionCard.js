@@ -17,6 +17,7 @@ function LotionCard(props) {
     handleProductDelete,
   } = props;
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
+
   return (
     <TouchableOpacity style={style.view1} onPress={onPress}>
       {loggedInUser?.user?.role === "admin" && (
@@ -44,7 +45,7 @@ function LotionCard(props) {
         {quantity === "0" ? (
           <Text style={{ fontSize: 6, color: "red" }}>Out Of Stock</Text>
         ) : (
-          <Text style={{ fontSize: 6, color: "grey" }}>
+          <Text style={{ fontSize: 6, color: "red" }}>
             In Stock - {quantity}
           </Text>
         )}
@@ -70,12 +71,17 @@ function LotionCard(props) {
           {endingDate && (
             <Text
               style={{
-                fontSize: 8,
+                fontSize: 6,
                 color: "red",
                 marginTop: 5,
               }}
             >
-              Offer End : {new Date(endingDate).toDateString()}
+              End Date :{" "}
+              {`${new Date(endingDate)} - ${new Date(
+                endingDate
+              ).getHours()}:${new Date(endingDate).getMinutes()}:${new Date(
+                endingDate
+              ).getSeconds()}`}
             </Text>
           )}
         </View>

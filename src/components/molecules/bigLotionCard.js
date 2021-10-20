@@ -25,7 +25,7 @@ function BigLotionCard(props) {
           {quantity === "0" ? (
             <Text style={{ fontSize: 6, color: "red" }}>Out Of Stock</Text>
           ) : (
-            <Text style={{ fontSize: 6, color: "grey" }}>
+            <Text style={{ fontSize: 6, color: "red" }}>
               In Stock - {quantity}
             </Text>
           )}

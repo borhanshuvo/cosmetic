@@ -29,10 +29,16 @@ function SpecailOffer() {
   const [startDate, setStartDate] = useState("");
   const [startMonth, setStartMonth] = useState("");
   const [startYear, setStartYear] = useState("");
+  const [startDateHour, setStartDateHour] = useState("");
+  const [startDateMinute, setStartDateMinute] = useState("");
+  const [startDateSecond, setStartDateSecond] = useState("");
   const [endDate, setEndDate] = useState("");
   const [endMonth, setEndMonth] = useState("");
   const [endYear, setEndYear] = useState("");
   const [error, setError] = useState("");
+  const [endDateHour, setEndDateHour] = useState("");
+  const [endDateMinute, setEndDateMinute] = useState("");
+  const [endDateSecond, setEndDateSecond] = useState("");
   const [loggedInUser, setLoggedInUser] = useContext(UserContext);
 
   useEffect(() => {
@@ -96,9 +102,15 @@ function SpecailOffer() {
           startDate,
           startMonth,
           startYear,
+          startDateSecond,
+          startDateMinute,
+          startDateHour,
           endDate,
           endMonth,
           endYear,
+          endDateSecond,
+          endDateMinute,
+          endDateHour,
         }),
       })
         .then((res) => res.json())
@@ -108,9 +120,15 @@ function SpecailOffer() {
             setStartDate("");
             setStartMonth("");
             setStartYear("");
+            setStartDateSecond("");
+            setStartDateMinute("");
+            setStartDateHour("");
             setEndDate("");
             setEndMonth("");
             setEndYear("");
+            setEndDateMinute("");
+            setEndDateSecond("");
+            setEndDateHour("");
             setTimeout(() => {
               navigation.navigate("ClientDashBoard");
             }, 2000);
@@ -185,7 +203,9 @@ function SpecailOffer() {
                 </View>
 
                 <View>
-                  <Text style={style.containerHedingStyle}>Start Date</Text>
+                  <Text style={style.containerHedingStyle}>
+                    Start Date (24 hour formate)
+                  </Text>
                   <View style={style.viewContainer}>
                     <TextInput
                       style={style.input}
@@ -216,8 +236,43 @@ function SpecailOffer() {
                     />
                   </View>
                 </View>
+
+                <View style={{ marginTop: 10 }}>
+                  <View style={style.viewContainer}>
+                    <TextInput
+                      style={style.input}
+                      placeholder="H:23"
+                      value={startDateHour}
+                      onChangeText={(e) => {
+                        setStartDateHour(e);
+                        checkNumber(e);
+                      }}
+                    />
+                    <TextInput
+                      style={style.input}
+                      placeholder="M:59"
+                      value={startDateMinute}
+                      onChangeText={(e) => {
+                        setStartDateMinute(e);
+                        checkNumber(e);
+                      }}
+                    />
+                    <TextInput
+                      style={style.input}
+                      placeholder="S:59"
+                      value={startDateSecond}
+                      onChangeText={(e) => {
+                        setStartDateSecond(e);
+                        checkNumber(e);
+                      }}
+                    />
+                  </View>
+                </View>
+
                 <View>
-                  <Text style={style.containerHedingStyle}>End Date</Text>
+                  <Text style={style.containerHedingStyle}>
+                    End Date (24 hour formate)
+                  </Text>
                   <View style={style.viewContainer}>
                     <TextInput
                       style={style.input}
@@ -243,6 +298,38 @@ function SpecailOffer() {
                       value={endYear}
                       onChangeText={(e) => {
                         setEndYear(e);
+                        checkNumber(e);
+                      }}
+                    />
+                  </View>
+                </View>
+
+                <View style={{ marginTop: 10 }}>
+                  <View style={style.viewContainer}>
+                    <TextInput
+                      style={style.input}
+                      placeholder="H:23"
+                      value={endDateHour}
+                      onChangeText={(e) => {
+                        setEndDateHour(e);
+                        checkNumber(e);
+                      }}
+                    />
+                    <TextInput
+                      style={style.input}
+                      placeholder="M:59"
+                      value={endDateMinute}
+                      onChangeText={(e) => {
+                        setEndDateMinute(e);
+                        checkNumber(e);
+                      }}
+                    />
+                    <TextInput
+                      style={style.input}
+                      placeholder="S:59"
+                      value={endDateSecond}
+                      onChangeText={(e) => {
+                        setEndDateSecond(e);
                         checkNumber(e);
                       }}
                     />
