@@ -49,7 +49,7 @@ function LotionCard(props) {
             In Stock - {quantity}
           </Text>
         )}
-        <Text style={{ fontSize: 6, color: "grey" }}>{dis}</Text>
+        <Text style={{ fontSize: 8, color: "grey" }}>{dis}</Text>
         <View style={style.view3}>
           <Text style={{ fontSize: 9, color: "black", opacity: 0.7 }}>
             ${parseFloat(price).toFixed(2)}

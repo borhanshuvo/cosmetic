@@ -29,7 +29,7 @@ function BigLotionCard(props) {
               In Stock - {quantity}
             </Text>
           )}
-          <Text style={{ fontSize: 6, color: "grey" }}>{dis}</Text>
+          <Text style={{ fontSize: 8, color: "grey" }}>{dis}</Text>
         </View>
       </View>
 
