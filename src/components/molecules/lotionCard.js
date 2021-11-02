@@ -1,5 +1,12 @@
 import * as React from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  Share,
+} from "react-native";
 import { UserContext } from "../../../App";
 import config from "../../../config";
 
@@ -18,12 +25,40 @@ function LotionCard(props) {
   } = props;
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
 
+  const share = async () => {
+    try {
+      const result = await Share.share({
+        message: `Product Name: ${title} \nProduct Description: ${dis} \nProduct Price: $${price}.00 \nProduct Image: ${config.APP_URL}${img}`,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
     <TouchableOpacity style={style.view1} onPress={onPress}>
-      {loggedInUser?.user?.role === "admin" && (
+      {loggedInUser?.user?.role === "admin" ? (
         <TouchableOpacity onPress={() => handleProductDelete(id, endingDate)}>
           <Image
             source={require("../../assets/delete.png")}
+            resizeMethod="resize"
+            resizeMode="contain"
+            style={style.image3}
+          />
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity onPress={share}>
+          <Image
+            source={require("../../assets/share.png")}
             resizeMethod="resize"
             resizeMode="contain"
             style={style.image3}
