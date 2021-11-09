@@ -126,6 +126,17 @@ function Register() {
                   resizeMode="contain"
                   style={style.logo}
                 />
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: "black",
+                    marginLeft: 5,
+                    marginBottom: -12,
+                    opacity: 0.6,
+                  }}
+                >
+                  Name
+                </Text>
                 <View style={style.inputView}>
                   <TextInput
                     placeholder="Jassica"
@@ -139,6 +150,18 @@ function Register() {
                     {errors?.errors?.name?.msg}
                   </Text>
                 )}
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: "black",
+                    marginLeft: 5,
+                    marginTop: 5,
+                    marginBottom: -12,
+                    opacity: 0.6,
+                  }}
+                >
+                  Email
+                </Text>
                 <View style={style.inputView}>
                   <TextInput
                     placeholder="Jassica@example.com"
@@ -152,6 +175,18 @@ function Register() {
                     {errors?.errors?.email?.msg}
                   </Text>
                 )}
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: "black",
+                    marginLeft: 5,
+                    marginTop: 5,
+                    marginBottom: -12,
+                    opacity: 0.6,
+                  }}
+                >
+                  About Me
+                </Text>
                 <View style={style.inputView}>
                   <TextInput
                     placeholder="About Me"
@@ -160,6 +195,18 @@ function Register() {
                     onChangeText={(e) => setAboutMe(e)}
                   />
                 </View>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: "black",
+                    marginLeft: 5,
+                    marginTop: 5,
+                    marginBottom: -12,
+                    opacity: 0.6,
+                  }}
+                >
+                  Instagram Username
+                </Text>
                 <View style={style.inputView}>
                   <TextInput
                     placeholder="Instagram Username"
@@ -168,6 +215,18 @@ function Register() {
                     onChangeText={(e) => setInstagramUsername(e)}
                   />
                 </View>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: "black",
+                    marginLeft: 5,
+                    marginTop: 5,
+                    marginBottom: -12,
+                    opacity: 0.6,
+                  }}
+                >
+                  Password
+                </Text>
                 <View style={style.inputView}>
                   <TextInput
                     placeholder="Password"
@@ -197,7 +256,18 @@ function Register() {
                     {errors?.errors?.password?.msg}
                   </Text>
                 )}
-
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: "black",
+                    marginLeft: 5,
+                    marginTop: 5,
+                    marginBottom: -12,
+                    opacity: 0.6,
+                  }}
+                >
+                  Confirm Password
+                </Text>
                 <View style={style.inputView}>
                   <TextInput
                     placeholder="Confirm Password"
@@ -222,6 +292,18 @@ function Register() {
                     </TouchableOpacity>
                   )}
                 </View>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: "black",
+                    marginLeft: 5,
+                    marginTop: 5,
+                    marginBottom: -12,
+                    opacity: 0.6,
+                  }}
+                >
+                  Image
+                </Text>
                 <View
                   style={{
                     display: "flex",
@@ -313,8 +395,9 @@ function Register() {
                 <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
                   <Text style={style.bottomtext1}>Already Have Account?</Text>
                 </TouchableOpacity>
-
-                <Text style={style.bottomtext2}>Sign In</Text>
+                <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
+                  <Text style={style.bottomtext2}>Sign In</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </ScrollView>

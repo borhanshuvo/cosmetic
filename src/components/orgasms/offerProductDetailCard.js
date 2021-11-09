@@ -63,7 +63,7 @@ const style = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row",
-    marginTop: 20,
+    marginTop: 172,
   },
   button: {
     width: "45%",

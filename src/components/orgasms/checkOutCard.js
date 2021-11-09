@@ -38,6 +38,23 @@ function CheckOutCard({ productDetail, offerDate, id }) {
     }
   }, [isFocused]);
 
+  const sendPushNotification = async (expoPushToken) => {
+    await fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Accept-encoding": "gzip, deflate",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        to: expoPushToken,
+        sound: "default",
+        title: "Cosmetic",
+        body: "New Order Added!",
+      }),
+    });
+  };
+
   const handleResponse = (data) => {
     if (data.title === "success") {
       setPayment({ showModal: false });
@@ -77,6 +94,7 @@ function CheckOutCard({ productDetail, offerDate, id }) {
             if (result.error) {
               showToast(result.error);
             } else {
+              sendPushNotification(result.adminPushToken);
               const currentQuantity = `${
                 parseInt(productDetail?.quantity) - quantity
               }`;
@@ -91,7 +109,7 @@ function CheckOutCard({ productDetail, offerDate, id }) {
                   body: formData,
                 })
                   .then((res) => res.json())
-                  .then((result) => console.log(result));
+                  .then((result) => {});
               } else {
                 fetch(
                   `${config.APP_URL}/product/update/${productDetail?._id}`,
@@ -105,17 +123,17 @@ function CheckOutCard({ productDetail, offerDate, id }) {
                   }
                 )
                   .then((res) => res.json())
-                  .then((result) => console.log(result));
+                  .then((result) => {});
               }
-                setAddress("");
-                setStreetAddress("");
-                setPhone("");
-                setCity("");
-                setquantity(1);
-                showToast(result.success);
-                setTimeout(() => {
-                  navigation.navigate("UserOrders");
-                }, 2000);
+              setAddress("");
+              setStreetAddress("");
+              setPhone("");
+              setCity("");
+              setquantity(1);
+              showToast(result.success);
+              setTimeout(() => {
+                navigation.navigate("UserOrders");
+              }, 2000);
             }
           });
       } catch (err) {
@@ -225,6 +243,7 @@ function CheckOutCard({ productDetail, offerDate, id }) {
             />
           </Modal>
           <TouchableOpacity
+          style={{marginTop: 130}}
             disabled={parseInt(productDetail?.quantity) === 0 ? true : false}
             onPress={() => {
               orderSubmit();

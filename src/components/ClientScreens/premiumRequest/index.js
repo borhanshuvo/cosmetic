@@ -8,7 +8,7 @@ import {
 } from "react-native";
 
 import BidRequestCard2 from "../../orgasms/bidRequestCard2";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import Header from "../../atoms/header";
 import AppTemplate from "../../ClientTemplate";
 import PremiumRequestCard from "../../orgasms/premiumRequestCard";
@@ -17,17 +17,20 @@ import { UserContext } from "../../../../App";
 
 function PremiumRequest() {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const [users, setUsers] = React.useState([]);
   const [number, setNumber] = React.useState(0);
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
 
   React.useEffect(() => {
-    fetch(`${config.APP_URL}/user/get`, {
-      headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
-    })
-      .then((res) => res.json())
-      .then((data) => setUsers(data));
-  }, [number]);
+    if (isFocused) {
+      fetch(`${config.APP_URL}/user/get`, {
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+      })
+        .then((res) => res.json())
+        .then((data) => setUsers(data));
+    }
+  }, [number, isFocused]);
 
   return (
     <AppTemplate>

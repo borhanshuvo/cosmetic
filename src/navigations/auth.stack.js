@@ -1,5 +1,4 @@
 import * as React from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import UserSignUp from "../components/screens/signUp";
 import UserRegister from "../components/screens/register";
@@ -8,7 +7,6 @@ import UserChangesPassword from "../components/screens/changePassword";
 import UserAppStack from "../navigations/UserAppStack";
 import SellerAppStack from "../navigations/SellerAppStack";
 import { UserContext } from "../../App";
-import jwt_decode from "jwt-decode";
 
 const Stack = createNativeStackNavigator();
 

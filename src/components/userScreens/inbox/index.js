@@ -11,15 +11,16 @@ import {
   ToastAndroid,
 } from "react-native";
 import InboxMessages from "../../orgasms/inboxMessage";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import Header from "../../atoms/header";
 import { TextInput } from "react-native-gesture-handler";
 import { io } from "socket.io-client";
 import config from "../../../../config";
-import { UserContext } from "../../../../App";
+import { StateContext, UserContext } from "../../../../App";
 
 function Inbox({ route }) {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const { id } = route?.params;
   const [socket, setSocket] = React.useState();
   const [clientMessage, setClientMessage] = React.useState("");
@@ -27,26 +28,45 @@ function Inbox({ route }) {
   const [sender, setSender] = React.useState({});
   const [receiver, setReceiver] = React.useState({});
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
+  const [state, setState] = React.useContext(StateContext);
   const showToast = (i) => {
     ToastAndroid.show(i, ToastAndroid.SHORT);
   };
 
   React.useEffect(() => {
-    fetch(`${config.APP_URL}/conversation/getConversationInfo/${id}`, {
-      headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        setSender(result?.conversation?.participant);
-        setReceiver(result?.conversation?.creator);
-      });
+    if (isFocused) {
+      fetch(`${config.APP_URL}/conversation/getConversationInfo/${id}`, {
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          setSender(result?.conversation?.participant);
+          setReceiver(result?.conversation?.creator);
+        });
 
-    fetch(`${config.APP_URL}/message/get/${id}`, {
-      headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
-    })
-      .then((res) => res.json())
-      .then((result) => setMessages(result?.messages));
-  }, [id]);
+      fetch(`${config.APP_URL}/message/get/${id}`, {
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+      })
+        .then((res) => res.json())
+        .then((result) => setMessages(result?.messages));
+
+      fetch(`${config.APP_URL}/conversation/updateBackColor/${id}`, {
+        method: "PUT",
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${loggedInUser?.accessToken}`,
+        },
+        body: JSON.stringify({
+          backColor: "#ffffff",
+          role: loggedInUser?.user?.role,
+        }),
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          setState((prevState) => prevState + 1);
+        });
+    }
+  }, [id, isFocused]);
 
   React.useEffect(() => {
     const s = io(`${config.APP_URL}`);
@@ -79,7 +99,24 @@ function Inbox({ route }) {
         }),
       })
         .then((res) => res.json())
-        .then((result) => setClientMessage(""));
+        .then((result) => {
+          setClientMessage("");
+          fetch(`${config.APP_URL}/conversation/updateBackColor/${id}`, {
+            method: "PUT",
+            headers: {
+              "content-type": "application/json",
+              authorization: `Bearer ${loggedInUser?.accessToken}`,
+            },
+            body: JSON.stringify({
+              backColor: "#E1E9E9",
+              role: loggedInUser?.user?.role,
+            }),
+          })
+            .then((res) => res.json())
+            .then((result) => {
+              setState((prevState) => prevState + 1);
+            });
+        });
     }
   };
   return (

@@ -6,10 +6,22 @@ import AuthStack from "./src/navigations/auth.stack";
 import { useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import * as Notifications from "expo-notifications";
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
+
 export const UserContext = createContext();
+export const StateContext = createContext();
 
 export default function App() {
   const [loggedInUser, setLoggedInUser] = useState({});
+  const [state, setState] = useState(0);
 
   const load = async () => {
     try {
@@ -26,10 +38,12 @@ export default function App() {
 
   return (
     <UserContext.Provider value={[loggedInUser, setLoggedInUser]}>
-      <NavigationContainer>
-        <StatusBar animated={true} hidden={true} />
-        <AuthStack />
-      </NavigationContainer>
+      <StateContext.Provider value={[state, setState]}>
+        <NavigationContainer>
+          <StatusBar animated={true} hidden={true} />
+          <AuthStack />
+        </NavigationContainer>
+      </StateContext.Provider>
     </UserContext.Provider>
   );
 }

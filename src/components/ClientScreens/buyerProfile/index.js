@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -8,19 +8,119 @@ import {
   SafeAreaView,
   ScrollView,
   Image,
-  FlatList,
+  TextInput,
+  ToastAndroid,
 } from "react-native";
-import BigLotionCard from "../../molecules/bigLotionCard";
 import Avatar from "../../atoms/avatar";
 import Header from "../../atoms/header";
-const Data = [{}, {}, {}, {}, {}, {}, {}, {}];
 import AppTemplate from "../../ClientTemplate";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import { UserContext } from "../../../../App";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as ImagePicker from "expo-image-picker";
+import config from "../../../../config";
 
 function BuyerProfile() {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const [loggedInUser, setLoggedInUser] = useContext(UserContext);
+  const [show, setShow] = useState(true);
+  const [image, setImg] = useState(null);
+  const [username, setUsername] = useState("");
+  const [userAboutMe, setUserAboutMe] = useState("");
+  const [userInstagramUsername, setUserInstagramUsername] = useState("");
+  const showToast = (i) => {
+    ToastAndroid.show(i, ToastAndroid.SHORT);
+  };
+
+  useEffect(() => {
+    if (isFocused) {
+      setShow(true);
+      setImg(null);
+    }
+  }, [isFocused]);
+
+  const PickImage = async () => {
+    let photo = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!photo.cancelled) {
+      setImg(photo.uri);
+    }
+  };
+
+  const updateProfile = () => {
+    if (image !== null) {
+      const ext = image.substring(image.lastIndexOf(".") + 1);
+      const fileName = image.replace(/^.*[\\\/]/, "");
+      const formData = new FormData();
+      formData.append("avatar", {
+        name: fileName,
+        uri: image,
+        type: `image/${ext}`,
+      });
+      formData.append("name", username || loggedInUser?.user?.name);
+      formData.append("aboutMe", userAboutMe || loggedInUser?.user?.aboutMe);
+      formData.append(
+        "instagramUsername",
+        userInstagramUsername || loggedInUser?.user?.instagramUsername
+      );
+      fetch(`${config.APP_URL}/user/update/${loggedInUser?.user?._id}`, {
+        method: "PUT",
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+        body: formData,
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          showToast("User updated successfully!");
+          setUsername("");
+          setUserAboutMe("");
+          setUserInstagramUsername("");
+          setImg(null);
+          setShow(true);
+          AsyncStorage.removeItem("userInfo");
+          const data = {
+            accessToken: loggedInUser?.accessToken,
+            user: result.result,
+          };
+          setLoggedInUser(data);
+          AsyncStorage.setItem("userInfo", JSON.stringify(data));
+        });
+    } else {
+      const formData = new FormData();
+      formData.append("name", username || loggedInUser?.user?.name);
+      formData.append("aboutMe", userAboutMe || loggedInUser?.user?.aboutMe);
+      formData.append(
+        "instagramUsername",
+        userInstagramUsername || loggedInUser?.user?.instagramUsername
+      );
+      fetch(`${config.APP_URL}/user/update/${loggedInUser?.user?._id}`, {
+        method: "PUT",
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+        body: formData,
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          showToast("User updated successfully!");
+          setUsername("");
+          setUserAboutMe("");
+          setUserInstagramUsername("");
+          setImg(null);
+          setShow(true);
+          AsyncStorage.removeItem("userInfo");
+          const data = {
+            accessToken: loggedInUser?.accessToken,
+            user: result.result,
+          };
+          setLoggedInUser(data);
+          AsyncStorage.setItem("userInfo", JSON.stringify(data));
+        });
+    }
+  };
+
   return (
     <AppTemplate>
       <View style={{ flex: 1, backgroundColor: "#EBEAEF" }}>
@@ -45,14 +145,26 @@ function BuyerProfile() {
               showsHorizontalScrollIndicator={false}
             >
               <View style={style.InputContainer}>
-                <Avatar
-                  hi={80}
-                  wi={80}
-                  icon={require("../../../assets/badge.png")}
-                  backcolor="#707070"
-                  img={loggedInUser?.user?.imgURL}
-                  image={null}
-                />
+                {show ? (
+                  <Avatar
+                    hi={80}
+                    wi={80}
+                    icon={require("../../../assets/badge.png")}
+                    backcolor="#707070"
+                    img={loggedInUser?.user?.imgURL}
+                    image={null}
+                  />
+                ) : (
+                  <Avatar
+                    hi={80}
+                    wi={80}
+                    icon={require("../../../assets/camera.png")}
+                    backcolor="#707070"
+                    img={loggedInUser?.user?.imgURL}
+                    onPress={PickImage}
+                    image={image}
+                  />
+                )}
                 <View style={style.view2}>
                   <Text style={{ opacity: 0.8 }}>
                     {loggedInUser?.user?.name}
@@ -76,53 +188,143 @@ function BuyerProfile() {
                     </View>
                   </TouchableOpacity>
                 </View>
-                <View style={style.about}>
-                  <Text
-                    style={{ fontSize: 12, color: "white", fontWeight: "bold" }}
-                  >
-                    About Me
-                  </Text>
-                  <Text style={{ fontSize: 12, color: "white", marginTop: 7 }}>
-                    {loggedInUser?.user?.aboutMe}
-                  </Text>
-                  <Text
-                    style={{ fontSize: 12, color: "white", fontWeight: "bold", marginTop: 10 }}
-                  >
-                    Instagram Username
-                  </Text>
-                  <Text style={{ fontSize: 12, color: "white", marginTop: 7 }}>
-                    {loggedInUser?.user?.instagramUsername}
-                  </Text>
-                </View>
-              </View>
-              {/* <View style={style.view3}>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: "black",
-                    opacity: 0.7,
-                    marginTop: 10,
-                    paddingLeft: 10,
-                  }}
-                >
-                  Purchase History (20 Products)
-                </Text>
-                <FlatList
-                  showsHorizontalScrollIndicator={false}
-                  horizontal={true}
-                  style={{ width: "100%", marginTop: 10 }}
-                  data={Data}
-                  keyExtractor={(item) => item.id}
-                  renderItem={({ item }) => (
-                    <BigLotionCard
-                      title="Skin Care Lotion"
-                      dis="Sed ut  -  Perspiciatis unde omnis iste"
-                      price="$ 29.00"
-                      color="rgba(255, 255,255, 0.4)"
+                {show ? (
+                  <View style={style.about}>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: "white",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      About Me
+                    </Text>
+                    <Text
+                      style={{ fontSize: 12, color: "white", marginTop: 7 }}
+                    >
+                      {loggedInUser?.user?.aboutMe}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: "white",
+                        fontWeight: "bold",
+                        marginTop: 10,
+                      }}
+                    >
+                      Instagram Username
+                    </Text>
+                    <Text
+                      style={{ fontSize: 12, color: "white", marginTop: 7 }}
+                    >
+                      {loggedInUser?.user?.instagramUsername}
+                    </Text>
+                  </View>
+                ) : (
+                  <View>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: "black",
+                        marginLeft: 5,
+                        marginBottom: -12,
+                        opacity: 0.6,
+                      }}
+                    >
+                      Name
+                    </Text>
+
+                    <View style={style.inputView}>
+                      <TextInput
+                        placeholder="Jassica"
+                        defaultValue={loggedInUser?.user?.name}
+                        style={style.input}
+                        onChangeText={(e) => setUsername(e)}
+                      />
+                    </View>
+
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: "black",
+                        marginLeft: 5,
+                        marginTop: 5,
+                        marginBottom: -12,
+                        opacity: 0.6,
+                      }}
+                    >
+                      About Me
+                    </Text>
+
+                    <TextInput
+                      multiline={true}
+                      numberOfLines={4}
+                      placeholder="About me..."
+                      defaultValue={loggedInUser?.user?.aboutMe}
+                      onChangeText={(e) => setUserAboutMe(e)}
+                      style={{
+                        backgroundColor: "white",
+                        display: "flex",
+                        height: 100,
+                        textAlignVertical: "top",
+                        marginTop: 12,
+                        borderRadius: 10,
+                        justifyContent: "flex-start",
+                        paddingLeft: 10,
+                        paddingRight: 10,
+                        paddingTop: 8,
+                        paddingBottom: 8,
+                      }}
                     />
-                  )}
-                />
-              </View> */}
+
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: "black",
+                        marginLeft: 5,
+                        marginTop: 5,
+                        marginBottom: -12,
+                        opacity: 0.6,
+                      }}
+                    >
+                      Instagram Username
+                    </Text>
+
+                    <View style={style.inputView}>
+                      <TextInput
+                        placeholder="Email"
+                        defaultValue={loggedInUser?.user?.instagramUsername}
+                        style={style.input}
+                        onChangeText={(e) => setUserInstagramUsername(e)}
+                      />
+                    </View>
+                  </View>
+                )}
+              </View>
+
+              {show ? (
+                <TouchableOpacity
+                  style={{ marginRight: 20, marginLeft: 20 }}
+                  onPress={() => setShow(false)}
+                >
+                  <View style={style.button}>
+                    <Text style={{ fontSize: 12, color: "white" }}>
+                      Edit Profile
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  style={{ marginRight: 20, marginLeft: 20 }}
+                  onPress={() => updateProfile()}
+                >
+                  <View style={style.button}>
+                    <Text style={{ fontSize: 12, color: "white" }}>
+                      Update Now
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              )}
             </ScrollView>
           </SafeAreaView>
         </ImageBackground>
@@ -148,7 +350,6 @@ const style = StyleSheet.create({
     paddingLeft: 24,
     paddingRight: 24,
   },
-
   backgroundImage: {
     height: "100%",
   },
@@ -212,5 +413,21 @@ const style = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     backgroundColor: "#B7C9D2",
+  },
+  inputView: {
+    backgroundColor: "white",
+    borderRadius: 11,
+    marginTop: 16,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  input: {
+    width: "85%",
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 10,
+    paddingBottom: 11,
   },
 });

@@ -24,6 +24,7 @@ function DashBoard() {
   const [loggedInUser, setLoggedInUser] = useContext(UserContext);
   const [products, setProducts] = React.useState([]);
   const [offerProducts, setOfferProducts] = React.useState([]);
+
   React.useEffect(() => {
     if (isFocused) {
       try {

@@ -39,9 +39,7 @@ function LotionCard(props) {
       } else if (result.action === Share.dismissedAction) {
         // dismissed
       }
-    } catch (error) {
-      console.log(error.message);
-    }
+    } catch (error) {}
   };
 
   return (
@@ -78,9 +76,9 @@ function LotionCard(props) {
           {title}
         </Text>
         {quantity === "0" ? (
-          <Text style={{ fontSize: 6, color: "red" }}>Out Of Stock</Text>
+          <Text style={{ fontSize: 8, color: "red" }}>Out Of Stock</Text>
         ) : (
-          <Text style={{ fontSize: 6, color: "red" }}>
+          <Text style={{ fontSize: 8, color: "red" }}>
             In Stock - {quantity}
           </Text>
         )}
@@ -106,7 +104,7 @@ function LotionCard(props) {
           {endingDate && (
             <Text
               style={{
-                fontSize: 6,
+                fontSize: 8,
                 color: "red",
                 marginTop: 5,
               }}

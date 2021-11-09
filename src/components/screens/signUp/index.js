@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -10,13 +10,16 @@ import {
   ToastAndroid,
 } from "react-native";
 import Input from "../../atoms/input";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import { UserContext } from "../../../../App";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import config from "../../../../config";
+import Constants from "expo-constants";
+import * as Notifications from "expo-notifications";
 
 function SignUp() {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
 
   const [visible, setvisible] = useState(false);
   const [email, setEmail] = useState("");
@@ -25,6 +28,62 @@ function SignUp() {
   const [errors, setErrors] = useState({});
   const [fieldValid, setFieldValid] = useState("");
 
+  const [pushToken, setPushToken] = React.useState("");
+  const [notification, setNotification] = React.useState(false);
+  const notificationListener = React.useRef();
+  const responseListener = React.useRef();
+
+  React.useEffect(() => {
+    let mounted = true;
+
+    registerForPushNotificationsAsync().then((token) => setPushToken(token));
+
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        setNotification(notification);
+      });
+
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {});
+
+    return () => {
+      Notifications.removeNotificationSubscription(
+        notificationListener.current
+      );
+      Notifications.removeNotificationSubscription(responseListener.current);
+      mounted = false;
+    };
+  }, []);
+
+  const registerForPushNotificationsAsync = async () => {
+    let token;
+    if (Constants.isDevice) {
+      const { status: existingStatus } =
+        await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+      if (existingStatus !== "granted") {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+      if (finalStatus !== "granted") {
+        return;
+      }
+      token = (await Notifications.getExpoPushTokenAsync()).data;
+    } else {
+    }
+
+    if (Platform.OS === "android") {
+      Notifications.setNotificationChannelAsync("default", {
+        name: "default",
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: "#FF231F7C",
+      });
+    }
+
+    return token;
+  };
+
   const validate = () => {
     if (email === "" || password === "") {
       setFieldValid("Username or Password Empty");
@@ -32,7 +91,7 @@ function SignUp() {
       fetch(`${config.APP_URL}/login/post`, {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, pushToken }),
       })
         .then((res) => res.json())
         .then((data) => {
@@ -43,9 +102,23 @@ function SignUp() {
             setLoggedInUser(data);
             setErrors("");
           } else {
-            setLoggedInUser(data);
-            AsyncStorage.setItem("userInfo", JSON.stringify(data));
-            navigation.navigate("ClientDashBoard");
+            fetch(`${config.APP_URL}/user/update/${data?.user?._id}`, {
+              method: "PUT",
+              headers: {
+                "content-type": "application/json",
+                authorization: `Bearer ${data?.accessToken}`,
+              },
+              body: JSON.stringify({ pushToken }),
+            })
+              .then((res) => res.json())
+              .then((result) => {
+                const updateData = {
+                  accessToken: data?.accessToken,
+                  user: result.result,
+                };
+                setLoggedInUser(updateData);
+                AsyncStorage.setItem("userInfo", JSON.stringify(updateData));
+              });
           }
         });
     }
@@ -54,6 +127,14 @@ function SignUp() {
   const showToast = (i) => {
     ToastAndroid.show(i, ToastAndroid.SHORT);
   };
+
+  useEffect(() => {
+    if (isFocused) {
+      setErrors({});
+      setFieldValid("");
+    }
+  }, [isFocused]);
+
   return (
     <View style={{ flex: 1, backgroundColor: "#EBEAEF" }}>
       <ImageBackground
@@ -70,6 +151,17 @@ function SignUp() {
               resizeMode="contain"
               style={style.logo}
             />
+            <Text
+              style={{
+                fontSize: 12,
+                color: "black",
+                marginLeft: 5,
+                marginBottom: -10,
+                opacity: 0.6,
+              }}
+            >
+              Email
+            </Text>
             <Input
               placeholder="Jassica@example.com"
               onChangeText={(e) => setEmail(e)}
@@ -79,6 +171,18 @@ function SignUp() {
                 {errors?.errors?.email?.msg}
               </Text>
             )}
+            <Text
+              style={{
+                fontSize: 12,
+                color: "black",
+                marginLeft: 5,
+                marginTop: 10,
+                marginBottom: -12,
+                opacity: 0.6,
+              }}
+            >
+              Password
+            </Text>
             <View style={style.inputView}>
               <TextInput
                 placeholder="Password"
@@ -157,7 +261,11 @@ function SignUp() {
             >
               <Text style={style.bottomtext1}>Need an Account?</Text>
             </TouchableOpacity>
-            <Text style={style.bottomtext2}>Sign Up</Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("UserRegister")}
+            >
+              <Text style={style.bottomtext2}>Sign Up</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </ImageBackground>

@@ -8,28 +8,31 @@ import {
 } from "react-native";
 import Header from "../../atoms/header";
 import AppTemplate from "../../ClientTemplate";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import config from "../../../../config";
 import { UserContext } from "../../../../App";
 import MessagesCard2 from "../../orgasms/messagesCard2";
 
 function Messages() {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const [users, setUsers] = React.useState([]);
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
 
   React.useEffect(() => {
-    try {
-      fetch(
-        `${config.APP_URL}/conversation/getUser/${loggedInUser?.user?._id}`,
-        {
-          headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
-        }
-      )
-        .then((res) => res.json())
-        .then((result) => setUsers(result?.conversation));
-    } catch (err) {}
-  }, []);
+    if (isFocused) {
+      try {
+        fetch(
+          `${config.APP_URL}/conversation/getUser/${loggedInUser?.user?._id}`,
+          {
+            headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+          }
+        )
+          .then((res) => res.json())
+          .then((result) => setUsers(result?.conversation));
+      } catch (err) {}
+    }
+  }, [isFocused]);
 
   return (
     <AppTemplate>
@@ -61,7 +64,7 @@ function Messages() {
                     title={user?.participant?.name}
                     dis={user?.participant?.email}
                     img={user?.participant?.image}
-                    backColor="white"
+                    backColor={user?.participant?.backColor}
                   />
                 </View>
               ))}

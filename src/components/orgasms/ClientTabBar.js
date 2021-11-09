@@ -1,11 +1,47 @@
-import React from "react";
-import { useNavigation } from "@react-navigation/native";
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { useRoute } from "@react-navigation/native";
+import config from "../../../config";
+import { StateContext, UserContext } from "../../../App";
+
 function ClientTabBar({ item = [], navi }) {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const nav = useRoute();
+  const [total, setTotal] = useState(0);
+  const [totalMessage, setTotalMessage] = useState(0);
+  const [loggedInUser, setLoggedInUser] = useContext(UserContext);
+  const [state, setState] = useContext(StateContext);
+
+  useEffect(() => {
+    if (isFocused) {
+      const email = loggedInUser.user.email;
+      fetch(`${config.APP_URL}/user/unseenNotification`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${loggedInUser?.accessToken}`,
+        },
+        body: JSON.stringify({ email }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setTotal(data);
+        });
+
+      fetch(
+        `${config.APP_URL}/conversation/getUser/${loggedInUser?.user?._id}`,
+        {
+          headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+        }
+      )
+        .then((res) => res.json())
+        .then((result) => setTotalMessage(result.userTotal));
+    }
+  }, [isFocused, state]);
+
   return (
     <View
       style={{
@@ -39,7 +75,7 @@ function ClientTabBar({ item = [], navi }) {
         onPress={() => navigation.navigate("ClientMessages")}
         style={style.icons}
       >
-        {nav?.name === "ClientMessages" ? (
+        {totalMessage > 0 ? (
           <Image
             source={require("../../assets/chatgrey.png")}
             resizeMode="contain"
@@ -47,12 +83,23 @@ function ClientTabBar({ item = [], navi }) {
             style={style.iconsStyle}
           />
         ) : (
-          <Image
-            source={require("../../assets/chatWhite.png")}
-            resizeMode="contain"
-            resizeMethod="resize"
-            style={style.iconsStyle}
-          />
+          <>
+            {nav?.name === "ClientMessages" ? (
+              <Image
+                source={require("../../assets/chatActive.png")}
+                resizeMode="contain"
+                resizeMethod="resize"
+                style={style.iconsStyle}
+              />
+            ) : (
+              <Image
+                source={require("../../assets/chatWhite.png")}
+                resizeMode="contain"
+                resizeMethod="resize"
+                style={style.iconsStyle}
+              />
+            )}
+          </>
         )}
       </TouchableOpacity>
 
@@ -70,20 +117,31 @@ function ClientTabBar({ item = [], navi }) {
       <TouchableOpacity
         onPress={() => navigation.navigate("ClientNotifications")}
       >
-        {nav?.name === "ClientNotifications" ? (
+        {total > 0 ? (
           <Image
-            source={require("../../assets/notiWhite.png")}
+            source={require("../../assets/notigrey.png")}
             resizeMode="contain"
             resizeMethod="resize"
             style={style.iconsStyle}
           />
         ) : (
-          <Image
-            source={require("../../assets/notiWhite.png")}
-            resizeMode="contain"
-            resizeMethod="resize"
-            style={style.iconsStyle}
-          />
+          <>
+            {nav?.name === "ClientNotifications" ? (
+              <Image
+                source={require("../../assets/notiActive.png")}
+                resizeMode="contain"
+                resizeMethod="resize"
+                style={style.iconsStyle}
+              />
+            ) : (
+              <Image
+                source={require("../../assets/notiWhite.png")}
+                resizeMode="contain"
+                resizeMethod="resize"
+                style={style.iconsStyle}
+              />
+            )}
+          </>
         )}
       </TouchableOpacity>
       <TouchableOpacity

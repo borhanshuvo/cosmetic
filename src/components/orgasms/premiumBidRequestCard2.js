@@ -20,6 +20,25 @@ function PremiumBidRequestCard2(props) {
   } = props;
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
 
+  const sendPushNotification = async (token) => {
+    await token.map((tkn) => {
+      fetch("https://exp.host/--/api/v2/push/send", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Accept-encoding": "gzip, deflate",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          to: tkn.pushToken,
+          sound: "default",
+          title: "Cosmetic",
+          body: "New Notification! Premium Bid Request!",
+        }),
+      });
+    });
+  };
+
   const handleBidStatus = (status) => {
     try {
       fetch(`${config.APP_URL}/premiumBidRequest/update/${id}`, {
@@ -32,6 +51,7 @@ function PremiumBidRequestCard2(props) {
       })
         .then((res) => res.json())
         .then((result) => {
+          sendPushNotification(result.pushToken);
           setNumber((prevState) => prevState + 1);
         });
     } catch (err) {}

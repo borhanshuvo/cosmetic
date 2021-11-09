@@ -18,6 +18,7 @@ function OrderRequest() {
   const [orders, setOrders] = React.useState([]);
   const [number, setNumber] = React.useState(0);
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
+  
   React.useEffect(() => {
     try {
       fetch(`${config.APP_URL}/order/get`, {

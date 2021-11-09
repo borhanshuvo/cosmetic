@@ -59,6 +59,25 @@ function AddProductDetail() {
     }
   };
 
+  const sendPushNotification = async (token) => {
+    await token.map((tkn) => {
+      fetch("https://exp.host/--/api/v2/push/send", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Accept-encoding": "gzip, deflate",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          to: tkn.pushToken,
+          sound: "default",
+          title: "Cosmetic",
+          body: "New Product Added!",
+        }),
+      });
+    });
+  };
+
   const addProduct = () => {
     if (title === "") {
       showToast("Product title required!");
@@ -106,6 +125,7 @@ function AddProductDetail() {
         .then((result) => {
           if (result.success) {
             showToast(result.success);
+            sendPushNotification(result.pushToken);
             setTitle("");
             setDescription("");
             setBid("");
@@ -145,6 +165,19 @@ function AddProductDetail() {
               showsHorizontalScrollIndicator={false}
             >
               <View style={style.InputContainer}>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: "black",
+                    marginLeft: 5,
+                    marginBottom: -12,
+                    marginTop: 3,
+                    opacity: 0.6,
+                  }}
+                >
+                  Title
+                </Text>
+
                 <View style={style.inputView}>
                   <TextInput
                     placeholder="Product Title"
@@ -153,6 +186,19 @@ function AddProductDetail() {
                     onChangeText={(e) => setTitle(e)}
                   />
                 </View>
+
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: "black",
+                    marginLeft: 5,
+                    marginBottom: -12,
+                    marginTop: 3,
+                    opacity: 0.6,
+                  }}
+                >
+                  Description
+                </Text>
 
                 <TextInput
                   multiline={true}
@@ -175,6 +221,19 @@ function AddProductDetail() {
                   onChangeText={(e) => setDescription(e)}
                 />
 
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: "black",
+                    marginLeft: 5,
+                    marginTop: 3,
+                    marginBottom: -12,
+                    opacity: 0.6,
+                  }}
+                >
+                  Bid
+                </Text>
+
                 <View style={style.inputView}>
                   <TextInput
                     placeholder="Minimum Bid"
@@ -183,6 +242,19 @@ function AddProductDetail() {
                     onChangeText={(e) => setBid(e)}
                   />
                 </View>
+
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: "black",
+                    marginLeft: 5,
+                    marginBottom: -12,
+                    marginTop: 3,
+                    opacity: 0.6,
+                  }}
+                >
+                  Category
+                </Text>
 
                 <ModalDropdown
                   isFullWidth
@@ -215,6 +287,19 @@ function AddProductDetail() {
                   }}
                 />
 
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: "black",
+                    marginLeft: 5,
+                    marginBottom: -12,
+                    marginTop: 3,
+                    opacity: 0.6,
+                  }}
+                >
+                  Quantity
+                </Text>
+
                 <View style={style.inputView}>
                   <TextInput
                     placeholder="Product Stock (Quantity)"
@@ -224,6 +309,19 @@ function AddProductDetail() {
                   />
                 </View>
 
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: "black",
+                    marginLeft: 5,
+                    marginBottom: -12,
+                    marginTop: 3,
+                    opacity: 0.6,
+                  }}
+                >
+                  Price
+                </Text>
+
                 <View style={style.inputView}>
                   <TextInput
                     placeholder="Buy Now Price"
@@ -232,6 +330,19 @@ function AddProductDetail() {
                     onChangeText={(e) => setPrice(e)}
                   />
                 </View>
+
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: "black",
+                    marginLeft: 5,
+                    marginBottom: -12,
+                    marginTop: 3,
+                    opacity: 0.6,
+                  }}
+                >
+                  Image
+                </Text>
 
                 <View
                   style={{

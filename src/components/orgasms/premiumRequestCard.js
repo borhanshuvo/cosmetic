@@ -22,6 +22,25 @@ function PremiumRequestCard(props) {
 
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
 
+  const sendPushNotification = async (token) => {
+    await token?.map((tkn) => {
+      fetch("https://exp.host/--/api/v2/push/send", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Accept-encoding": "gzip, deflate",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          to: tkn.pushToken,
+          sound: "default",
+          title: "Cosmetic",
+          body: "Premium User!",
+        }),
+      });
+    });
+  };
+
   const updateStatus = (premium) => {
     try {
       fetch(`${config.APP_URL}/user/update/${id}`, {
@@ -34,6 +53,7 @@ function PremiumRequestCard(props) {
       })
         .then((res) => res.json())
         .then((result) => {
+          sendPushNotification(result.pushToken);
           setNumber((prevState) => prevState + 1);
         });
     } catch (err) {}

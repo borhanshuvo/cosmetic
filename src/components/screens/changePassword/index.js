@@ -94,6 +94,18 @@ function ChangePassword() {
             />
             {!fieldShow ? (
               <View>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: "black",
+                    marginLeft: 5,
+                    marginTop: 5,
+                    marginBottom: -12,
+                    opacity: 0.6,
+                  }}
+                >
+                  Verification Code
+                </Text>
                 <View style={style.inputView}>
                   <TextInput
                     placeholder="123456"
@@ -144,6 +156,18 @@ function ChangePassword() {
               </View>
             ) : (
               <View>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: "black",
+                    marginLeft: 5,
+                    marginTop: 5,
+                    marginBottom: -12,
+                    opacity: 0.6,
+                  }}
+                >
+                  Password
+                </Text>
                 <View style={style.inputView}>
                   <TextInput
                     placeholder="Password"
@@ -179,6 +203,18 @@ function ChangePassword() {
                   </Text>
                 )}
 
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: "black",
+                    marginLeft: 5,
+                    marginTop: 5,
+                    marginBottom: -12,
+                    opacity: 0.6,
+                  }}
+                >
+                  Confirm Password
+                </Text>
                 <View style={style.inputView}>
                   <TextInput
                     placeholder="Confirm Password"
@@ -251,7 +287,11 @@ function ChangePassword() {
             >
               <Text style={style.bottomtext1}>Need an Account?</Text>
             </TouchableOpacity>
-            <Text style={style.bottomtext2}>Sign Up</Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("UserRegister")}
+            >
+              <Text style={style.bottomtext2}>Sign Up</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </ImageBackground>

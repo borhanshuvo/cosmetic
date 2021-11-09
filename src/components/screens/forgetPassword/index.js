@@ -65,6 +65,18 @@ function ForgetPassword() {
               resizeMode="contain"
               style={style.logo}
             />
+            <Text
+              style={{
+                fontSize: 12,
+                color: "black",
+                marginLeft: 5,
+                marginTop: 5,
+                marginBottom: -12,
+                opacity: 0.6,
+              }}
+            >
+              Email
+            </Text>
             <View style={style.inputView}>
               <TextInput
                 placeholder="Jassica@example.com"
@@ -118,7 +130,11 @@ function ForgetPassword() {
             >
               <Text style={style.bottomtext1}>Need an Account?</Text>
             </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("UserRegister")}
+            >
             <Text style={style.bottomtext2}>Sign Up</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </ImageBackground>

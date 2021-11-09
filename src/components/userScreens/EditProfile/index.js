@@ -14,14 +14,13 @@ import * as ImagePicker from "expo-image-picker";
 import Avatar from "../../atoms/avatar";
 import Header from "../../atoms/header";
 import AppTemplate from "../../Usertemplate";
-import { useNavigation, useIsFocused } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { UserContext } from "../../../../App";
 import config from "../../../../config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function EditProfile() {
   const navigation = useNavigation();
-  const isFocused = useIsFocused();
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
   const [image, setImg] = useState(null);
   const [username, setUsername] = useState("");
@@ -75,7 +74,7 @@ function EditProfile() {
           AsyncStorage.removeItem("userInfo");
           const data = {
             accessToken: loggedInUser?.accessToken,
-            user: result,
+            user: result.result,
           };
           setLoggedInUser(data);
           AsyncStorage.setItem("userInfo", JSON.stringify(data));
@@ -103,7 +102,7 @@ function EditProfile() {
           AsyncStorage.removeItem("userInfo");
           const data = {
             accessToken: loggedInUser?.accessToken,
-            user: result,
+            user: result.result,
           };
           setLoggedInUser(data);
           AsyncStorage.setItem("userInfo", JSON.stringify(data));
@@ -191,7 +190,10 @@ function EditProfile() {
                   />
                 </View>
 
-                <TouchableOpacity onPress={() => updateProfile()}>
+                <TouchableOpacity
+                  style={{ marginTop: 150 }}
+                  onPress={() => updateProfile()}
+                >
                   <View style={style.button}>
                     <Text style={{ fontSize: 12, color: "white" }}>
                       Update Now

@@ -13,13 +13,15 @@ import Menu, {
   MenuOption,
   MenuTrigger,
 } from "react-native-popup-menu";
-import { UserContext } from "../../../App";
+import { StateContext, UserContext } from "../../../App";
 import config from "../../../config";
 
 function MessagesCard(props) {
   const { title, dis, dotColor, backColor, toggle, img, id, email, setNumber } =
     props;
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
+  const [state, setState] = React.useContext(StateContext);
+  
   const showToast = (i) => {
     ToastAndroid.show(i, ToastAndroid.SHORT);
   };
@@ -70,82 +72,100 @@ function MessagesCard(props) {
       });
   };
 
-  return (
-    <MenuProvider skipInstanceCheck={true}>
-      <View style={[style.view1, { backgroundColor: backColor }]}>
-        <View style={style.view5}>
-          <View style={style.viewtop}>
-            <View></View>
+  const updateColor = (id) => {
+    fetch(`${config.APP_URL}/user/updateNotification/${id}`, {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${loggedInUser?.accessToken}`,
+      },
+      body: JSON.stringify({ email }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setNumber((prevState) => prevState + 1);
+        setState((prevState) => prevState + 1);
+      });
+  };
 
-            {toggle === true ? (
-              <View style={style.dotsImage}>
-                <Menu style={{ width: 40 }}>
-                  <MenuTrigger>
-                    <View>
-                      <Image
-                        resizeMethod="resize"
-                        resizeMode="contain"
-                        source={require("../../assets/menuDots.png")}
-                        style={{ height: 16, width: 16 }}
-                      />
-                    </View>
-                  </MenuTrigger>
-                  <MenuOptions style={{ backgroundColor: "transparent"  }}>
-                    <View style={{ backgroundColor: "white" }}>
-                      <TouchableOpacity onPress={() => deleteProduct(id)}>
-                        <Text style={{ marginTop: 5, marginLeft: 5 }}>
-                          DELETE
-                        </Text>
-                      </TouchableOpacity>
-                      {loggedInUser?.user?.role !== "admin" && (
-                        <TouchableOpacity onPress={() => saveProduct()}>
+  return (
+    <TouchableOpacity onPress={() => updateColor(id)}>
+      <MenuProvider skipInstanceCheck={true}>
+        <View style={[style.view1, { backgroundColor: backColor }]}>
+          <View style={style.view5}>
+            <View style={style.viewtop}>
+              <View></View>
+
+              {toggle === true ? (
+                <View style={style.dotsImage}>
+                  <Menu style={{ width: 40 }}>
+                    <MenuTrigger>
+                      <View>
+                        <Image
+                          resizeMethod="resize"
+                          resizeMode="contain"
+                          source={require("../../assets/menuDots.png")}
+                          style={{ height: 16, width: 16 }}
+                        />
+                      </View>
+                    </MenuTrigger>
+                    <MenuOptions style={{ backgroundColor: "transparent" }}>
+                      <View style={{ backgroundColor: "white" }}>
+                        <TouchableOpacity onPress={() => deleteProduct(id)}>
                           <Text style={{ marginTop: 5, marginLeft: 5 }}>
-                            SAVE
+                            DELETE
                           </Text>
                         </TouchableOpacity>
-                      )}
-                      <MenuOption />
-                    </View>
-                  </MenuOptions>
-                </Menu>
-              </View>
-            ) : (
-              <View style={[style.dot, { backgroundColor: dotColor }]}></View>
-            )}
-          </View>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-            }}
-          >
-            <Image
-              source={{ uri: `${config?.APP_URL}${img}` }}
-              resizeMethod="resize"
-              resizeMode="contain"
-              style={style.image}
-            />
-            <View style={style.view4}>
-              <Text style={{ fontSize: 13, color: "black", opacity: 0.7 }}>
-                {title}
-              </Text>
+                        {loggedInUser?.user?.role !== "admin" && (
+                          <TouchableOpacity onPress={() => saveProduct()}>
+                            <Text style={{ marginTop: 5, marginLeft: 5 }}>
+                              SAVE
+                            </Text>
+                          </TouchableOpacity>
+                        )}
+                        <MenuOption />
+                      </View>
+                    </MenuOptions>
+                  </Menu>
+                </View>
+              ) : (
+                <View style={[style.dot, { backgroundColor: dotColor }]}></View>
+              )}
+            </View>
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <Image
+                source={{ uri: `${config?.APP_URL}${img}` }}
+                resizeMethod="resize"
+                resizeMode="contain"
+                style={style.image}
+              />
+              <View style={style.view4}>
+                <Text style={{ fontSize: 13, color: "black", opacity: 0.7 }}>
+                  {title}
+                </Text>
 
-              <Text
-                style={{
-                  fontSize: 6,
-                  color: "grey",
-                  marginTop: 4,
-                  width: "90%",
-                }}
-              >
-                {dis}
-              </Text>
+                <Text
+                  style={{
+                    fontSize: 8,
+                    color: "grey",
+                    marginTop: 4,
+                    width: "90%",
+                  }}
+                >
+                  {dis}
+                </Text>
+              </View>
             </View>
           </View>
         </View>
-      </View>
-    </MenuProvider>
+      </MenuProvider>
+    </TouchableOpacity>
   );
 }
 export default MessagesCard;

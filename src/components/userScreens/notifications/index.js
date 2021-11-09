@@ -9,29 +9,32 @@ import {
 import NotificationCard from "../../orgasms/notificationCard";
 import Header from "../../atoms/header";
 import AppTemplate from "../../Usertemplate";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import { UserContext } from "../../../../App";
 import config from "../../../../config";
 
 function Notifications() {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
   const [notification, setNotification] = React.useState([]);
   const [number, setNumber] = React.useState(0);
-  
+
   React.useEffect(() => {
-    const email = loggedInUser?.user?.email;
-    fetch(`${config.APP_URL}/user/getUserNotification`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        authorization: `Bearer ${loggedInUser?.accessToken}`,
-      },
-      body: JSON.stringify({ email }),
-    })
-      .then((res) => res.json())
-      .then((data) => setNotification(data));
-  }, [number]);
+    if (isFocused) {
+      const email = loggedInUser?.user?.email;
+      fetch(`${config.APP_URL}/user/getUserNotification`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${loggedInUser?.accessToken}`,
+        },
+        body: JSON.stringify({ email }),
+      })
+        .then((res) => res.json())
+        .then((data) => setNotification(data));
+    }
+  }, [number, isFocused]);
 
   return (
     <AppTemplate>
@@ -65,7 +68,7 @@ function Notifications() {
                     img={nt?.imgURL}
                     email={loggedInUser?.user?.email}
                     setNumber={setNumber}
-                    backColor="white"
+                    backColor={nt?.backColor}
                     dotColor="#B7C9D2"
                     toggle={true}
                   />

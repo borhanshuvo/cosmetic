@@ -21,6 +21,23 @@ function BidRequestCard({ productDetails }) {
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
   const [bidAmmount, setBidAmmount] = React.useState("");
 
+  const sendPushNotification = async (expoPushToken) => {
+    await fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Accept-encoding": "gzip, deflate",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        to: expoPushToken,
+        sound: "default",
+        title: "Cosmetic",
+        body: "New Bid Request!",
+      }),
+    });
+  };
+
   const handlePlaceBid = () => {
     if (bidAmmount === "") {
       showToast("Enter Bid Price!");
@@ -49,6 +66,7 @@ function BidRequestCard({ productDetails }) {
           if (result.success) {
             setBidAmmount("");
             showToast(result.success);
+            sendPushNotification(result.adminPushToken);
             setTimeout(() => {
               navigation.navigate("UserBids");
             }, 2000);
@@ -94,7 +112,7 @@ function BidRequestCard({ productDetails }) {
         </View>
 
         <TouchableOpacity
-          style={{ marginTop: 20 }}
+          style={{ marginTop: 166 }}
           onPress={() => handlePlaceBid()}
         >
           <View style={style.button}>

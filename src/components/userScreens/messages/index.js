@@ -19,7 +19,7 @@ function Messages() {
   const [admins, setAdmins] = React.useState([]);
 
   React.useEffect(() => {
-    try {
+    if (isFocused) {
       fetch(
         `${config.APP_URL}/conversation/getUser/${loggedInUser?.user?._id}`,
         {
@@ -28,8 +28,8 @@ function Messages() {
       )
         .then((res) => res.json())
         .then((result) => setAdmins(result?.conversation));
-    } catch (err) {}
-  }, []);
+    }
+  }, [isFocused]);
 
   return (
     <AppTemplate>
@@ -61,7 +61,7 @@ function Messages() {
                   title={admin?.creator?.name}
                   dis={admin?.creator?.email}
                   img={admin?.creator?.image}
-                  backColor="white"
+                  backColor={admin?.creator?.backColor}
                   dotColor="#B7C9D2"
                 />
               ))}
