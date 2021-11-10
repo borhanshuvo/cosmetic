@@ -182,6 +182,19 @@ function EditOfferProductDetail({ route }) {
               showsHorizontalScrollIndicator={false}
             >
               <View style={style.InputContainer}>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: "black",
+                    marginLeft: 5,
+                    marginBottom: -12,
+                    marginTop: 3,
+                    opacity: 0.6,
+                  }}
+                >
+                  Title
+                </Text>
+
                 <View style={style.inputView}>
                   <TextInput
                     placeholder="Name"
@@ -190,6 +203,19 @@ function EditOfferProductDetail({ route }) {
                     onChangeText={(e) => setProductTitle(e)}
                   />
                 </View>
+
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: "black",
+                    marginLeft: 5,
+                    marginBottom: -12,
+                    marginTop: 3,
+                    opacity: 0.6,
+                  }}
+                >
+                  Description
+                </Text>
 
                 <TextInput
                   multiline={true}
@@ -213,6 +239,19 @@ function EditOfferProductDetail({ route }) {
                   }}
                 />
 
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: "black",
+                    marginLeft: 5,
+                    marginTop: 3,
+                    marginBottom: -12,
+                    opacity: 0.6,
+                  }}
+                >
+                  Bid
+                </Text>
+
                 <View style={style.inputView}>
                   <TextInput
                     placeholder="Bid"
@@ -221,6 +260,19 @@ function EditOfferProductDetail({ route }) {
                     onChangeText={(e) => setProductBid(e)}
                   />
                 </View>
+
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: "black",
+                    marginLeft: 5,
+                    marginBottom: -12,
+                    marginTop: 3,
+                    opacity: 0.6,
+                  }}
+                >
+                  Category
+                </Text>
 
                 <ModalDropdown
                   isFullWidth
@@ -253,6 +305,19 @@ function EditOfferProductDetail({ route }) {
                   }}
                 />
 
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: "black",
+                    marginLeft: 5,
+                    marginBottom: -12,
+                    marginTop: 3,
+                    opacity: 0.6,
+                  }}
+                >
+                  Quantity
+                </Text>
+
                 <View style={style.inputView}>
                   <TextInput
                     placeholder="Quantity"
@@ -262,6 +327,19 @@ function EditOfferProductDetail({ route }) {
                   />
                 </View>
 
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: "black",
+                    marginLeft: 5,
+                    marginBottom: -12,
+                    marginTop: 3,
+                    opacity: 0.6,
+                  }}
+                >
+                  Price
+                </Text>
+
                 <View style={style.inputView}>
                   <TextInput
                     placeholder="Price"
@@ -270,6 +348,19 @@ function EditOfferProductDetail({ route }) {
                     onChangeText={(e) => setProductPrice(e)}
                   />
                 </View>
+
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: "black",
+                    marginLeft: 5,
+                    marginBottom: -12,
+                    marginTop: 3,
+                    opacity: 0.6,
+                  }}
+                >
+                  Image
+                </Text>
 
                 <View
                   style={{

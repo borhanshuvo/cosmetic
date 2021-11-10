@@ -1,6 +1,6 @@
 import * as React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
-import { UserContext } from "../../../App";
+import { StateContext, UserContext } from "../../../App";
 import config from "../../../config";
 
 function OrderRequestCard(props) {
@@ -19,6 +19,7 @@ function OrderRequestCard(props) {
     productImg,
   } = props;
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
+  const [state, setState] = React.useContext(StateContext);
 
   const sendPushNotification = async (token) => {
     await token.map((tkn) => {
@@ -53,6 +54,7 @@ function OrderRequestCard(props) {
         .then((result) => {
           sendPushNotification(result.pushToken);
           setNumber((prevState) => prevState + 1);
+          setState((prevState) => prevState + 1);
         });
     } catch (err) {}
   };

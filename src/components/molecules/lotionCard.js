@@ -45,14 +45,27 @@ function LotionCard(props) {
   return (
     <TouchableOpacity style={style.view1} onPress={onPress}>
       {loggedInUser?.user?.role === "admin" ? (
-        <TouchableOpacity onPress={() => handleProductDelete(id, endingDate)}>
-          <Image
-            source={require("../../assets/delete.png")}
-            resizeMethod="resize"
-            resizeMode="contain"
-            style={style.image3}
-          />
-        </TouchableOpacity>
+        <>
+          <TouchableOpacity onPress={share}>
+            <Image
+              source={require("../../assets/share.png")}
+              resizeMethod="resize"
+              resizeMode="contain"
+              style={style.image3}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ marginTop: -35, marginLeft: -50 }}
+            onPress={() => handleProductDelete(id, endingDate)}
+          >
+            <Image
+              source={require("../../assets/delete.png")}
+              resizeMethod="resize"
+              resizeMode="contain"
+              style={style.image3}
+            />
+          </TouchableOpacity>
+        </>
       ) : (
         <TouchableOpacity onPress={share}>
           <Image
@@ -72,19 +85,19 @@ function LotionCard(props) {
         />
       </View>
       <View style={style.view4}>
-        <Text style={{ fontSize: 10, color: "black", opacity: 0.7 }}>
+        <Text style={{ fontSize: 14, color: "black", opacity: 0.7 }}>
           {title}
         </Text>
         {quantity === "0" ? (
-          <Text style={{ fontSize: 8, color: "red" }}>Out Of Stock</Text>
+          <Text style={{ fontSize: 10, color: "red" }}>Out Of Stock</Text>
         ) : (
-          <Text style={{ fontSize: 8, color: "red" }}>
+          <Text style={{ fontSize: 10, color: "red" }}>
             In Stock - {quantity}
           </Text>
         )}
-        <Text style={{ fontSize: 8, color: "grey" }}>{dis}</Text>
+        <Text style={{ fontSize: 12, color: "grey" }}>{dis}</Text>
         <View style={style.view3}>
-          <Text style={{ fontSize: 9, color: "black", opacity: 0.7 }}>
+          <Text style={{ fontSize: 10, color: "black", opacity: 0.7 }}>
             ${parseFloat(price).toFixed(2)}
           </Text>
           {loggedInUser?.user?.role !== "admin" && (
@@ -104,7 +117,7 @@ function LotionCard(props) {
           {endingDate && (
             <Text
               style={{
-                fontSize: 8,
+                fontSize: 10,
                 color: "red",
                 marginTop: 5,
               }}

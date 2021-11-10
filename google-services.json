@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "18921599335",
+    "project_id": "cosmatic-8efe0",
+    "storage_bucket": "cosmatic-8efe0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:18921599335:android:d0eafce5f21e0313e43fc2",
+        "android_client_info": {
+          "package_name": "com.xenure.cosmetic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "18921599335-qnntae6ia0q42oj58b3hhuajdg4i015q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1zhSA98VMyoKoybP5FdrVPxsiqYeZ1dw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "18921599335-qnntae6ia0q42oj58b3hhuajdg4i015q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

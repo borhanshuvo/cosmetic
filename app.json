@@ -22,6 +22,8 @@
     },
     "android": {
       "package": "com.xenure.cosmetic",
+      "googleServicesFile": "./google-services.json",
+      "useNextNotificationsApi":true,
       "versionCode": 2
     },
     "web": {

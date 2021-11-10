@@ -1,18 +1,47 @@
 import * as React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
-
-// import Home from "../userScreens/Home";
-// import Orders from "../userScreens/orders";
-// import BidRequest from "../userScreens/bidRequest";
-// import Messages from "../userScreens/messages";
-import { useNavigation } from "@react-navigation/native";
-import { UserContext } from "../../../App";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
+import { StateContext, UserContext } from "../../../App";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import config from "../../../config";
 
 function ClientSidebar() {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
+  const [state, setState] = React.useContext(StateContext);
+  const [totalOrder, setTotalOrder] = React.useState(0);
+  const [totalBid, setTotalBid] = React.useState(0);
+  const [totalPremiumBid, setTotalPremiumBid] = React.useState(0);
+  const [totalPremiumUser, setTotalPremiumUser] = React.useState(0);
+
+  React.useEffect(() => {
+    if (isFocused) {
+      fetch(`${config.APP_URL}/order/pendingOrderStatus`, {
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+      })
+        .then((res) => res.json())
+        .then((result) => setTotalOrder(result));
+
+      fetch(`${config.APP_URL}/bidRequest/pendingOrderStatus`, {
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+      })
+        .then((res) => res.json())
+        .then((result) => setTotalBid(result));
+
+      fetch(`${config.APP_URL}/premiumBidRequest/pendingOrderStatus`, {
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+      })
+        .then((res) => res.json())
+        .then((result) => setTotalPremiumBid(result));
+
+      fetch(`${config.APP_URL}/user/pendingUserStatus`, {
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+      })
+        .then((res) => res.json())
+        .then((result) => setTotalPremiumUser(result));
+    }
+  }, [isFocused, state]);
 
   const logout = async () => {
     try {
@@ -21,6 +50,7 @@ function ClientSidebar() {
       navigation.navigate("SignUp");
     } catch (err) {}
   };
+
   return (
     <View style={style.view1}>
       <View>
@@ -78,6 +108,17 @@ function ClientSidebar() {
             onPress={() => navigation.navigate("OrderRequest")}
           >
             <Text style={style.textLinks}>Orders</Text>
+            {totalOrder > 0 && (
+              <Text
+                style={{
+                  color: "orange",
+                  fontSize: 8,
+                  lineHeight: 10,
+                }}
+              >
+                o
+              </Text>
+            )}
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -85,6 +126,17 @@ function ClientSidebar() {
             onPress={() => navigation.navigate("ClientBidRequest2")}
           >
             <Text style={style.textLinks}>Bids</Text>
+            {totalBid > 0 && (
+              <Text
+                style={{
+                  color: "orange",
+                  fontSize: 8,
+                  lineHeight: 10,
+                }}
+              >
+                o
+              </Text>
+            )}
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -92,6 +144,17 @@ function ClientSidebar() {
             onPress={() => navigation.navigate("ClientPremiumBidRequest2")}
           >
             <Text style={style.textLinks}>Premium Bids</Text>
+            {totalPremiumBid > 0 && (
+              <Text
+                style={{
+                  color: "orange",
+                  fontSize: 8,
+                  lineHeight: 10,
+                }}
+              >
+                o
+              </Text>
+            )}
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -99,6 +162,17 @@ function ClientSidebar() {
             onPress={() => navigation.navigate("ClientPremiumRequest")}
           >
             <Text style={style.textLinks}>Premium User</Text>
+            {totalPremiumUser > 0 && (
+              <Text
+                style={{
+                  color: "orange",
+                  fontSize: 8,
+                  lineHeight: 10,
+                }}
+              >
+                o
+              </Text>
+            )}
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -212,6 +286,8 @@ const style = StyleSheet.create({
   },
   viewText: {
     marginTop: "8%",
+    flexDirection: "row",
+    alignItems: "flex-start",
   },
   textLinks: {
     color: "white",
