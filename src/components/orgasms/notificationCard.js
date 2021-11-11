@@ -15,13 +15,15 @@ import Menu, {
 } from "react-native-popup-menu";
 import { StateContext, UserContext } from "../../../App";
 import config from "../../../config";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 
 function MessagesCard(props) {
   const { title, dis, dotColor, backColor, toggle, img, id, email, setNumber } =
     props;
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
   const [state, setState] = React.useContext(StateContext);
-  
+  const navigation = useNavigation();
+
   const showToast = (i) => {
     ToastAndroid.show(i, ToastAndroid.SHORT);
   };
@@ -85,6 +87,13 @@ function MessagesCard(props) {
       .then((data) => {
         setNumber((prevState) => prevState + 1);
         setState((prevState) => prevState + 1);
+        if (loggedInUser?.user?.role === "admin") {
+          navigation.navigate("ClientEditProductDetail", {
+            id: id,
+          });
+        } else {
+          navigation.navigate("UserProductDetail", { id: id });
+        }
       });
   };
 

@@ -139,14 +139,13 @@ export default LotionCard;
 
 const style = StyleSheet.create({
   view1: {
-    width: 165,
+    width: 180,
     backgroundColor: "white",
     alignItems: "center",
-    padding: 8,
+    padding: 4,
     margin: 8,
     borderRadius: 30,
   },
-
   image: {
     height: 110,
     width: 150,
@@ -176,9 +175,8 @@ const style = StyleSheet.create({
     alignItems: "center",
   },
   view4: {
-    width: 150,
-    paddingLeft: 20,
-    paddingRight: 20,
+    width: 160,
+    paddingLeft: 10,
     paddingTop: 10,
     paddingBottom: 10,
   },
