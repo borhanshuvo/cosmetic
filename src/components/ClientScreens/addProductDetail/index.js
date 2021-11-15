@@ -372,6 +372,7 @@ function AddProductDetail() {
                       alignItems: "center",
                       display: "flex",
                     }}
+                    onPress={PickImage}
                   >
                     {image === null ? (
                       <Image

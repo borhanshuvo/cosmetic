@@ -17,6 +17,7 @@ import { useNavigation, useIsFocused } from "@react-navigation/native";
 import { useContext } from "react";
 import { UserContext } from "../../../../App";
 import config from "../../../../config";
+import OfferProductCard from "../../molecules/offerProductCard";
 
 function DashBoard() {
   const navigation = useNavigation();
@@ -107,7 +108,7 @@ function DashBoard() {
               data={offerProducts}
               keyExtractor={(item) => item._id}
               renderItem={({ item }) => (
-                <LotionCard
+                <OfferProductCard
                   onPress={() =>
                     navigation.navigate("ClientEditOfferProductDetail", {
                       id: item?._id,
@@ -117,10 +118,12 @@ function DashBoard() {
                   title={item?.product?.title}
                   dis={item?.product?.description}
                   price={item?.product?.price}
+                  bid={item?.product?.bid}
                   img={item?.product?.imgURL}
                   endingDate={item?.endingDate}
                   quantity={item?.product?.quantity}
                   handleProductDelete={handleProductDelete}
+                  color="#ffffff"
                 />
               )}
             />

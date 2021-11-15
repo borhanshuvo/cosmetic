@@ -5,9 +5,8 @@ import moment from "moment";
 
 function InboxMessages(props) {
   const {
-    title,
+    messageImage,
     dis,
-    dotColor,
     backColor,
     onPress,
     left,
@@ -58,6 +57,14 @@ function InboxMessages(props) {
             >
               {dis}
             </Text>
+            {messageImage !== "" && (
+              <Image
+                source={{ uri: `${config.APP_URL}${messageImage}` }}
+                resizeMethod="resize"
+                resizeMode="contain"
+                style={style.image2}
+              />
+            )}
           </View>
         </View>
       </TouchableOpacity>
@@ -110,6 +117,11 @@ const style = StyleSheet.create({
     height: 40,
     width: 40,
     borderRadius: 50,
+  },
+  image2: {
+    height: 50,
+    width: 50,
+    borderRadius: 5,
   },
   viewtop: {
     height: 10,

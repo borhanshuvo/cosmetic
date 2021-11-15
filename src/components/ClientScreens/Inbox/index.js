@@ -17,6 +17,7 @@ import { TextInput } from "react-native-gesture-handler";
 import { io } from "socket.io-client";
 import config from "../../../../config";
 import { StateContext, UserContext } from "../../../../App";
+import * as ImagePicker from "expo-image-picker";
 
 function ClientInbox({ route }) {
   const navigation = useNavigation();
@@ -29,6 +30,7 @@ function ClientInbox({ route }) {
   const [receiver, setReceiver] = React.useState({});
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
   const [state, setState] = React.useContext(StateContext);
+  const [image, setImg] = React.useState(null);
 
   const showToast = (i) => {
     ToastAndroid.show(i, ToastAndroid.SHORT);
@@ -84,26 +86,57 @@ function ClientInbox({ route }) {
     setMessages([...messages, data]);
   });
 
+  const PickImage = async () => {
+    let photo = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!photo.cancelled) {
+      setImg(photo.uri);
+    }
+  };
+
   const sendMessage = () => {
     if (clientMessage === "") {
       showToast("Please write something!");
     } else {
+      const formData = new FormData();
+      if (image) {
+        const ext = image.substring(image.lastIndexOf(".") + 1);
+        const fileName = image.replace(/^.*[\\\/]/, "");
+        formData.append("img", {
+          name: fileName,
+          uri: image,
+          type: `image/${ext}`,
+        });
+      }
+
+      formData.append("text", clientMessage);
+      formData.append("sender_name", sender?.name);
+      formData.append("sender_email", sender?.email);
+      formData.append("sender_id", sender?.id);
+      formData.append("sender_image", sender?.image);
+      formData.append("sender_backColor", sender?.backColor);
+      formData.append("receiver_name", receiver?.name);
+      formData.append("receiver_email", receiver?.email);
+      formData.append("receiver_id", receiver?.id);
+      formData.append("receiver_image", receiver?.image);
+      formData.append("receiver_backColor", receiver?.backColor);
+      formData.append("conversation_id", id);
+
       fetch(`${config.APP_URL}/message/send`, {
         method: "POST",
         headers: {
-          "content-type": "application/json",
           authorization: `Bearer ${loggedInUser?.accessToken}`,
         },
-        body: JSON.stringify({
-          text: clientMessage,
-          sender,
-          receiver,
-          conversation_id: id,
-        }),
+        body: formData,
       })
         .then((res) => res.json())
         .then((result) => {
           setClientMessage("");
+          setImg(null);
           fetch(`${config.APP_URL}/conversation/updateBackColor/${id}`, {
             method: "PUT",
             headers: {
@@ -175,16 +208,18 @@ function ClientInbox({ route }) {
                     <View key={message._id}>
                       {loggedInUser?.user?._id === message?.sender?.id ? (
                         <InboxMessages
+                          messageImage={message?.avatar}
                           dis={message?.text}
                           img={message?.sender?.image}
                           time={message?.createdAt}
-                          backColor="rgba(255, 255,255, 0.4)"
+                          backColor="rgba(255, 255,255, 0.6)"
                           left={20}
                           textDesign={false}
                           justify="flex-end"
                         />
                       ) : (
                         <InboxMessages
+                          messageImage={message?.avatar}
                           dis={message?.text}
                           img={message?.sender?.image}
                           time={message?.createdAt}
@@ -195,19 +230,15 @@ function ClientInbox({ route }) {
                       )}
                     </View>
                   ))}
-                  {/* <InboxMessages
-                    dis="Sed ut  -  Perspiciatis unde omnis iste Perspiciatis unde omnis iste
-                    Perspiciatis unde omnis iste...              "
-                    backColor="white"
-                    right={20}
+                  <Image
+                    source={{ uri: image }}
+                    resizeMethod="resize"
+                    resizeMode="contain"
+                    style={{
+                      height: 50,
+                      width: 50,
+                    }}
                   />
-                  <InboxMessages
-                    dis="Sed ut  -  Perspiciatis unde omnis iste Perspiciatis unde omnis iste
-                    Perspiciatis unde omnis iste...              "
-                    backColor="rgba(255, 255,255, 0.4)"
-                    left={20}
-                    justify="flex-end"
-                  /> */}
                 </View>
               </ScrollView>
             </SafeAreaView>
@@ -240,9 +271,8 @@ function ClientInbox({ route }) {
                   alignItems: "center",
                   justifyContent: "space-between",
                   flexDirection: "row",
-
-                  paddingRight: 15,
-                  paddingLeft: 10,
+                  paddingRight: 30,
+                  paddingLeft: 20,
                   width: "30%",
                 }}
               >
@@ -251,13 +281,15 @@ function ClientInbox({ route }) {
                   resizeMethod="resize"
                   resizeMode="contain"
                   style={style.image}
-                />
-                <Image
-                  source={require("../../../assets/attach.png")}
-                  resizeMethod="resize"
-                  resizeMode="contain"
-                  style={style.image}
                 /> */}
+                <TouchableOpacity onPress={() => PickImage()}>
+                  <Image
+                    source={require("../../../assets/attach.png")}
+                    resizeMethod="resize"
+                    resizeMode="contain"
+                    style={style.image}
+                  />
+                </TouchableOpacity>
                 <TouchableOpacity onPress={() => sendMessage()}>
                   <Image
                     source={require("../../../assets/send.png")}
@@ -290,11 +322,9 @@ const style = StyleSheet.create({
   },
   scrollView: {
     marginTop: 20,
-
     display: "flex",
   },
   image: {
-    marginLeft: 50,
     height: 20,
     width: 20,
     borderRadius: 8,

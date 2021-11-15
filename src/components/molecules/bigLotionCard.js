@@ -25,8 +25,8 @@ function BigLotionCard(props) {
           {quantity === "0" ? (
             <Text style={{ fontSize: 10, color: "red" }}>Out Of Stock</Text>
           ) : (
-            <Text style={{ fontSize: 10, color: "red" }}>
-              In Stock - {quantity}
+            <Text style={{ fontSize: 10, color: "black" }}>
+              In a Stock - {quantity}
             </Text>
           )}
           <Text style={{ fontSize: 12, color: "grey" }}>{dis}</Text>
@@ -39,7 +39,7 @@ function BigLotionCard(props) {
             fontSize: 10,
             color: "black",
             opacity: 0.7,
-            marginBottom: 30,
+            marginTop: -35
           }}
         >
           ${parseFloat(price).toFixed(2)}

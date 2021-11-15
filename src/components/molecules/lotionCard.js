@@ -55,7 +55,7 @@ function LotionCard(props) {
             />
           </TouchableOpacity>
           <TouchableOpacity
-            style={{ marginTop: -35, marginLeft: -50 }}
+            style={{ marginTop: -35, marginLeft: -210 }}
             onPress={() => handleProductDelete(id, endingDate)}
           >
             <Image
@@ -91,8 +91,8 @@ function LotionCard(props) {
         {quantity === "0" ? (
           <Text style={{ fontSize: 10, color: "red" }}>Out Of Stock</Text>
         ) : (
-          <Text style={{ fontSize: 10, color: "red" }}>
-            In Stock - {quantity}
+          <Text style={{ fontSize: 10, color: "black" }}>
+            In a Stock ({quantity})
           </Text>
         )}
         <Text style={{ fontSize: 12, color: "grey" }}>{dis}</Text>
