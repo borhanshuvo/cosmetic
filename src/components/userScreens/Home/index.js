@@ -16,6 +16,7 @@ import { useNavigation, useIsFocused } from "@react-navigation/native";
 import { UserContext } from "../../../../App";
 import AppTemplate from "../../Usertemplate";
 import config from "../../../../config";
+import OfferProductCard from "../../molecules/offerProductCard";
 
 function Home() {
   const navigation = useNavigation();
@@ -89,7 +90,7 @@ function Home() {
           >
             {user?.premium === "Premium" && (
               <>
-                <Text style={style.text2}>Offer</Text>
+                <Text style={style.text2}>Auction</Text>
                 <FlatList
                   showsHorizontalScrollIndicator={false}
                   horizontal={true}
@@ -97,7 +98,7 @@ function Home() {
                   data={offerProducts}
                   keyExtractor={(item) => item._id}
                   renderItem={({ item }) => (
-                    <LotionCard
+                    <OfferProductCard
                       ButtonClick={() =>
                         navigation.navigate("UserOfferCheckOut", {
                           id: item?._id,
@@ -111,9 +112,11 @@ function Home() {
                       title={item?.product?.title}
                       dis={item?.product?.description}
                       price={item?.product?.price}
+                      bid={item?.product?.bid}
                       img={item?.product?.imgURL}
                       quantity={item?.product?.quantity}
                       endingDate={item?.endingDate}
+                      color="#ffffff"
                     />
                   )}
                 />

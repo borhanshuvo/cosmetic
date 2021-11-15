@@ -109,15 +109,12 @@ function ClientSidebar() {
           >
             <Text style={style.textLinks}>Orders</Text>
             {totalOrder > 0 && (
-              <Text
-                style={{
-                  color: "orange",
-                  fontSize: 8,
-                  lineHeight: 10,
-                }}
-              >
-                o
-              </Text>
+              <Image
+                source={require("../../assets/notiRed.png")}
+                resizeMode="contain"
+                resizeMethod="resize"
+                style={{ height: 10, width: 10, marginLeft: 5, marginTop: 5 }}
+              />
             )}
           </TouchableOpacity>
 
@@ -127,15 +124,12 @@ function ClientSidebar() {
           >
             <Text style={style.textLinks}>Bids</Text>
             {totalBid > 0 && (
-              <Text
-                style={{
-                  color: "orange",
-                  fontSize: 8,
-                  lineHeight: 10,
-                }}
-              >
-                o
-              </Text>
+              <Image
+                source={require("../../assets/notiRed.png")}
+                resizeMode="contain"
+                resizeMethod="resize"
+                style={{ height: 10, width: 10, marginLeft: 5, marginTop: 5 }}
+              />
             )}
           </TouchableOpacity>
 
@@ -145,15 +139,12 @@ function ClientSidebar() {
           >
             <Text style={style.textLinks}>Premium Bids</Text>
             {totalPremiumBid > 0 && (
-              <Text
-                style={{
-                  color: "orange",
-                  fontSize: 8,
-                  lineHeight: 10,
-                }}
-              >
-                o
-              </Text>
+              <Image
+                source={require("../../assets/notiRed.png")}
+                resizeMode="contain"
+                resizeMethod="resize"
+                style={{ height: 10, width: 10, marginLeft: 5, marginTop: 5 }}
+              />
             )}
           </TouchableOpacity>
 
@@ -163,15 +154,12 @@ function ClientSidebar() {
           >
             <Text style={style.textLinks}>Premium User</Text>
             {totalPremiumUser > 0 && (
-              <Text
-                style={{
-                  color: "orange",
-                  fontSize: 8,
-                  lineHeight: 10,
-                }}
-              >
-                o
-              </Text>
+              <Image
+                source={require("../../assets/notiRed.png")}
+                resizeMode="contain"
+                resizeMethod="resize"
+                style={{ height: 10, width: 10, marginLeft: 5, marginTop: 5 }}
+              />
             )}
           </TouchableOpacity>
 

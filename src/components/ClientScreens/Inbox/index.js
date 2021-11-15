@@ -86,6 +86,23 @@ function ClientInbox({ route }) {
     setMessages([...messages, data]);
   });
 
+  const sendPushNotification = async (token, message) => {
+    await fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Accept-encoding": "gzip, deflate",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        to: token,
+        sound: "default",
+        title: "Cosmetic",
+        body: `${message}!`,
+      }),
+    });
+  };
+
   const PickImage = async () => {
     let photo = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -137,6 +154,7 @@ function ClientInbox({ route }) {
         .then((result) => {
           setClientMessage("");
           setImg(null);
+          sendPushNotification(result.pushToken, result.messageText);
           fetch(`${config.APP_URL}/conversation/updateBackColor/${id}`, {
             method: "PUT",
             headers: {
@@ -230,15 +248,17 @@ function ClientInbox({ route }) {
                       )}
                     </View>
                   ))}
-                  <Image
-                    source={{ uri: image }}
-                    resizeMethod="resize"
-                    resizeMode="contain"
-                    style={{
-                      height: 50,
-                      width: 50,
-                    }}
-                  />
+                  {image && (
+                    <Image
+                      source={{ uri: image }}
+                      resizeMethod="resize"
+                      resizeMode="contain"
+                      style={{
+                        height: 50,
+                        width: 50,
+                      }}
+                    />
+                  )}
                 </View>
               </ScrollView>
             </SafeAreaView>
