@@ -1,9 +1,11 @@
+import { useRoute } from "@react-navigation/native";
 import * as React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import config from "../../../config";
 
 function BigLotionCard(props) {
   const { title, dis, price, color, onPress, img, quantity } = props;
+  const nav = useRoute();
   return (
     <TouchableOpacity
       style={[style.view1, { backgroundColor: color }]}
@@ -22,28 +24,30 @@ function BigLotionCard(props) {
           <Text style={{ fontSize: 14, color: "black", opacity: 0.7 }}>
             {title}
           </Text>
-          {quantity === "0" ? (
-            <Text style={{ fontSize: 10, color: "red" }}>Out Of Stock</Text>
-          ) : (
-            <Text style={{ fontSize: 10, color: "black" }}>
-              In a Stock - {quantity}
-            </Text>
-          )}
-          <Text style={{ fontSize: 12, color: "grey" }}>{dis}</Text>
-        </View>
-      </View>
 
-      <View style={style.view3}>
-        <Text
-          style={{
-            fontSize: 10,
-            color: "black",
-            opacity: 0.7,
-            marginTop: -35
-          }}
-        >
-          ${parseFloat(price).toFixed(2)}
-        </Text>
+          {nav?.name !== "ClientCustomerProfile" && (
+            <>
+              {quantity === "0" ? (
+                <Text style={{ fontSize: 10, color: "red" }}>Out Of Stock</Text>
+              ) : (
+                <Text style={{ fontSize: 10, color: "black" }}>
+                  In a Stock ({quantity})
+                </Text>
+              )}
+            </>
+          )}
+          <Text style={{ fontSize: 12, color: "grey", textAlign: "justify" }}>
+            {dis}
+          </Text>
+          <Text
+            style={{
+              fontSize: 10,
+              color: "black",
+            }}
+          >
+            ${parseFloat(price).toFixed(2)}
+          </Text>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -56,7 +60,6 @@ const style = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-
     margin: 8,
     padding: 4,
     paddingLeft: 8,
@@ -83,12 +86,6 @@ const style = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
   },
-  //   view3: {
-  //     display: "flex",
-  //     flexDirection: "row",
-
-  //     alignItems: "center",
-  //   },
   view4: {
     paddingLeft: 5,
   },
