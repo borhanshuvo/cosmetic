@@ -13,7 +13,7 @@ import Graph from "../../orgasms/graph";
 import AppTemplate from "../../ClientTemplate";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 import config from "../../../../config";
-import { UserContext } from "../../../../App";
+import { StateContext, UserContext } from "../../../../App";
 
 function Statics() {
   const navigation = useNavigation();
