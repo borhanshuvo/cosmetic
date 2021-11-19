@@ -11,7 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 import Header from "../../atoms/header";
 import AppTemplate from "../../Usertemplate";
 import config from "../../../../config";
-import { UserContext } from "../../../../App";
+import { StateContext, UserContext } from "../../../../App";
 import PremiumBidRequestCard from "../../orgasms/premiumBidRequestCard";
 
 function PremiumBidRequest({ route }) {
@@ -19,6 +19,7 @@ function PremiumBidRequest({ route }) {
   const { id } = route?.params;
   const [product, setProduct] = useState({});
   const [loggedInUser, setLoggedInUser] = useContext(UserContext);
+  const [state, setState] = React.useContext(StateContext);
 
   useEffect(() => {
     try {
@@ -28,7 +29,7 @@ function PremiumBidRequest({ route }) {
         .then((res) => res.json())
         .then((result) => setProduct(result));
     } catch (err) {}
-  }, [id]);
+  }, [id, state]);
 
   return (
     <AppTemplate>
@@ -44,7 +45,7 @@ function PremiumBidRequest({ route }) {
               img1={require("../../../assets/arrowLeft2.png")}
               title="Bid Request"
               img2={require("../../../assets/menu2.png")}
-              img3={require("../../../assets/loupe.png")}
+              img3={require("../../../assets/menu1.png")}
             />
           </View>
           <SafeAreaView style={style.container}>

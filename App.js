@@ -34,7 +34,12 @@ export default function App() {
 
   React.useEffect(() => {
     load();
-  }, []);
+    setState(0);
+    const interval = setInterval(() => {
+      setState((prevState) => prevState + 1);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [state]);
 
   return (
     <UserContext.Provider value={[loggedInUser, setLoggedInUser]}>

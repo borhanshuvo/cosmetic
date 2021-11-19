@@ -16,7 +16,7 @@ import Header from "../../atoms/header";
 import AppTemplate from "../../ClientTemplate";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 import config from "../../../../config";
-import { UserContext } from "../../../../App";
+import { StateContext, UserContext } from "../../../../App";
 
 function SpecailOffer() {
   const navigation = useNavigation();
@@ -40,6 +40,7 @@ function SpecailOffer() {
   const [endDateMinute, setEndDateMinute] = useState("");
   const [endDateSecond, setEndDateSecond] = useState("");
   const [loggedInUser, setLoggedInUser] = useContext(UserContext);
+  const [state, setState] = React.useContext(StateContext);
 
   useEffect(() => {
     if (isFocused) {
@@ -51,7 +52,7 @@ function SpecailOffer() {
           .then((result) => setProducts(result));
       } catch (err) {}
     }
-  }, [isFocused]);
+  }, [isFocused, state]);
 
   const handelPress = () => {
     if (startDate === "") {
@@ -129,6 +130,7 @@ function SpecailOffer() {
             setEndDateMinute("");
             setEndDateSecond("");
             setEndDateHour("");
+            setState((prevState) => prevState + 1);
             setTimeout(() => {
               navigation.navigate("ClientDashBoard");
             }, 2000);
@@ -159,7 +161,7 @@ function SpecailOffer() {
               img1={require("../../../assets/arrowLeft2.png")}
               title="Special Offer"
               img2={require("../../../assets/menu2.png")}
-              img3={require("../../../assets/loupe.png")}
+              img3={require("../../../assets/menu1.png")}
             />
           </View>
           <SafeAreaView style={style.container}>

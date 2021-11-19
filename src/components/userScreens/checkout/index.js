@@ -12,7 +12,7 @@ import { useNavigation, useIsFocused } from "@react-navigation/native";
 import Header from "../../atoms/header";
 import AppTemplate from "../../Usertemplate";
 import config from "../../../../config";
-import { UserContext } from "../../../../App";
+import { StateContext, UserContext } from "../../../../App";
 
 function CheckOut({ route }) {
   const navigation = useNavigation();
@@ -20,6 +20,7 @@ function CheckOut({ route }) {
   const { id } = route?.params;
   const [product, setProduct] = useState({});
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
+  const [state, setState] = React.useContext(StateContext);
 
   useEffect(() => {
     if (isFocused) {
@@ -31,7 +32,7 @@ function CheckOut({ route }) {
           .then((result) => setProduct(result));
       } catch (err) {}
     }
-  }, [isFocused, id]);
+  }, [isFocused, id, state]);
 
   return (
     <AppTemplate>
@@ -47,7 +48,7 @@ function CheckOut({ route }) {
               img1={require("../../../assets/arrowLeft2.png")}
               title="Check Out"
               img2={require("../../../assets/menu2.png")}
-              img3={require("../../../assets/loupe.png")}
+              img3={require("../../../assets/menu1.png")}
             />
           </View>
           <SafeAreaView style={style.container}>

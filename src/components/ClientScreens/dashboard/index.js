@@ -15,7 +15,7 @@ import BigLotionCard from "../../molecules/bigLotionCard";
 import AppTemplate from "../../ClientTemplate";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 import { useContext } from "react";
-import { UserContext } from "../../../../App";
+import { StateContext, UserContext } from "../../../../App";
 import config from "../../../../config";
 import OfferProductCard from "../../molecules/offerProductCard";
 
@@ -23,6 +23,7 @@ function DashBoard() {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const [loggedInUser, setLoggedInUser] = useContext(UserContext);
+  const [state, setState] = React.useContext(StateContext);
   const [products, setProducts] = React.useState([]);
   const [offerProducts, setOfferProducts] = React.useState([]);
 
@@ -42,7 +43,7 @@ function DashBoard() {
           .then((result) => setOfferProducts(result));
       } catch (err) {}
     }
-  }, [isFocused]);
+  }, [isFocused, state]);
 
   const handleProductDelete = (id, endingDate) => {
     if (endingDate) {
@@ -54,6 +55,7 @@ function DashBoard() {
         .then((result) => {
           const delPro = offerProducts.filter((pd) => pd._id !== result._id);
           setOfferProducts(delPro);
+          setState((prevState) => prevState + 1);
         });
     } else {
       fetch(`${config.APP_URL}/product/delete/${id}`, {
@@ -64,6 +66,7 @@ function DashBoard() {
         .then((result) => {
           const delPro = products.filter((pd) => pd._id !== result._id);
           setProducts(delPro);
+          setState((prevState) => prevState + 1);
         });
     }
   };
@@ -85,7 +88,7 @@ function DashBoard() {
               userImg={loggedInUser?.user?.imgURL}
               title="Dashboard"
               img2={require("../../../assets/menu2.png")}
-              img3={require("../../../assets/loupe.png")}
+              img3={require("../../../assets/menu1.png")}
             />
 
             <Text style={{ fontSize: 12, paddingBottom: 4, marginTop: 50 }}>

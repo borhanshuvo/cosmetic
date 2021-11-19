@@ -1,10 +1,51 @@
 import * as React from "react";
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
-import { DrawerActions, useNavigation } from "@react-navigation/native";
+import {
+  DrawerActions,
+  useNavigation,
+  useIsFocused,
+} from "@react-navigation/native";
 import config from "../../../config";
+import { StateContext, UserContext } from "../../../App";
 function Header(props) {
   const { img1, img2, img3, userImg, title, onPress } = props;
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
+  const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
+  const [state, setState] = React.useContext(StateContext);
+  const [totalOrder, setTotalOrder] = React.useState(0);
+  const [totalBid, setTotalBid] = React.useState(0);
+  const [totalPremiumBid, setTotalPremiumBid] = React.useState(0);
+  const [totalPremiumUser, setTotalPremiumUser] = React.useState(0);
+
+  React.useEffect(() => {
+    if (isFocused) {
+      fetch(`${config.APP_URL}/order/pendingOrderStatus`, {
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+      })
+        .then((res) => res.json())
+        .then((result) => setTotalOrder(result));
+
+      fetch(`${config.APP_URL}/bidRequest/pendingOrderStatus`, {
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+      })
+        .then((res) => res.json())
+        .then((result) => setTotalBid(result));
+
+      fetch(`${config.APP_URL}/premiumBidRequest/pendingOrderStatus`, {
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+      })
+        .then((res) => res.json())
+        .then((result) => setTotalPremiumBid(result));
+
+      fetch(`${config.APP_URL}/user/pendingUserStatus`, {
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+      })
+        .then((res) => res.json())
+        .then((result) => setTotalPremiumUser(result));
+    }
+  }, [isFocused, state]);
+
   return (
     <View style={style.view1}>
       <View style={{ width: "22%" }}>
@@ -46,7 +87,14 @@ function Header(props) {
           onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
         >
           <Image
-            source={img2}
+            source={
+              totalOrder > 0 ||
+              totalBid > 0 ||
+              totalPremiumBid > 0 ||
+              totalPremiumUser > 0
+                ? img3
+                : img2
+            }
             style={style.image2}
             resizeMethod="resize"
             resizeMode="contain"

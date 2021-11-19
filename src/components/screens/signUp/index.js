@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import Input from "../../atoms/input";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
-import { UserContext } from "../../../../App";
+import { StateContext, UserContext } from "../../../../App";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import config from "../../../../config";
 import Constants from "expo-constants";
@@ -25,6 +25,7 @@ function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loggedInUser, setLoggedInUser] = useContext(UserContext);
+  const [state, setState] = React.useContext(StateContext);
   const [errors, setErrors] = useState({});
   const [fieldValid, setFieldValid] = useState("");
 
@@ -53,7 +54,7 @@ function SignUp() {
       Notifications.removeNotificationSubscription(responseListener.current);
       mounted = false;
     };
-  }, []);
+  }, [state]);
 
   const registerForPushNotificationsAsync = async () => {
     let token;

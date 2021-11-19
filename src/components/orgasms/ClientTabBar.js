@@ -76,12 +76,23 @@ function ClientTabBar({ item = [], navi }) {
         style={style.icons}
       >
         {totalMessage > 0 ? (
-          <Image
-            source={require("../../assets/chatgrey.png")}
-            resizeMode="contain"
-            resizeMethod="resize"
-            style={style.iconsStyle}
-          />
+          <>
+            {nav?.name === "ClientMessages" ? (
+              <Image
+                source={require("../../assets/chatgrey.png")}
+                resizeMode="contain"
+                resizeMethod="resize"
+                style={style.iconsStyle}
+              />
+            ) : (
+              <Image
+                source={require("../../assets/chatWhiteRed.png")}
+                resizeMode="contain"
+                resizeMethod="resize"
+                style={style.iconsStyle}
+              />
+            )}
+          </>
         ) : (
           <>
             {nav?.name === "ClientMessages" ? (
@@ -118,12 +129,23 @@ function ClientTabBar({ item = [], navi }) {
         onPress={() => navigation.navigate("ClientNotifications")}
       >
         {total > 0 ? (
-          <Image
-            source={require("../../assets/notigrey.png")}
-            resizeMode="contain"
-            resizeMethod="resize"
-            style={style.iconsStyle}
-          />
+          <>
+            {nav?.name === "ClientNotifications" ? (
+              <Image
+                source={require("../../assets/notigrey.png")}
+                resizeMode="contain"
+                resizeMethod="resize"
+                style={style.iconsStyle}
+              />
+            ) : (
+              <Image
+                source={require("../../assets/notiWhiteRed.png")}
+                resizeMode="contain"
+                resizeMethod="resize"
+                style={style.iconsStyle}
+              />
+            )}
+          </>
         ) : (
           <>
             {nav?.name === "ClientNotifications" ? (

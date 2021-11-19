@@ -13,7 +13,7 @@ import {
 // import BidRequest from "../userScreens/bidRequest";
 // import Messages from "../userScreens/messages";
 import { useNavigation } from "@react-navigation/native";
-import { UserContext } from "../../../App";
+import { StateContext, UserContext } from "../../../App";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import config from "../../../config";
 
@@ -22,6 +22,7 @@ function Sidebar() {
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
   const [user, setUser] = React.useState();
   const [number, setNumber] = React.useState(0);
+  const [state, setState] = React.useContext(StateContext);
 
   React.useEffect(() => {
     fetch(`${config.APP_URL}/user/get/${loggedInUser?.user?._id}`, {
@@ -29,7 +30,7 @@ function Sidebar() {
     })
       .then((res) => res.json())
       .then((data) => setUser(data.user[0]));
-  }, [loggedInUser?.user?._id, number]);
+  }, [loggedInUser?.user?._id, number, state]);
 
   const showToast = (i) => {
     ToastAndroid.show(i, ToastAndroid.SHORT);

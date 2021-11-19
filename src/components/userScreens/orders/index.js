@@ -10,15 +10,17 @@ import BigLotionCard2 from "../../molecules/bigLotionCard2";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 import Header from "../../atoms/header";
 import AppTemplate from "../../Usertemplate";
-import { UserContext } from "../../../../App";
+import { StateContext, UserContext } from "../../../../App";
 import config from "../../../../config";
 
 function Orders() {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
+  const [state, setState] = React.useContext(StateContext);
   const email = loggedInUser?.user?.email;
   const [orderList, setOrderList] = React.useState([]);
+
   React.useEffect(() => {
     if (isFocused) {
       try {
@@ -34,7 +36,8 @@ function Orders() {
           .then((result) => setOrderList(result));
       } catch (err) {}
     }
-  }, [email, isFocused]);
+  }, [email, isFocused, state]);
+
   return (
     <AppTemplate>
       <View style={{ flex: 1, backgroundColor: "#EBEAEF" }}>
@@ -49,7 +52,7 @@ function Orders() {
               img1={require("../../../assets/arrowLeft2.png")}
               title="Orders"
               img2={require("../../../assets/menu2.png")}
-              img3={require("../../../assets/loupe.png")}
+              img3={require("../../../assets/menu1.png")}
             />
           </View>
           <SafeAreaView style={style.container}>

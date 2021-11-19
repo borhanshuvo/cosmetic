@@ -44,6 +44,7 @@ function MessagesCard(props) {
         } else {
           showToast(data.success);
           setNumber((prevState) => prevState + 1);
+          setState((prevState) => prevState + 1);
         }
       });
   };
@@ -68,6 +69,7 @@ function MessagesCard(props) {
       .then((result) => {
         if (result.success) {
           showToast(result.success);
+          setState((prevState) => prevState + 1);
         } else {
           showToast(result.error);
         }

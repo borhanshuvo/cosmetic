@@ -69,7 +69,7 @@ function ClientInbox({ route }) {
           setState((prevState) => prevState + 1);
         });
     }
-  }, [id, isFocused]);
+  }, [id, isFocused, state]);
 
   React.useEffect(() => {
     if (isFocused) {
@@ -80,10 +80,12 @@ function ClientInbox({ route }) {
         s.disconnect();
       };
     }
-  }, [isFocused]);
+  }, [isFocused, state]);
 
   socket?.off("new_message").on("new_message", (data) => {
-    setMessages([...messages, data]);
+    if (data?.conversation_id === id) {
+      setMessages([...messages, data]);
+    }
   });
 
   const sendPushNotification = async (token, message) => {
@@ -187,7 +189,7 @@ function ClientInbox({ route }) {
             img1={require("../../../assets/arrowLeft2.png")}
             title="Chat"
             img2={require("../../../assets/menu2.png")}
-            img3={require("../../../assets/loupe.png")}
+            img3={require("../../../assets/menu1.png")}
           />
         </View>
         <View
@@ -279,7 +281,7 @@ function ClientInbox({ route }) {
                   paddingLeft: 12,
                   paddingRight: 12,
                   paddingTop: 13,
-                  paddingBottom: 13,
+                  paddingBottom: 20,
                   color: "#AEAEAE",
                   width: "70%",
                 }}

@@ -10,13 +10,14 @@ import BigLotionCard2 from "../../molecules/bigLotionCard2";
 import Header from "../../atoms/header";
 import AppTemplate from "../../Usertemplate";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
-import { UserContext } from "../../../../App";
+import { StateContext, UserContext } from "../../../../App";
 import config from "../../../../config";
 
 function Bids() {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
+  const [state, setState] = React.useContext(StateContext);
   const [bids, setBids] = React.useState([]);
 
   React.useEffect(() => {
@@ -27,7 +28,7 @@ function Bids() {
         .then((res) => res.json())
         .then((result) => setBids(result));
     }
-  }, [loggedInUser?.user?.email, isFocused]);
+  }, [loggedInUser?.user?.email, isFocused, state]);
 
   return (
     <AppTemplate>
@@ -43,7 +44,7 @@ function Bids() {
               img1={require("../../../assets/arrowLeft2.png")}
               title="Bids"
               img2={require("../../../assets/menu2.png")}
-              img3={require("../../../assets/loupe.png")}
+              img3={require("../../../assets/menu1.png")}
             />
           </View>
           <SafeAreaView style={style.container}>

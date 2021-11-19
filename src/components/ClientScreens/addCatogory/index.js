@@ -16,7 +16,7 @@ import AppTemplate from "../../ClientTemplate";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import config from "../../../../config";
-import { UserContext } from "../../../../App";
+import { StateContext, UserContext } from "../../../../App";
 
 function AddCatogory() {
   const navigation = useNavigation();
@@ -25,16 +25,18 @@ function AddCatogory() {
   const [errors, setErrors] = useState({});
   const [number, setNumber] = useState(0);
   const [loggedInUser, setLoggedInUser] = useContext(UserContext);
+  const [state, setState] = React.useContext(StateContext);
   const showToast = (i) => {
     ToastAndroid.show(i, ToastAndroid.SHORT);
   };
+
   useEffect(() => {
     fetch(`${config.APP_URL}/category/get`, {
       headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
     })
       .then((res) => res.json())
       .then((data) => setCategories(data));
-  }, [number]);
+  }, [number, state]);
 
   const validate = () => {
     if (categoryName === "") {
@@ -55,6 +57,7 @@ function AddCatogory() {
           } else {
             setErrors(data);
             setNumber(number + 1);
+            setState((prevState) => prevState + 1);
             setTimeout(() => {
               setCategoryName("");
               setErrors({});
@@ -78,7 +81,7 @@ function AddCatogory() {
               img1={require("../../../assets/arrowLeft2.png")}
               title="Add Catogory"
               img2={require("../../../assets/menu2.png")}
-              img3={require("../../../assets/loupe.png")}
+              img3={require("../../../assets/menu1.png")}
             />
           </View>
           <SafeAreaView style={style.container}>

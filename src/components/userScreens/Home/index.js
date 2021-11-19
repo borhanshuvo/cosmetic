@@ -13,7 +13,7 @@ import Header from "../../atoms/header";
 import LotionCard from "../../molecules/lotionCard";
 import BigLotionCard from "../../molecules/bigLotionCard";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
-import { UserContext } from "../../../../App";
+import { StateContext, UserContext } from "../../../../App";
 import AppTemplate from "../../Usertemplate";
 import config from "../../../../config";
 import OfferProductCard from "../../molecules/offerProductCard";
@@ -22,6 +22,7 @@ function Home() {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
+  const [state, setState] = React.useContext(StateContext);
   const [products, setProducts] = React.useState([]);
   const [offerProducts, setOfferProducts] = React.useState([]);
   const [user, setUser] = React.useState();
@@ -46,7 +47,7 @@ function Home() {
         .then((res) => res.json())
         .then((result) => setOfferProducts(result));
     }
-  }, [loggedInUser?.user?._id, isFocused]);
+  }, [loggedInUser?.user?._id, isFocused, state]);
 
   return (
     <AppTemplate>
@@ -65,7 +66,7 @@ function Home() {
               userImg={loggedInUser?.user?.imgURL}
               title="Products"
               img2={require("../../../assets/menu2.png")}
-              img3={require("../../../assets/loupe.png")}
+              img3={require("../../../assets/menu1.png")}
             />
             <View style={{ marginTop: 24 }}>
               <View style={style.view2}>

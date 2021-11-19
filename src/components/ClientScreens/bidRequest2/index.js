@@ -11,11 +11,12 @@ import BidRequestCard2 from "../../orgasms/bidRequestCard2";
 import Header from "../../atoms/header";
 import AppTemplate from "../../ClientTemplate";
 import config from "../../../../config";
-import { UserContext } from "../../../../App";
+import { StateContext, UserContext } from "../../../../App";
 
 function BidRequest2() {
   const navigation = useNavigation();
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
+  const [state, setState] = React.useContext(StateContext);
   const [bids, setBids] = React.useState([]);
   const [number, setNumber] = React.useState(0);
   const isFocused = useIsFocused();
@@ -30,7 +31,7 @@ function BidRequest2() {
           .then((result) => setBids(result));
       } catch (err) {}
     }
-  }, [number, isFocused]);
+  }, [number, isFocused, state]);
 
   return (
     <AppTemplate>
@@ -46,7 +47,7 @@ function BidRequest2() {
               img1={require("../../../assets/arrowLeft2.png")}
               title="Bid Request"
               img2={require("../../../assets/menu2.png")}
-              img3={require("../../../assets/loupe.png")}
+              img3={require("../../../assets/menu1.png")}
             />
           </View>
           <SafeAreaView style={style.container}>

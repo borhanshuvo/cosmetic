@@ -6,6 +6,7 @@ import config from "../../../config";
 function BigLotionCard(props) {
   const { title, dis, price, color, onPress, img, quantity } = props;
   const nav = useRoute();
+
   return (
     <TouchableOpacity
       style={[style.view1, { backgroundColor: color }]}
@@ -25,7 +26,7 @@ function BigLotionCard(props) {
             {title}
           </Text>
 
-          {nav?.name !== "ClientCustomerProfile" && (
+          {/* {nav?.name !== "ClientCustomerProfile" && (
             <>
               {quantity === "0" ? (
                 <Text style={{ fontSize: 10, color: "red" }}>Out Of Stock</Text>
@@ -35,10 +36,12 @@ function BigLotionCard(props) {
                 </Text>
               )}
             </>
-          )}
-          <Text style={{ fontSize: 12, color: "grey", textAlign: "justify" }}>
+          )} */}
+          <Text style={{ fontSize: 12, color: "grey", textAlign: "justify", width: 180 }}>
             {dis}
           </Text>
+        </View>
+        <View>
           <Text
             style={{
               fontSize: 10,
@@ -56,7 +59,7 @@ export default BigLotionCard;
 
 const style = StyleSheet.create({
   view1: {
-    width: 250,
+    width: 280,
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
@@ -67,7 +70,7 @@ const style = StyleSheet.create({
     borderRadius: 12,
   },
   view5: {
-    width: 185,
+    width: "100%",
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
@@ -76,17 +79,8 @@ const style = StyleSheet.create({
     height: 42,
     width: 42,
   },
-
-  view2: {
-    backgroundColor: "#B7C9D2",
-    height: 26,
-    width: 26,
-    borderRadius: 6,
-    alignItems: "center",
-    display: "flex",
-    justifyContent: "center",
-  },
   view4: {
     paddingLeft: 5,
+    flexGrow: 1,
   },
 });

@@ -17,7 +17,7 @@ import { useNavigation, useIsFocused } from "@react-navigation/native";
 import ModalDropdown from "react-native-modal-dropdown";
 import config from "../../../../config";
 import * as ImagePicker from "expo-image-picker";
-import { UserContext } from "../../../../App";
+import { StateContext, UserContext } from "../../../../App";
 
 function EditOfferProductDetail({ route }) {
   const navigation = useNavigation();
@@ -36,6 +36,7 @@ function EditOfferProductDetail({ route }) {
   const [productQuantity, setProductQuantity] = useState("");
   const [productPrice, setProductPrice] = useState("");
   const [loggedInUser, setLoggedInUser] = useContext(UserContext);
+  const [state, setState] = React.useContext(StateContext);
 
   useEffect(() => {
     if (isFocused) {
@@ -53,7 +54,7 @@ function EditOfferProductDetail({ route }) {
           .then((result) => setProduct(result));
       } catch (err) {}
     }
-  }, [isFocused, id]);
+  }, [isFocused, id, state]);
 
   const PickImage = async () => {
     let photo = await ImagePicker.launchImageLibraryAsync({
@@ -109,6 +110,7 @@ function EditOfferProductDetail({ route }) {
             setProductCategory("");
             setProductPrice("");
             setProductQuantity("");
+            setState((prevState) => prevState + 1);
             setImg(null);
             setTimeout(() => {
               navigation.navigate("ClientDashBoard");
@@ -149,6 +151,7 @@ function EditOfferProductDetail({ route }) {
             setProductCategory("");
             setProductPrice("");
             setProductQuantity("");
+            setState((prevState) => prevState + 1);
             setImg(null);
             setTimeout(() => {
               navigation.navigate("ClientDashBoard");
@@ -172,7 +175,7 @@ function EditOfferProductDetail({ route }) {
               img1={require("../../../assets/arrowLeft2.png")}
               title="Edit a Product"
               img2={require("../../../assets/menu2.png")}
-              img3={require("../../../assets/loupe.png")}
+              img3={require("../../../assets/menu1.png")}
             />
           </View>
           <SafeAreaView style={style.container}>

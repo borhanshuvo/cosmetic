@@ -10,7 +10,7 @@ import Header from "../../atoms/header";
 import AppTemplate from "../../ClientTemplate";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 import config from "../../../../config";
-import { UserContext } from "../../../../App";
+import { StateContext, UserContext } from "../../../../App";
 import MessagesCard2 from "../../orgasms/messagesCard2";
 
 function Messages() {
@@ -18,6 +18,7 @@ function Messages() {
   const isFocused = useIsFocused();
   const [users, setUsers] = React.useState([]);
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
+  const [state, setState] = React.useContext(StateContext);
 
   React.useEffect(() => {
     if (isFocused) {
@@ -32,7 +33,7 @@ function Messages() {
           .then((result) => setUsers(result?.conversation));
       } catch (err) {}
     }
-  }, [isFocused]);
+  }, [isFocused, state]);
 
   return (
     <AppTemplate>
@@ -48,7 +49,7 @@ function Messages() {
               img1={require("../../../assets/arrowLeft2.png")}
               title="Messages"
               img2={require("../../../assets/menu2.png")}
-              img3={require("../../../assets/loupe.png")}
+              img3={require("../../../assets/menu1.png")}
             />
           </View>
           <SafeAreaView style={style.container}>

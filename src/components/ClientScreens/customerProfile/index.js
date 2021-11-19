@@ -17,13 +17,14 @@ const Data = [{}, {}, {}, {}, {}, {}, {}, {}];
 import AppTemplate from "../../ClientTemplate";
 import { useNavigation } from "@react-navigation/native";
 import config from "../../../../config";
-import { UserContext } from "../../../../App";
+import { StateContext, UserContext } from "../../../../App";
 
 function CustomerProfile({ route }) {
   const navigation = useNavigation();
   const { id } = route?.params;
   const [user, setUser] = useState();
   const [loggedInUser, setLoggedInUser] = useContext(UserContext);
+  const [state, setState] = React.useContext(StateContext);
 
   useEffect(() => {
     fetch(`${config.APP_URL}/user/get/${id}`, {
@@ -31,7 +32,7 @@ function CustomerProfile({ route }) {
     })
       .then((res) => res.json())
       .then((data) => setUser(data));
-  }, [id]);
+  }, [id, state]);
 
   return (
     <AppTemplate>
@@ -47,7 +48,7 @@ function CustomerProfile({ route }) {
               img1={require("../../../assets/arrowLeft2.png")}
               title="Profile"
               img2={require("../../../assets/menu2.png")}
-              img3={require("../../../assets/loupe.png")}
+              img3={require("../../../assets/menu1.png")}
             />
           </View>
           <SafeAreaView style={style.container}>

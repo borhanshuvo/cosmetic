@@ -13,7 +13,7 @@ import Header from "../../atoms/header";
 import AppTemplate from "../../ClientTemplate";
 import PremiumRequestCard from "../../orgasms/premiumRequestCard";
 import config from "../../../../config";
-import { UserContext } from "../../../../App";
+import { StateContext, UserContext } from "../../../../App";
 
 function PremiumRequest() {
   const navigation = useNavigation();
@@ -21,6 +21,7 @@ function PremiumRequest() {
   const [users, setUsers] = React.useState([]);
   const [number, setNumber] = React.useState(0);
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
+  const [state, setState] = React.useContext(StateContext);
 
   React.useEffect(() => {
     if (isFocused) {
@@ -30,7 +31,7 @@ function PremiumRequest() {
         .then((res) => res.json())
         .then((data) => setUsers(data));
     }
-  }, [number, isFocused]);
+  }, [number, isFocused, state]);
 
   return (
     <AppTemplate>
@@ -46,7 +47,7 @@ function PremiumRequest() {
               img1={require("../../../assets/arrowLeft2.png")}
               title="Premium Request"
               img2={require("../../../assets/menu2.png")}
-              img3={require("../../../assets/loupe.png")}
+              img3={require("../../../assets/menu1.png")}
             />
           </View>
           <SafeAreaView style={style.container}>

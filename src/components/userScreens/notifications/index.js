@@ -10,13 +10,14 @@ import NotificationCard from "../../orgasms/notificationCard";
 import Header from "../../atoms/header";
 import AppTemplate from "../../Usertemplate";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
-import { UserContext } from "../../../../App";
+import { StateContext, UserContext } from "../../../../App";
 import config from "../../../../config";
 
 function Notifications() {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
+  const [state, setState] = React.useContext(StateContext);
   const [notification, setNotification] = React.useState([]);
   const [number, setNumber] = React.useState(0);
 
@@ -34,7 +35,7 @@ function Notifications() {
         .then((res) => res.json())
         .then((data) => setNotification(data));
     }
-  }, [number, isFocused]);
+  }, [number, isFocused, state]);
 
   return (
     <AppTemplate>
@@ -50,7 +51,7 @@ function Notifications() {
               img1={require("../../../assets/arrowLeft2.png")}
               title="Notification"
               img2={require("../../../assets/menu2.png")}
-              img3={require("../../../assets/loupe.png")}
+              img3={require("../../../assets/menu1.png")}
             />
           </View>
           <SafeAreaView style={style.container}>

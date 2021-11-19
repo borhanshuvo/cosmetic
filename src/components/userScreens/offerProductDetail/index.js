@@ -13,7 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import { useEffect } from "react";
 import config from "../../../../config";
-import { UserContext } from "../../../../App";
+import { StateContext, UserContext } from "../../../../App";
 import OfferProductDetailCard from "../../orgasms/offerProductDetailCard";
 
 function OfferProductDetail({ route }) {
@@ -21,6 +21,7 @@ function OfferProductDetail({ route }) {
   const { id } = route?.params;
   const [product, setProduct] = useState({});
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
+  const [state, setState] = React.useContext(StateContext);
 
   useEffect(() => {
     try {
@@ -30,7 +31,7 @@ function OfferProductDetail({ route }) {
         .then((res) => res.json())
         .then((result) => setProduct(result));
     } catch (err) {}
-  }, [id]);
+  }, [id, state]);
 
   return (
     <AppTemplate>
@@ -58,7 +59,7 @@ function OfferProductDetail({ route }) {
               img1={require("../../../assets/arrowLeft2.png")}
               title="Products Detail"
               img2={require("../../../assets/menu2.png")}
-              img3={require("../../../assets/loupe.png")}
+              img3={require("../../../assets/menu1.png")}
             />
             <Image
               source={{ uri: `${config.APP_URL}${product?.product?.imgURL}` }}

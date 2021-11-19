@@ -6,6 +6,8 @@ import {
   StyleSheet,
   Image,
   Share,
+  Modal,
+  Pressable,
 } from "react-native";
 import { UserContext } from "../../../App";
 import config from "../../../config";
@@ -24,6 +26,7 @@ function LotionCard(props) {
     handleProductDelete,
   } = props;
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
+  const [modalVisible, setModalVisible] = React.useState(false);
 
   const share = async () => {
     try {
@@ -46,6 +49,44 @@ function LotionCard(props) {
     <TouchableOpacity style={style.view1} onPress={onPress}>
       {loggedInUser?.user?.role === "admin" ? (
         <>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <View style={style.centeredView}>
+              <View style={style.modalView}>
+                <Text style={style.modalText}>Are you want to Delete!</Text>
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    width: 100,
+                  }}
+                >
+                  <Pressable
+                    style={[style.button, style.buttonOpen]}
+                    onPress={() => {
+                      handleProductDelete(id, endingDate);
+                      setTimeout(() => setModalVisible(false), 1000);
+                    }}
+                  >
+                    <Text style={style.textStyle}>Yes</Text>
+                  </Pressable>
+                  <Pressable
+                    style={[style.button, style.buttonClose]}
+                    onPress={() => setModalVisible(!modalVisible)}
+                  >
+                    <Text style={style.textStyle}>No</Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>
+          </Modal>
           <TouchableOpacity onPress={share}>
             <Image
               source={require("../../assets/share.png")}
@@ -56,7 +97,9 @@ function LotionCard(props) {
           </TouchableOpacity>
           <TouchableOpacity
             style={{ marginTop: -35, marginLeft: -210 }}
-            onPress={() => handleProductDelete(id, endingDate)}
+            onPress={() => {
+              setModalVisible(true);
+            }}
           >
             <Image
               source={require("../../assets/delete.png")}
@@ -179,5 +222,49 @@ const style = StyleSheet.create({
     paddingLeft: 10,
     paddingTop: 10,
     paddingBottom: 10,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 5,
+    paddingBottom: 5,
+    elevation: 5,
+  },
+  buttonOpen: {
+    backgroundColor: "green",
+  },
+  buttonClose: {
+    backgroundColor: "red",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
   },
 });

@@ -11,13 +11,14 @@ import Header from "../../atoms/header";
 import AppTemplate from "../../ClientTemplate";
 import OrderRequestCard from "../../orgasms/orderRequestCard";
 import config from "../../../../config";
-import { UserContext } from "../../../../App";
+import { StateContext, UserContext } from "../../../../App";
 
 function OrderRequest() {
   const navigation = useNavigation();
   const [orders, setOrders] = React.useState([]);
   const [number, setNumber] = React.useState(0);
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
+  const [state, setState] = React.useContext(StateContext);
   
   React.useEffect(() => {
     try {
@@ -27,7 +28,7 @@ function OrderRequest() {
         .then((res) => res.json())
         .then((result) => setOrders(result));
     } catch (err) {}
-  }, [number]);
+  }, [number, state]);
 
   return (
     <AppTemplate>
@@ -43,7 +44,7 @@ function OrderRequest() {
               img1={require("../../../assets/arrowLeft2.png")}
               title="Order"
               img2={require("../../../assets/menu2.png")}
-              img3={require("../../../assets/loupe.png")}
+              img3={require("../../../assets/menu1.png")}
             />
           </View>
           <SafeAreaView style={style.container}>

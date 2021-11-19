@@ -76,12 +76,23 @@ function TabBar({ item = [], navi }) {
         style={style.icons}
       >
         {totalMessage > 0 ? (
-          <Image
-            source={require("../../assets/chatgrey.png")}
-            resizeMode="contain"
-            resizeMethod="resize"
-            style={style.iconsStyle}
-          />
+          <>
+            {nav?.name === "UserMessages" ? (
+              <Image
+                source={require("../../assets/chatgrey.png")}
+                resizeMode="contain"
+                resizeMethod="resize"
+                style={style.iconsStyle}
+              />
+            ) : (
+              <Image
+                source={require("../../assets/chatWhiteRed.png")}
+                resizeMode="contain"
+                resizeMethod="resize"
+                style={style.iconsStyle}
+              />
+            )}
+          </>
         ) : (
           <>
             {nav?.name === "UserMessages" ? (
@@ -106,12 +117,23 @@ function TabBar({ item = [], navi }) {
         onPress={() => navigation.navigate("UserNotifications")}
       >
         {total > 0 ? (
-          <Image
-            source={require("../../assets/notigrey.png")}
-            resizeMode="contain"
-            resizeMethod="resize"
-            style={style.iconsStyle}
-          />
+          <>
+            {nav?.name === "UserNotifications" ? (
+              <Image
+                source={require("../../assets/notigrey.png")}
+                resizeMode="contain"
+                resizeMethod="resize"
+                style={style.iconsStyle}
+              />
+            ) : (
+              <Image
+                source={require("../../assets/notiWhiteRed.png")}
+                resizeMode="contain"
+                resizeMethod="resize"
+                style={style.iconsStyle}
+              />
+            )}
+          </>
         ) : (
           <>
             {nav?.name === "UserNotifications" ? (

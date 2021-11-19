@@ -50,7 +50,7 @@ function TagClient() {
               onPress={() => navigation.goBack()}
               title="Tag Client"
               img2={require("../../../assets/menu2.png")}
-              img3={require("../../../assets/loupe.png")}
+              img3={require("../../../assets/menu1.png")}
             />
           </View>
           <View style={style.InputContainer}>

@@ -15,7 +15,7 @@ import Avatar from "../../atoms/avatar";
 import Header from "../../atoms/header";
 import AppTemplate from "../../ClientTemplate";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
-import { UserContext } from "../../../../App";
+import { StateContext, UserContext } from "../../../../App";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
 import config from "../../../../config";
@@ -24,6 +24,7 @@ function BuyerProfile() {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const [loggedInUser, setLoggedInUser] = useContext(UserContext);
+  const [state, setState] = React.useContext(StateContext);
   const [show, setShow] = useState(true);
   const [image, setImg] = useState(null);
   const [username, setUsername] = useState("");
@@ -38,7 +39,7 @@ function BuyerProfile() {
       setShow(true);
       setImg(null);
     }
-  }, [isFocused]);
+  }, [isFocused, state]);
 
   const PickImage = async () => {
     let photo = await ImagePicker.launchImageLibraryAsync({
@@ -88,6 +89,7 @@ function BuyerProfile() {
           };
           setLoggedInUser(data);
           AsyncStorage.setItem("userInfo", JSON.stringify(data));
+          setState((prevState) => prevState + 1);
         });
     } else {
       const formData = new FormData();
@@ -117,6 +119,7 @@ function BuyerProfile() {
           };
           setLoggedInUser(data);
           AsyncStorage.setItem("userInfo", JSON.stringify(data));
+          setState((prevState) => prevState + 1);
         });
     }
   };
@@ -135,7 +138,7 @@ function BuyerProfile() {
               img1={require("../../../assets/arrowLeft2.png")}
               title="Profile"
               img2={require("../../../assets/menu2.png")}
-              img3={require("../../../assets/loupe.png")}
+              img3={require("../../../assets/menu1.png")}
             />
           </View>
           <SafeAreaView style={style.container}>

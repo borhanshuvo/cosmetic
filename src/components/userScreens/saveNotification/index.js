@@ -9,7 +9,7 @@ import {
 import Header from "../../atoms/header";
 import AppTemplate from "../../Usertemplate";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
-import { UserContext } from "../../../../App";
+import { StateContext, UserContext } from "../../../../App";
 import config from "../../../../config";
 import SaveNotificationCard from "../../orgasms/saveNotificationCard";
 
@@ -18,6 +18,7 @@ function SaveNotification() {
   const isFocused = useIsFocused();
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
   const [saveNotifications, setSaveNotifications] = React.useState([]);
+  const [state, setState] = React.useContext(StateContext);
 
   React.useEffect(() => {
     if (isFocused) {
@@ -30,7 +31,7 @@ function SaveNotification() {
         .then((res) => res.json())
         .then((result) => setSaveNotifications(result));
     }
-  }, [loggedInUser?.user?.email, isFocused]);
+  }, [loggedInUser?.user?.email, isFocused, state]);
 
   return (
     <AppTemplate>
@@ -46,7 +47,7 @@ function SaveNotification() {
               img1={require("../../../assets/arrowLeft2.png")}
               title="Save Notification"
               img2={require("../../../assets/menu2.png")}
-              img3={require("../../../assets/loupe.png")}
+              img3={require("../../../assets/menu1.png")}
             />
           </View>
           <SafeAreaView style={style.container}>

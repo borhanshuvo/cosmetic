@@ -1,5 +1,13 @@
 import * as React from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  Modal,
+  Pressable,
+} from "react-native";
 import config from "../../../config";
 import moment from "moment";
 
@@ -16,9 +24,11 @@ function InboxMessages(props) {
     time,
     textDesign,
   } = props;
+  const [modalVisible, setModalVisible] = React.useState(false);
+
   return (
     <View>
-      <TouchableOpacity
+      <View
         style={[
           style.view1,
           {
@@ -58,16 +68,53 @@ function InboxMessages(props) {
               {dis}
             </Text>
             {messageImage !== "" && (
-              <Image
-                source={{ uri: `${config.APP_URL}${messageImage}` }}
-                resizeMethod="resize"
-                resizeMode="contain"
-                style={style.image2}
-              />
+              <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                <Modal
+                  animationType="slide"
+                  transparent={true}
+                  visible={modalVisible}
+                  onRequestClose={() => {
+                    setModalVisible(!modalVisible);
+                  }}
+                >
+                  <View style={style.centeredView}>
+                    <View
+                      style={{
+                        marginLeft: "-80%",
+                        backgroundColor: "red",
+                        padding: 2,
+                      }}
+                    >
+                      <Pressable onPress={() => setModalVisible(!modalVisible)}>
+                        <Image
+                          source={require("../../assets/cross.jpg")}
+                          resizeMethod="resize"
+                          resizeMode="contain"
+                          style={style.image4}
+                        />
+                      </Pressable>
+                    </View>
+                    <View style={style.modalView}>
+                      <Image
+                        source={{ uri: `${config.APP_URL}${messageImage}` }}
+                        resizeMethod="resize"
+                        resizeMode="contain"
+                        style={style.image3}
+                      />
+                    </View>
+                  </View>
+                </Modal>
+                <Image
+                  source={{ uri: `${config.APP_URL}${messageImage}` }}
+                  resizeMethod="resize"
+                  resizeMode="contain"
+                  style={style.image2}
+                />
+              </TouchableOpacity>
             )}
           </View>
         </View>
-      </TouchableOpacity>
+      </View>
       <Text
         style={{
           textAlign: `${textDesign ? "left" : "right"}`,
@@ -133,8 +180,36 @@ const style = StyleSheet.create({
   dot: {
     height: 10,
     width: 10,
-
     borderRadius: 100,
     marginRight: -12,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalView: {
+    margin: 10,
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 25,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  image3: {
+    height: 300,
+    width: 300,
+    borderRadius: 5,
+  },
+  image4: {
+    height: 25,
+    width: 25,
   },
 });

@@ -9,7 +9,7 @@ import {
   Modal,
 } from "react-native";
 import { WebView } from "react-native-webview";
-import { UserContext } from "../../../App";
+import { StateContext, UserContext } from "../../../App";
 import CounterCheckOut from "../molecules/counterCheckOut";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 import config from "../../../config";
@@ -18,6 +18,7 @@ function CheckOutCard({ productDetail, offerDate, id }) {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
+  const [state, setState] = React.useContext(StateContext);
   const [quantity, setquantity] = React.useState(1);
   const price = productDetail?.price;
   const totalAmount = quantity * price;
@@ -109,7 +110,9 @@ function CheckOutCard({ productDetail, offerDate, id }) {
                   body: formData,
                 })
                   .then((res) => res.json())
-                  .then((result) => {});
+                  .then((result) => {
+                    setState((prevState) => prevState + 1);
+                  });
               } else {
                 fetch(
                   `${config.APP_URL}/product/update/${productDetail?._id}`,
@@ -123,7 +126,9 @@ function CheckOutCard({ productDetail, offerDate, id }) {
                   }
                 )
                   .then((res) => res.json())
-                  .then((result) => {});
+                  .then((result) => {
+                    setState((prevState) => prevState + 1);
+                  });
               }
               setAddress("");
               setStreetAddress("");

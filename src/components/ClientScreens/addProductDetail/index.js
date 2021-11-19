@@ -17,7 +17,7 @@ import { useNavigation, useIsFocused } from "@react-navigation/native";
 import ModalDropdown from "react-native-modal-dropdown";
 import config from "../../../../config";
 import * as ImagePicker from "expo-image-picker";
-import { UserContext } from "../../../../App";
+import { StateContext, UserContext } from "../../../../App";
 
 function AddProductDetail() {
   const navigation = useNavigation();
@@ -31,6 +31,7 @@ function AddProductDetail() {
   const [category, setCategory] = useState("");
   const [price, setPrice] = useState("");
   const [loggedInUser, setLoggedInUser] = useContext(UserContext);
+  const [state, setState] = React.useContext(StateContext);
   const showToast = (i) => {
     ToastAndroid.show(i, ToastAndroid.SHORT);
   };
@@ -45,7 +46,7 @@ function AddProductDetail() {
           .then((result) => setCategories(result));
       } catch (err) {}
     }
-  }, [isFocused]);
+  }, [isFocused, state]);
 
   const PickImage = async () => {
     let photo = await ImagePicker.launchImageLibraryAsync({
@@ -132,6 +133,7 @@ function AddProductDetail() {
             setCategory("");
             setPrice("");
             setQuantity("");
+            setState((prevState) => prevState + 1);
             setImg(null);
             setTimeout(() => {
               navigation.navigate("ClientDashBoard");
@@ -155,7 +157,7 @@ function AddProductDetail() {
               img1={require("../../../assets/arrowLeft2.png")}
               title="Add a Product"
               img2={require("../../../assets/menu2.png")}
-              img3={require("../../../assets/loupe.png")}
+              img3={require("../../../assets/menu1.png")}
             />
           </View>
           <SafeAreaView style={style.container}>

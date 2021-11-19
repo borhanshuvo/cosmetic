@@ -11,7 +11,7 @@ import {
 import Stars from "../atoms/stars";
 import { useNavigation } from "@react-navigation/native";
 import config from "../../../config";
-import { UserContext } from "../../../App";
+import { StateContext, UserContext } from "../../../App";
 
 function PremiumBidRequestCard({ productDetails }) {
   const navigation = useNavigation();
@@ -19,6 +19,7 @@ function PremiumBidRequestCard({ productDetails }) {
     ToastAndroid.show(i, ToastAndroid.SHORT);
   };
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
+  const [state, setState] = React.useContext(StateContext);
   const [bidAmmount, setBidAmmount] = React.useState("");
 
   const sendPushNotification = async (expoPushToken) => {
@@ -67,6 +68,7 @@ function PremiumBidRequestCard({ productDetails }) {
             setBidAmmount("");
             showToast(result.success);
             sendPushNotification(result.adminPushToken);
+            setState((prevState) => prevState + 1);
             setTimeout(() => {
               navigation.navigate("UserPremiumBids");
             }, 2000);

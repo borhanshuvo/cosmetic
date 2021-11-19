@@ -38,6 +38,7 @@ function Statics() {
   month[11] = "December";
   const currentMonth = month[date.getMonth()];
   const [loggedInUser, setLoggedInUser] = useContext(UserContext);
+  const [state, setState] = React.useContext(StateContext);
 
   useEffect(() => {
     if (isFocused) {
@@ -53,7 +54,7 @@ function Statics() {
         .then((res) => res.json())
         .then((result) => setStateValue(result));
     }
-  }, [isFocused, year]);
+  }, [isFocused, year, state]);
 
   return (
     <AppTemplate>
@@ -69,7 +70,7 @@ function Statics() {
               img1={require("../../../assets/arrowLeft2.png")}
               title="Statistics"
               img2={require("../../../assets/menu2.png")}
-              img3={require("../../../assets/loupe.png")}
+              img3={require("../../../assets/menu1.png")}
             />
           </View>
           <SafeAreaView style={style.container}>

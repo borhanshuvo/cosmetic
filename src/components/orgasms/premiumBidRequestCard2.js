@@ -58,6 +58,7 @@ function PremiumBidRequestCard2(props) {
         });
     } catch (err) {}
   };
+  
   return (
     <View style={[style.view1, { backgroundColor: backColor }]}>
       <View style={style.view5}>

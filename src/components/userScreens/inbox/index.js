@@ -69,7 +69,7 @@ function Inbox({ route }) {
           setState((prevState) => prevState + 1);
         });
     }
-  }, [id, isFocused]);
+  }, [id, isFocused, state]);
 
   React.useEffect(() => {
     const s = io(`${config.APP_URL}`);
@@ -78,7 +78,7 @@ function Inbox({ route }) {
     return () => {
       s.disconnect();
     };
-  }, []);
+  }, [state]);
 
   socket?.off("new_message").on("new_message", (data) => {
     setMessages([...messages, data]);
@@ -184,7 +184,7 @@ function Inbox({ route }) {
             img1={require("../../../assets/arrowLeft2.png")}
             title="Chat"
             img2={require("../../../assets/menu2.png")}
-            img3={require("../../../assets/loupe.png")}
+            img3={require("../../../assets/menu1.png")}
           />
         </View>
         <View
