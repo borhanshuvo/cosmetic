@@ -59,6 +59,7 @@ function PremiumBids() {
               {bids.map((bid) => (
                 <BigLotionCard2
                   key={bid._id}
+                  id={bid._id}
                   title={bid?.product?.title}
                   dis={bid?.product?.description}
                   price={bid?.bidAmmount}

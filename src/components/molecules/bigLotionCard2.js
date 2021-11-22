@@ -38,7 +38,9 @@ function BigLotionCard2(props) {
           .then((result) => {
             setState((prevState) => prevState + 1);
           });
-      } else {
+      }
+
+      if (bidType === "premiumBid") {
         fetch(`${config.APP_URL}/premiumBidRequest/update/${id}`, {
           method: "PUT",
           headers: {

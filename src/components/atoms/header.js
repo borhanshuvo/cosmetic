@@ -57,6 +57,15 @@ function Header(props) {
           setUserTotalBid(result.totalBid);
           setUserTotalPremiumBid(result.totalPremiumBid);
         });
+
+      return () => {
+        setTotalOrder(0);
+        setTotalBid(0);
+        setTotalPremiumBid(0);
+        setTotalPremiumUser(0);
+        setUserTotalBid(0);
+        setUserTotalPremiumBid(0);
+      };
     }
   }, [isFocused, state, loggedInUser?.user?.email]);
 

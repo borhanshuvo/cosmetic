@@ -279,6 +279,8 @@ const style = StyleSheet.create({
   },
   viewText: {
     marginTop: "8%",
+    flexDirection: "row",
+    alignItems: "flex-start",
   },
   textLinks: {
     color: "white",

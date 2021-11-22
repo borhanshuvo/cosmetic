@@ -65,27 +65,21 @@ function ClientInbox({ route }) {
         }),
       })
         .then((res) => res.json())
-        .then((result) => {
-          setState((prevState) => prevState + 1);
-        });
+        .then((result) => {});
     }
   }, [id, isFocused, state]);
 
   React.useEffect(() => {
-    if (isFocused) {
-      const s = io(`${config.APP_URL}`);
-      setSocket(s);
+    const s = io(`${config.APP_URL}`);
+    setSocket(s);
 
-      return () => {
-        s.disconnect();
-      };
-    }
-  }, [isFocused, state]);
+    return () => {
+      s.disconnect();
+    };
+  }, [state]);
 
   socket?.off("new_message").on("new_message", (data) => {
-    if (data?.conversation_id === id) {
-      setMessages([...messages, data]);
-    }
+    setMessages([...messages, data]);
   });
 
   const sendPushNotification = async (token, message) => {
@@ -169,9 +163,7 @@ function ClientInbox({ route }) {
             }),
           })
             .then((res) => res.json())
-            .then((result) => {
-              setState((prevState) => prevState + 1);
-            });
+            .then((result) => {});
         });
     }
   };
