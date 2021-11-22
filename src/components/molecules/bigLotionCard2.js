@@ -1,9 +1,11 @@
 import * as React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+import { UserContext } from "../../../App";
 import config from "../../../config";
 
 function BigLotionCard2(props) {
   const {
+    id,
     title,
     dis,
     price,
@@ -15,9 +17,49 @@ function BigLotionCard2(props) {
     buttonWidth,
     ButtontextColor,
     buttonTextOpacity,
+    setState,
+    bidType,
   } = props;
+
+  const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
+
+  const handleBackColor = (color) => {
+    try {
+      if (bidType === "bid") {
+        fetch(`${config.APP_URL}/bidRequest/update/${id}`, {
+          method: "PUT",
+          headers: {
+            "content-type": "application/json",
+            authorization: `Bearer ${loggedInUser?.accessToken}`,
+          },
+          body: JSON.stringify({ backColor: color }),
+        })
+          .then((res) => res.json())
+          .then((result) => {
+            setState((prevState) => prevState + 1);
+          });
+      } else {
+        fetch(`${config.APP_URL}/premiumBidRequest/update/${id}`, {
+          method: "PUT",
+          headers: {
+            "content-type": "application/json",
+            authorization: `Bearer ${loggedInUser?.accessToken}`,
+          },
+          body: JSON.stringify({ backColor: color }),
+        })
+          .then((res) => res.json())
+          .then((result) => {
+            setState((prevState) => prevState + 1);
+          });
+      }
+    } catch (err) {}
+  };
+
   return (
-    <TouchableOpacity style={[style.view1, { backgroundColor: backColor }]}>
+    <TouchableOpacity
+      style={[style.view1, { backgroundColor: backColor }]}
+      onPress={() => handleBackColor("#ffffff")}
+    >
       <View style={style.view5}>
         <View
           style={{
@@ -37,7 +79,9 @@ function BigLotionCard2(props) {
               {title}
             </Text>
 
-            <Text style={{ fontSize: 6, color: "grey", marginRight: 50}}>{dis}</Text>
+            <Text style={{ fontSize: 6, color: "grey", marginRight: 50 }}>
+              {dis}
+            </Text>
             <View
               style={{
                 backgroundColor: buttonBackColor,
@@ -67,7 +111,10 @@ function BigLotionCard2(props) {
         <Text style={{ fontSize: 9, color: "black", opacity: 0.7 }}>
           ${parseFloat(price).toFixed(2)}
         </Text>
-        <Image  source={{ uri: `${config?.APP_URL}${userImg}` }} style={style.image1} />
+        <Image
+          source={{ uri: `${config?.APP_URL}${userImg}` }}
+          style={style.image1}
+        />
       </View>
     </TouchableOpacity>
   );

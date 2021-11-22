@@ -20,7 +20,7 @@ function Notifications() {
   const [state, setState] = React.useContext(StateContext);
   const [notification, setNotification] = React.useState([]);
   const [number, setNumber] = React.useState(0);
-  
+
   React.useEffect(() => {
     if (isFocused) {
       const email = loggedInUser.user.email;
@@ -68,6 +68,8 @@ function Notifications() {
                   dis={nt?.description}
                   img={nt?.imgURL}
                   email={loggedInUser?.user?.email}
+                  collectionName={nt?.collectionName || ""}
+                  offerId={nt?.offerId}
                   setNumber={setNumber}
                   backColor={nt?.backColor}
                   dotColor="#B7C9D2"

@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   ScrollView,
   FlatList,
+  ToastAndroid,
 } from "react-native";
 
 import Header from "../../atoms/header";
@@ -26,6 +27,9 @@ function DashBoard() {
   const [state, setState] = React.useContext(StateContext);
   const [products, setProducts] = React.useState([]);
   const [offerProducts, setOfferProducts] = React.useState([]);
+  const showToast = (i) => {
+    ToastAndroid.show(i, ToastAndroid.SHORT);
+  };
 
   React.useEffect(() => {
     if (isFocused) {
@@ -53,9 +57,12 @@ function DashBoard() {
       })
         .then((res) => res.json())
         .then((result) => {
-          const delPro = offerProducts.filter((pd) => pd._id !== result._id);
-          setOfferProducts(delPro);
-          setState((prevState) => prevState + 1);
+          showToast(result.success);
+          setTimeout(() => {
+            const delPro = offerProducts.filter((pd) => pd._id !== id);
+            setOfferProducts(delPro);
+            setState((prevState) => prevState + 1);
+          }, 2000);
         });
     } else {
       fetch(`${config.APP_URL}/product/delete/${id}`, {
@@ -64,9 +71,12 @@ function DashBoard() {
       })
         .then((res) => res.json())
         .then((result) => {
-          const delPro = products.filter((pd) => pd._id !== result._id);
-          setProducts(delPro);
-          setState((prevState) => prevState + 1);
+          showToast(result.success);
+          setTimeout(() => {
+            const delPro = products.filter((pd) => pd._id !== id);
+            setProducts(delPro);
+            setState((prevState) => prevState + 1);
+          }, 2000);
         });
     }
   };

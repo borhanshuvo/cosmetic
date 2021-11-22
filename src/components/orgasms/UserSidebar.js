@@ -7,30 +7,48 @@ import {
   Image,
   ToastAndroid,
 } from "react-native";
-
-// import Home from "../userScreens/Home";
-// import Orders from "../userScreens/orders";
-// import BidRequest from "../userScreens/bidRequest";
-// import Messages from "../userScreens/messages";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import { StateContext, UserContext } from "../../../App";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import config from "../../../config";
 
 function Sidebar() {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
   const [user, setUser] = React.useState();
   const [number, setNumber] = React.useState(0);
   const [state, setState] = React.useContext(StateContext);
+  const [userTotalBid, setUserTotalBid] = React.useState(0);
+  const [userTotalPremiumBid, setUserTotalPremiumBid] = React.useState(0);
 
   React.useEffect(() => {
-    fetch(`${config.APP_URL}/user/get/${loggedInUser?.user?._id}`, {
-      headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
-    })
-      .then((res) => res.json())
-      .then((data) => setUser(data.user[0]));
-  }, [loggedInUser?.user?._id, number, state]);
+    if (isFocused) {
+      fetch(`${config.APP_URL}/user/get/${loggedInUser?.user?._id}`, {
+        headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+      })
+        .then((res) => res.json())
+        .then((data) => setUser(data.user[0]));
+
+      fetch(
+        `${config.APP_URL}/user/getAllNotificationLength/${loggedInUser?.user?.email}`,
+        {
+          headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+        }
+      )
+        .then((res) => res.json())
+        .then((result) => {
+          setUserTotalBid(result.totalBid);
+          setUserTotalPremiumBid(result.totalPremiumBid);
+        });
+    }
+  }, [
+    isFocused,
+    loggedInUser?.user?.email,
+    state,
+    loggedInUser?.user?._id,
+    number,
+  ]);
 
   const showToast = (i) => {
     ToastAndroid.show(i, ToastAndroid.SHORT);
@@ -121,6 +139,14 @@ function Sidebar() {
             onPress={() => navigation.navigate("UserBids")}
           >
             <Text style={style.textLinks}>My Bids</Text>
+            {userTotalBid > 0 && (
+              <Image
+                source={require("../../assets/notiRed.png")}
+                resizeMode="contain"
+                resizeMethod="resize"
+                style={{ height: 10, width: 10, marginLeft: 5, marginTop: 5 }}
+              />
+            )}
           </TouchableOpacity>
 
           {user?.premium === "Premium" && (
@@ -129,6 +155,14 @@ function Sidebar() {
               onPress={() => navigation.navigate("UserPremiumBids")}
             >
               <Text style={style.textLinks}>My Premium Bids</Text>
+              {userTotalPremiumBid > 0 && (
+                <Image
+                  source={require("../../assets/notiRed.png")}
+                  resizeMode="contain"
+                  resizeMethod="resize"
+                  style={{ height: 10, width: 10, marginLeft: 5, marginTop: 5 }}
+                />
+              )}
             </TouchableOpacity>
           )}
 

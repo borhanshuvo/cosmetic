@@ -17,6 +17,8 @@ function Header(props) {
   const [totalBid, setTotalBid] = React.useState(0);
   const [totalPremiumBid, setTotalPremiumBid] = React.useState(0);
   const [totalPremiumUser, setTotalPremiumUser] = React.useState(0);
+  const [userTotalBid, setUserTotalBid] = React.useState(0);
+  const [userTotalPremiumBid, setUserTotalPremiumBid] = React.useState(0);
 
   React.useEffect(() => {
     if (isFocused) {
@@ -43,8 +45,20 @@ function Header(props) {
       })
         .then((res) => res.json())
         .then((result) => setTotalPremiumUser(result));
+
+      fetch(
+        `${config.APP_URL}/user/getAllNotificationLength/${loggedInUser?.user?.email}`,
+        {
+          headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
+        }
+      )
+        .then((res) => res.json())
+        .then((result) => {
+          setUserTotalBid(result.totalBid);
+          setUserTotalPremiumBid(result.totalPremiumBid);
+        });
     }
-  }, [isFocused, state]);
+  }, [isFocused, state, loggedInUser?.user?.email]);
 
   return (
     <View style={style.view1}>
@@ -83,23 +97,36 @@ function Header(props) {
           resizeMethod="resize"
           resizeMode="contain"
         /> */}
-        <TouchableOpacity
-          onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
-        >
-          <Image
-            source={
-              totalOrder > 0 ||
-              totalBid > 0 ||
-              totalPremiumBid > 0 ||
-              totalPremiumUser > 0
-                ? img3
-                : img2
-            }
-            style={style.image2}
-            resizeMethod="resize"
-            resizeMode="contain"
-          />
-        </TouchableOpacity>
+        {loggedInUser?.user?.role === "admin" ? (
+          <TouchableOpacity
+            onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
+          >
+            <Image
+              source={
+                totalOrder > 0 ||
+                totalBid > 0 ||
+                totalPremiumBid > 0 ||
+                totalPremiumUser > 0
+                  ? img3
+                  : img2
+              }
+              style={style.image2}
+              resizeMethod="resize"
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
+          >
+            <Image
+              source={userTotalBid > 0 || userTotalPremiumBid > 0 ? img3 : img2}
+              style={style.image2}
+              resizeMethod="resize"
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );

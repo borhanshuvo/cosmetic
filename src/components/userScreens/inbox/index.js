@@ -72,17 +72,22 @@ function Inbox({ route }) {
   }, [id, isFocused, state]);
 
   React.useEffect(() => {
-    const s = io(`${config.APP_URL}`);
-    setSocket(s);
+    if (isFocused) {
+      const s = io(`${config.APP_URL}`);
+      setSocket(s);
 
-    return () => {
-      s.disconnect();
-    };
-  }, [state]);
+      return () => {
+        s.disconnect();
+      };
+    }
+  }, [isFocused, state]);
 
   socket?.off("new_message").on("new_message", (data) => {
-    setMessages([...messages, data]);
+    if (data?.conversation_id === id) {
+      setMessages([...messages, data]);
+    }
   });
+
 
   const sendPushNotification = async (token, message) => {
     await fetch("https://exp.host/--/api/v2/push/send", {

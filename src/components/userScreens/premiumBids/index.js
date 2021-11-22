@@ -62,13 +62,15 @@ function PremiumBids() {
                   title={bid?.product?.title}
                   dis={bid?.product?.description}
                   price={bid?.bidAmmount}
-                  backColor="white"
+                  backColor={bid?.backColor}
                   orderStatus={bid?.status}
                   userImg={bid?.imgURL}
                   productImg={bid?.product?.imgURL}
                   buttonBackColor="#B7C9D2"
                   buttonWidth={70}
                   ButtontextColor="white"
+                  setState={setState}
+                  bidType="premiumBid"
                 />
               ))}
             </ScrollView>

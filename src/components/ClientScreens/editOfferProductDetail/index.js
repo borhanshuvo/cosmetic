@@ -23,6 +23,7 @@ function EditOfferProductDetail({ route }) {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const { id } = route?.params;
+
   const showToast = (i) => {
     ToastAndroid.show(i, ToastAndroid.SHORT);
   };

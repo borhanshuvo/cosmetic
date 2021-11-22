@@ -68,6 +68,8 @@ function Notifications() {
                     dis={nt?.description}
                     img={nt?.imgURL}
                     email={loggedInUser?.user?.email}
+                    collectionName={nt?.collectionName || ""}
+                    offerId={nt?.offerId}
                     setNumber={setNumber}
                     backColor={nt?.backColor}
                     dotColor="#B7C9D2"

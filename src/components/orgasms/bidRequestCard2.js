@@ -48,7 +48,7 @@ function BigLotionCard2(props) {
           "content-type": "application/json",
           authorization: `Bearer ${loggedInUser?.accessToken}`,
         },
-        body: JSON.stringify({ status }),
+        body: JSON.stringify({ status, backColor: "#E1E9E9" }),
       })
         .then((res) => res.json())
         .then((result) => {
@@ -58,6 +58,7 @@ function BigLotionCard2(props) {
         });
     } catch (err) {}
   };
+
   return (
     <View style={[style.view1, { backgroundColor: backColor }]}>
       <View style={style.view5}>
