@@ -30,6 +30,14 @@ function OfferProductCard(props) {
   const [loggedInUser, setLoggedInUser] = React.useContext(UserContext);
   const [modalVisible, setModalVisible] = React.useState(false);
 
+  let fakeDate;
+
+  if (new Date(endingDate).getHours() >= 12) {
+    fakeDate = new Date(endingDate).getHours();
+  } else {
+    fakeDate = new Date(endingDate).getHours() - 6;
+  }
+
   const share = async () => {
     try {
       const result = await Share.share({
@@ -53,67 +61,78 @@ function OfferProductCard(props) {
       onPress={onPress}
     >
       <View>
-        <View>
-          {loggedInUser?.user?.role === "admin" ? (
-            <View>
-              <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => {
-                  setModalVisible(!modalVisible);
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <View style={style.centeredView}>
+            <View style={style.modalView}>
+              <Text style={style.modalText}>Are you want to Delete!</Text>
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  width: 100,
                 }}
               >
-                <View style={style.centeredView}>
-                  <View style={style.modalView}>
-                    <Text style={style.modalText}>Are you want to Delete!</Text>
-                    <View
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        width: 100,
-                      }}
-                    >
-                      <Pressable
-                        style={[style.button, style.buttonOpen]}
-                        onPress={() => {
-                          handleProductDelete(id, endingDate);
-                          setTimeout(() => setModalVisible(false), 1000);
-                        }}
-                      >
-                        <Text style={style.textStyle}>Yes</Text>
-                      </Pressable>
-                      <Pressable
-                        style={[style.button, style.buttonClose]}
-                        onPress={() => setModalVisible(!modalVisible)}
-                      >
-                        <Text style={style.textStyle}>No</Text>
-                      </Pressable>
-                    </View>
-                  </View>
-                </View>
-              </Modal>
-              <TouchableOpacity onPress={share}>
-                <Image
-                  source={require("../../assets/share.png")}
-                  resizeMethod="resize"
-                  resizeMode="contain"
-                  style={style.image3}
-                />
-              </TouchableOpacity>
+                <Pressable
+                  style={[style.button, style.buttonOpen]}
+                  onPress={() => {
+                    handleProductDelete(id, endingDate);
+                    setTimeout(() => setModalVisible(false), 1000);
+                  }}
+                >
+                  <Text style={style.textStyle}>Yes</Text>
+                </Pressable>
+                <Pressable
+                  style={[style.button, style.buttonClose]}
+                  onPress={() => setModalVisible(!modalVisible)}
+                >
+                  <Text style={style.textStyle}>No</Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+        </Modal>
+        <View>
+          {loggedInUser?.user?.role === "admin" ? (
+            <View
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                flexDirection: "row",
+              }}
+            >
+              <View style={{ marginLeft: 10 }}>
+                <TouchableOpacity onPress={share}>
+                  <Image
+                    source={require("../../assets/share.png")}
+                    resizeMethod="resize"
+                    resizeMode="contain"
+                    style={style.image3}
+                  />
+                </TouchableOpacity>
+              </View>
 
-              <TouchableOpacity
-                style={{ marginLeft: 10, marginTop: -15 }}
-                onPress={() => setModalVisible(true)}
+              <View
+                style={{
+                  marginRight: -100,
+                }}
               >
-                <Image
-                  source={require("../../assets/delete.png")}
-                  resizeMethod="resize"
-                  resizeMode="contain"
-                  style={style.image3}
-                />
-              </TouchableOpacity>
+                <TouchableOpacity onPress={() => setModalVisible(true)}>
+                  <Image
+                    source={require("../../assets/delete.png")}
+                    resizeMethod="resize"
+                    resizeMode="contain"
+                    style={style.image3}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
           ) : (
             <View>
@@ -204,11 +223,14 @@ function OfferProductCard(props) {
                       textAlign: "right",
                     }}
                   >
-                    {`${new Date(endingDate).toDateString()} - ${
-                      new Date(endingDate).getHours() - 6
-                    }:${new Date(endingDate).getMinutes()}:${new Date(
+                    {`${new Date(
                       endingDate
-                    ).getSeconds()}`.slice(3, 30)}
+                    ).toDateString()} - ${fakeDate}:${new Date(
+                      endingDate
+                    ).getMinutes()}:${new Date(endingDate).getSeconds()}`.slice(
+                      3,
+                      30
+                    )}
                   </Text>
                 )}
                 <Text
@@ -235,6 +257,7 @@ const style = StyleSheet.create({
     height: 10,
   },
   image3: {
+    width: 15,
     height: 15,
   },
   view1: {

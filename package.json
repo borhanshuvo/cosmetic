@@ -35,7 +35,8 @@
     "react-native-unimodules": "0.14.10",
     "react-native-web": "~0.13.12",
     "react-native-webview": "^11.14.1",
-    "socket.io-client": "^4.3.2"
+    "socket.io-client": "^4.3.2",
+    "@react-native-community/datetimepicker": "3.5.2"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0"

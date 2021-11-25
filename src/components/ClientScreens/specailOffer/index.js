@@ -26,12 +26,18 @@ function SpecailOffer() {
   };
   const [products, setProducts] = useState([]);
   const [indexNumber, setIndexNumber] = useState(null);
-  const [startDate, setStartDate] = useState("");
-  const [startMonth, setStartMonth] = useState("");
-  const [startYear, setStartYear] = useState("");
-  const [startDateHour, setStartDateHour] = useState("");
-  const [startDateMinute, setStartDateMinute] = useState("");
-  const [startDateSecond, setStartDateSecond] = useState("");
+  const [startDate, setStartDate] = useState(`${new Date().getDate()}`);
+  const [startMonth, setStartMonth] = useState(`${new Date().getMonth() + 1}`);
+  const [startYear, setStartYear] = useState(`${new Date().getFullYear()}`);
+  const [startDateHour, setStartDateHour] = useState(
+    `${new Date().getHours() + 1}`
+  );
+  const [startDateMinute, setStartDateMinute] = useState(
+    `${new Date().getMinutes()}`
+  );
+  const [startDateSecond, setStartDateSecond] = useState(
+    `${new Date().getSeconds()}`
+  );
   const [endDate, setEndDate] = useState("");
   const [endMonth, setEndMonth] = useState("");
   const [endYear, setEndYear] = useState("");
@@ -45,14 +51,24 @@ function SpecailOffer() {
   useEffect(() => {
     if (isFocused) {
       try {
+        setProducts([]);
         fetch(`${config.APP_URL}/product/productName`, {
           headers: { authorization: `Bearer ${loggedInUser?.accessToken}` },
         })
           .then((res) => res.json())
           .then((result) => setProducts(result));
+        setStartDate(`${new Date().getDate()}`);
+        setStartMonth(`${new Date().getMonth() + 1}`);
+        setStartYear(`${new Date().getFullYear()}`);
+        setStartDateHour(`${new Date().getHours()}`);
+        setStartDateMinute(`${new Date().getMinutes()}`);
+        setStartDateSecond(`${new Date().getSeconds()}`);
+        return () => {
+          setProducts([]);
+        };
       } catch (err) {}
     }
-  }, [isFocused, state]);
+  }, [isFocused]);
 
   const sendPushNotification = async (token) => {
     await token.map((tkn) => {
@@ -74,7 +90,9 @@ function SpecailOffer() {
   };
 
   const handelPress = () => {
-    if (startDate === "") {
+    if (indexNumber === null) {
+      showToast("Please Select Product");
+    } else if (startDate === "") {
       showToast("Please Enter Date");
     } else if (isNaN(startDate)) {
       showToast("Only Number!");
@@ -371,13 +389,15 @@ function SpecailOffer() {
                   </Text>
                 )}
 
-                <TouchableOpacity onPress={() => handelPress()}>
-                  <View style={style.button}>
-                    <Text style={{ fontSize: 12, color: "white" }}>
-                      Continue
-                    </Text>
-                  </View>
-                </TouchableOpacity>
+                <View style={style.buttonMargin}>
+                  <TouchableOpacity onPress={() => handelPress()}>
+                    <View style={style.button}>
+                      <Text style={{ fontSize: 12, color: "white" }}>
+                        Continue
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
               </View>
             </ScrollView>
           </SafeAreaView>
@@ -445,8 +465,10 @@ const style = StyleSheet.create({
     paddingTop: 17,
     paddingBottom: 17,
     elevation: 5,
-    marginTop: 150,
     marginBottom: 10,
+  },
+  buttonMargin: {
+    marginTop: 150,
   },
   input: {
     width: "33.33%",
